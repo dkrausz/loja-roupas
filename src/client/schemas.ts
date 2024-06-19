@@ -2,7 +2,7 @@ import z from "zod";
 
 export const clientSchema = z.object({
   id: z.number().positive(),
-  publicId: z.string(), //para que server este publicID?
+  publicId: z.string(),
   name: z.string().max(255),
   email: z.string().email(),
   password: z
@@ -13,13 +13,13 @@ export const clientSchema = z.object({
   birthDate: z.date(),
   cpf: z.string().max(11),
   phone: z.string().max(11),
-  //   storeId: z.number().positive(),
+  storeId: z.number().positive(),
 });
 
 export const clientRegisterSchema = clientSchema.omit({
   id: true,
-  publicId: true,
-  //   storeId: true,
+  // publicId: true,
+  // storeId: true,
 });
 
 export const clientReturnSchema = clientSchema.omit({ password: true });

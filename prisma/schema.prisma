@@ -69,9 +69,9 @@ model Client {
   email     String    @unique
   password  String    @db.VarChar(50)
   birthDate DateTime
-  CPF       String    @db.VarChar(11)
-  address   Address[]
+  cpf       String    @db.VarChar(11)
   phone     String?   @db.VarChar(11)
+  address   Address[]
   orders    Order[]
   storeId   Int
   store     Store     @relation(fields: [storeId], references: [id])

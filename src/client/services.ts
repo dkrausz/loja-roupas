@@ -1,24 +1,49 @@
 import { injectable } from "tsyringe";
 import { prisma } from "../database/prisma";
-import { TClientRegister, TClientReturn, TClientUpdate } from "./interfaces";
-
+import {
+  TClient,
+  TClientRegister,
+  TClientReturn,
+  TClientUpdate,
+} from "./interfaces";
+import bcryptjs from "bcryptjs";
+import { clientReturnSchema } from "./schemas";
 @injectable()
 export class ClientServices {
-  register = async (data: TClientRegister): Promise<TClientReturn | null> => {
-    return null;
+  register = async (payload: TClientRegister): Promise<TClientReturn> => {
+    const pwd: string = await bcryptjs.hash(payload.password, 10);
+    const newClient: TClientRegister = {
+      ...payload,
+      password: pwd,
+    };
+
+    const createdClient = await prisma.client.create({ data: newClient });
+    return clientReturnSchema.parse(createdClient);
   };
 
-  get = async (): Promise<Array<TClientReturn> | null> => {
-    return null;
+  get = async (): Promise<Array<TClientReturn>> => {
+    const loadClients = prisma.client.findMany();
+
+    return clientReturnSchema.array().parse(loadClients);
   };
 
-  getOne = async (id: number): Promise<TClientReturn | null> => {
-    return null;
+  getOne = async (id: number): Promise<TClientReturn> => {
+    const clientFound: TClient = (await prisma.client.findFirst({
+      where: { id },
+    })) as TClient;
+    return clientReturnSchema.parse(clientFound);
   };
 
-  update = async (data: TClientUpdate): Promise<TClientReturn | null> => {
-    return null;
+  update = async (id: number, data: TClientUpdate): Promise<TClientReturn> => {
+    const clientFound: TClient = (await prisma.client.findFirst({
+      where: { id },
+    })) as TClient;
+    const clientUpdated = { ...clientFound, ...data };
+
+    return clientReturnSchema.parse(clientUpdated);
   };
 
-  exclude = async (id: number) => {};
+  remove = async (id: number) => {
+    prisma.client.delete({ where: { id } });
+  };
 }
