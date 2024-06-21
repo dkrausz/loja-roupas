@@ -18,7 +18,7 @@ export const clientSchema = z.object({
 
 export const clientRegisterSchema = clientSchema.omit({
   id: true,
-  // publicId: true,
+  publicId: true,
   // storeId: true,
 });
 

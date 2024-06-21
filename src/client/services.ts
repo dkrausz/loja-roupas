@@ -12,8 +12,11 @@ import { clientReturnSchema } from "./schemas";
 export class ClientServices {
   register = async (payload: TClientRegister): Promise<TClientReturn> => {
     const pwd: string = await bcryptjs.hash(payload.password, 10);
+    const dateValue = new Date(payload.birthDate);
+
     const newClient: TClientRegister = {
       ...payload,
+      birthDate: dateValue,
       password: pwd,
     };
 
@@ -22,7 +25,7 @@ export class ClientServices {
   };
 
   get = async (): Promise<Array<TClientReturn>> => {
-    const loadClients = prisma.client.findMany();
+    const loadClients = await prisma.client.findMany();
 
     return clientReturnSchema.array().parse(loadClients);
   };
@@ -44,6 +47,6 @@ export class ClientServices {
   };
 
   remove = async (id: number) => {
-    prisma.client.delete({ where: { id } });
+    return await prisma.client.delete({ where: { id } });
   };
 }

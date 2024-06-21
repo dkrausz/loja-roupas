@@ -56,8 +56,8 @@ model Address {
   state        String    @db.VarChar(20)
   city         String    @db.VarChar(20)
   country      String    @db.VarChar(20)
-  clientId     Int
-  client       Client    @relation(fields: [clientId], references: [id])
+  clientId     Int?
+  client       Client?   @relation(fields: [clientId], references: [id])
   employee     Employee?
   store        Store?
 }
@@ -67,7 +67,7 @@ model Client {
   publicId  String    @default(uuid())
   name      String    @db.VarChar(255)
   email     String    @unique
-  password  String    @db.VarChar(50)
+  password  String
   birthDate DateTime
   cpf       String    @db.VarChar(11)
   phone     String?   @db.VarChar(11)
