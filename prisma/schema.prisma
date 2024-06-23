@@ -48,7 +48,7 @@ enum AccessLevel {
 
 model Address {
   id Int @id @default(autoincrement())
-  Street String @db.VarChar(100)
+  street String @db.VarChar(100)
   number Int 
   complement String? @db.VarChar(100)
   zipCode String @db.VarChar(9)  
@@ -56,8 +56,8 @@ model Address {
   state String @db.VarChar(20)
   city String @db.VarChar(20)
   country String @db.VarChar(20)
-  clientId Int
-  client Client @relation(fields: [clientId], references: [id])
+  clientId Int?
+  client Client? @relation(fields: [clientId], references: [id])
   employee Employee?
   store Store?
 }
@@ -101,8 +101,9 @@ model Product {
   description String @db.VarChar(255)
   price Int 
   orders Order[]
-  storeId Int
-  store Store @relation(fields: [storeId],references: [id])
+
+  storeId Int?
+  store Store? @relation(fields: [storeId],references: [id])
 }
 
 
