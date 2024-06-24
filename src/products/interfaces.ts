@@ -8,10 +8,9 @@ type TCreateProductBody = z.infer<typeof createProductBodySchema>;
 type TUpdateProductBody = z.infer<typeof updateProductSchema>;
 
 interface IProductService{
-  create(payload:TCreateProductBody):Promise<TReturnProduct>;
-  getAllProducts():Promise<Array<TReturnProduct>>;
-  getOneProduct(publicId:String):Promise<TReturnProduct>;
+  createProduct(payload:TCreateProductBody):Promise<TReturnProduct>;  
   getProducts(search:string):Promise<Array<TReturnProduct>>;
+  getOneProduct(publicId:String):Promise<TReturnProduct>;
   updateProduct(payload:TUpdateProductBody,publicId:string):Promise<TReturnProduct>;
   deleteProduct(publicId:string):Promise<void>;
 }

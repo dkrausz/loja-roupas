@@ -7,9 +7,11 @@ type TUpdateAddressBody = z.infer<typeof updateBodySchema>;
 
 
 interface IAddressService{
-  create(payload:TCreateAddressBody):Promise<TReturnAddress>;
+  createAddress(payload:TCreateAddressBody):Promise<TReturnAddress>;
   getAddressById(id:number):Promise<TReturnAddress>;
   getAddressByUser(clientId:number):Promise<Array<TReturnAddress>>;
+  updateAddress(payload:TUpdateAddressBody, id:Number):Promise<TReturnAddress>;
+  deleteAddress(id:Number):Promise<void>;
 
 }
 

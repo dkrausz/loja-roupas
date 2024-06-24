@@ -1,11 +1,12 @@
+import { injectable } from "tsyringe";
 import { prisma } from "../database/prisma";
 import { IAddressService, TCreateAddressBody, TReturnAddress, TUpdateAddressBody } from "./interfaces";
 import { addressSchema } from "./schemas";
 
+@injectable()
+export class AddressService implements IAddressService{
 
-class AddressService implements IAddressService{
-
-  public create=async(payload:TCreateAddressBody):Promise<TReturnAddress>=>{
+  public createAddress=async(payload:TCreateAddressBody):Promise<TReturnAddress>=>{
     const newAddress = await prisma.address.create({data:payload});  
     return addressSchema.parse(newAddress); 
   };
