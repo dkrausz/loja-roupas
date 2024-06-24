@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Store {
+  id        Int        @id @default(autoincrement())
+  publicId  String     @default(uuid())
+  name      String     @db.VarChar(255)
+  CNPJ      String     @db.VarChar(14)
+  adressId  Int        @unique
+  adress    Address    @relation(fields: [adressId], references: [id])
+  products  Product[]
+  oders     Order[]
+  clients   Client[]
+  employees Employee[]
+}
+
+model Employee {
+  id          Int         @id @default(autoincrement())
+  publicId    String      @default(uuid())
+  name        String      @db.VarChar(255)
+  password    String      @db.VarChar(50)
+  birthDate   DateTime
+  CPF         String      @db.VarChar(11)
+  addressId   Int?        @unique
+  address     Address?    @relation(fields: [addressId], references: [id])
+  phone       String?     @db.VarChar(11)
+  accessLevel AccessLevel
+  storeId     Int
+  store       Store       @relation(fields: [storeId], references: [id])
+}
+
+enum AccessLevel {
+  ADM
+  FUNCIONARIO
+}
+
+model Address {
+  id Int @id @default(autoincrement())
+  street String @db.VarChar(100)
+  number Int 
+  complement String? @db.VarChar(100)
+  zipCode String @db.VarChar(9)  
+  neighborhood String @db.VarChar(20)
+  state String @db.VarChar(20)
+  city String @db.VarChar(20)
+  country String @db.VarChar(20)
+  clientId Int?
+  client Client? @relation(fields: [clientId], references: [id])
+  employee Employee?
+  store Store?
+}
+
+model Client {
+  id        Int       @id @default(autoincrement())
+  publicId  String    @default(uuid())
+  name      String    @db.VarChar(255)
+  email     String    @unique
+  password  String
+  birthDate DateTime
+  cpf       String    @db.VarChar(11)
+  phone     String?   @db.VarChar(11)
+  address   Address[]
+  orders    Order[]
+  storeId   Int
+  store     Store     @relation(fields: [storeId], references: [id])
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  publicId    String      @default(uuid())
+  date        DateTime
+  products    Product[]
+  paymentType paymentType
+  clientId    Int
+  status      Status
+  discount    Boolean     @default(false)
+  total       Int
+  client      Client      @relation(fields: [clientId], references: [id])
+  storeId     Int
+  store       Store       @relation(fields: [storeId], references: [id])
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  publicId String @default(uuid())
+  name String @db.VarChar(50)
+  description String @db.VarChar(255)
+  price Int 
+  orders Order[]
+
+  storeId Int?
+  store Store? @relation(fields: [storeId],references: [id])
+}
+
+enum Status {
+  IN_PROGRESS
+  COMPLETED
+  DELIVERED
+}
+
+enum paymentType {
+  PIX
+  CARTAO_CREDITO
+  BOLETO
+}
