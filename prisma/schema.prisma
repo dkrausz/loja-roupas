@@ -47,6 +47,24 @@ enum AccessLevel {
 }
 
 model Address {
+<<<<<<< HEAD
+<<<<<<< HEAD
+  id Int @id @default(autoincrement())
+  street String @db.VarChar(100)
+  number Int 
+  complement String? @db.VarChar(100)
+  zipCode String @db.VarChar(9)  
+  neighborhood String @db.VarChar(20)
+  state String @db.VarChar(20)
+  city String @db.VarChar(20)
+  country String @db.VarChar(20)
+  clientId Int?
+  client Client? @relation(fields: [clientId], references: [id])
+  employee Employee?
+  store Store?
+=======
+=======
+>>>>>>> dev
   id           Int       @id @default(autoincrement())
   Street       String    @db.VarChar(100)
   number       Int
@@ -60,6 +78,10 @@ model Address {
   client       Client?   @relation(fields: [clientId], references: [id])
   employee     Employee?
   store        Store?
+<<<<<<< HEAD
+>>>>>>> dd60069c5cb6fdce1fa6a2db3692baeaab998863
+=======
+>>>>>>> dev
 }
 
 model Client {
@@ -93,6 +115,30 @@ model Order {
 }
 
 model Product {
+<<<<<<< HEAD
+<<<<<<< HEAD
+  id Int @id @default(autoincrement())
+  publicId String @default(uuid())
+  name String @db.VarChar(50)
+  description String @db.VarChar(255)
+  price Int 
+  orders Order[]
+
+  storeId Int?
+  store Store? @relation(fields: [storeId],references: [id])
+=======
+  id          Int     @id @default(autoincrement())
+  publicId    String  @default(uuid())
+  name        String  @db.VarChar(50)
+  description String  @db.VarChar(255)
+  price       Int
+  orders      Order[]
+  storeId     Int
+  store       Store   @relation(fields: [storeId], references: [id])
+>>>>>>> dd60069c5cb6fdce1fa6a2db3692baeaab998863
+}
+
+=======
   id          Int     @id @default(autoincrement())
   publicId    String  @default(uuid())
   name        String  @db.VarChar(50)
@@ -103,6 +149,7 @@ model Product {
   store       Store   @relation(fields: [storeId], references: [id])
 }
 
+>>>>>>> dev
 enum Status {
   IN_PROGRESS
   COMPLETED
