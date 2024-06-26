@@ -1,5 +1,5 @@
 import { injectable } from "tsyringe";
-import { TCreateStore, TReturnStore, TUpdateStore, storeSchema } from "./schemas";
+import { TCreateStore, TReturnStore, TUpdateStore, getStoreSchema, returnStoreSchema } from "./schemas";
 import { prisma } from "../database/prisma";
 
 @injectable()
@@ -7,19 +7,19 @@ export class StoreServices {
     async getMany(): Promise<TReturnStore[]> {
         const storeList = await prisma.store.findMany();
 
-        return storeList;
+        return getStoreSchema.array().parse(storeList);
     };
 
     async getOne(id: number): Promise<TReturnStore> {
         const store = await prisma.store.findFirst({ where: { id } });
 
-        return storeSchema.parse(store);
+        return getStoreSchema.parse(store);
     };
 
     async create(body: TCreateStore): Promise<TReturnStore> {
         const newStore = await prisma.store.create({ data: body });
 
-        return storeSchema.parse(newStore);
+        return returnStoreSchema.parse(newStore);
     };
 
     async update(id: number, body: TUpdateStore): Promise<TReturnStore> {
@@ -27,7 +27,7 @@ export class StoreServices {
 
         const updatedStore = { ...updateStore, ...body };
 
-        return storeSchema.parse(updatedStore);
+        return returnStoreSchema.parse(updatedStore);
     };
 
     async delete(id: number) {
