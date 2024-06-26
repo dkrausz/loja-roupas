@@ -28,3 +28,10 @@ export type TGetStore = z.infer<typeof getStoreSchema>;
 export type TCreateStore = z.infer<typeof createStoreSchema>;
 
 export type TUpdateStore = z.infer<typeof updateStoreSchema>;
+
+// // \
+// // 
+// // asdasdasdasdasd
+// asdasdasdasd
+// asdasdasdasdas
+// asdasdasdasdasd
