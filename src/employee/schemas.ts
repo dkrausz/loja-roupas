@@ -20,7 +20,7 @@ export const employeeSchema = z.object({
     storeId: z.number(),
 });
 
-export const returnEmployeeSchema = employeeSchema.extend({ address: addressSchema.nullish(), store: storeSchema.nullish() }).omit({addressId: true, storeId: true});
+export const returnEmployeeSchema = employeeSchema.extend({ address: addressSchema.nullish(), store: storeSchema.nullish() }).omit({ id: true, password: true});
 
 export const createEmployeeSchema = employeeSchema.omit({id: true});
 

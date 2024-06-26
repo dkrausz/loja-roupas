@@ -1,25 +1,26 @@
 import { injectable } from "tsyringe";
-import { TCreateEmployee, TEmployeeReturn, TUpdateEmployee, employeeSchema } from "./schemas";
+import { TCreateEmployee, TEmployee, TEmployeeReturn, TUpdateEmployee, returnEmployeeSchema } from "./schemas";
 import { prisma } from "../database/prisma";
+
 
 injectable()
 export class EmployeeServices {
     async getMany(): Promise<TEmployeeReturn[]> {
         const employeeList = await prisma.employee.findMany();
 
-        return employeeList;
+        return returnEmployeeSchema.array().parse(employeeList);
     };
 
     async getOne(id: number): Promise<TEmployeeReturn> {
         const employee = await prisma.employee.findFirst({ where: { id } });
 
-        return employeeSchema.parse(employee);
+        return returnEmployeeSchema.parse(employee);
     };
 
     async create(body: TCreateEmployee): Promise<TEmployeeReturn> {
         const newEmployee = await prisma.employee.create({ data: body });
 
-        return employeeSchema.parse(newEmployee);
+        return returnEmployeeSchema.parse(newEmployee);
     };
 
     async update(id: number, body: TUpdateEmployee): Promise<TEmployeeReturn> {
@@ -27,7 +28,7 @@ export class EmployeeServices {
 
         const updatedEmployee = { ...updateEmployee, ...body };
 
-        return employeeSchema.parse(updatedEmployee);
+        return returnEmployeeSchema.parse(updatedEmployee);
     };
 
     async delete(id: number) {
