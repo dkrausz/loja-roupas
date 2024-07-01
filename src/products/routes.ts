@@ -9,7 +9,7 @@ container.registerSingleton("ProductService", ProductService);
 const productController = container.resolve(ProductController);
 
 
-productRoute.get("",productController.getProducts);
+productRoute.get("/",productController.getProducts);
 productRoute.get("/:id",productController.getOneProduct);
 
 
