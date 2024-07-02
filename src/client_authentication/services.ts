@@ -8,7 +8,11 @@ import { sign } from "jsonwebtoken";
 import { clientReturnSchema } from "../client/schemas";
 
 @injectable()
+<<<<<<< HEAD
 export class ClientAuthentication {
+=======
+export class ClientAuthenticationService {
+>>>>>>> cf167dde4199762fce1dd9bee65b19a0103d0568
   login = async (payload: TClientLogin): Promise<TClientLoginReturn> => {
     const loadedUser: TClient = (await prisma.client.findFirst({
       where: { email: payload.email },
