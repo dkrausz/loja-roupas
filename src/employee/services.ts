@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import { TCreateEmployee, TEmployee, TEmployeeReturn, TUpdateEmployee, returnEmployeeSchema } from "./schemas";
 import { prisma } from "../database/prisma";
-import bcryptjs from "bcryptjs"; 
+import bcryptjs from "bcryptjs";
 
 
 injectable()
@@ -21,7 +21,9 @@ export class EmployeeServices {
     async create(body: TCreateEmployee): Promise<TEmployeeReturn> {
         const pwd = await bcryptjs.hash(body.password, 10);
 
-        const employee = {...body, password: pwd};
+        const dateValue = new Date(body.birthDate);
+
+        const employee = { ...body, birthDate: dateValue, password: pwd };
 
         const newEmployee = await prisma.employee.create({ data: employee });
 
