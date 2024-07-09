@@ -10,7 +10,7 @@ export const employeeLogin = employeeSchema.pick({
 export type TemployeeLogin = z.infer<typeof employeeLogin>;
 
 export type TemployeeLoginReturn = {
-    token: string;
-    employee: TEmployeeReturn;
+    token: string,
+    employee: TEmployeeReturn,
 };
 

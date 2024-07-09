@@ -11,8 +11,8 @@ export class EmployeeAuthController {
     ){}
 
     async login (req: Request, res: Response): Promise<Response>{
-        const response = this.employeeAuthService.login(req.body);
-
+        const response = await this.employeeAuthService.login(req.body);
+        
         return res.status(201).json(response);
     }
 }
