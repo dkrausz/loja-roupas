@@ -21,9 +21,10 @@ export class EmployeeServices {
     async create(body: TCreateEmployee): Promise<TEmployeeReturn> {
         const pwd = await bcryptjs.hash(body.password, 10);
 
-        const newEmployee = { ...body, password: pwd };
+        const dataValue = new Date(body.birthDate);
 
-        console.log(newEmployee);
+        const newEmployee = { ...body, birthDate: dataValue , password: pwd };
+
 
         const employee = await prisma.employee.create({ data: newEmployee });
 
