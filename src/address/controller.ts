@@ -1,7 +1,8 @@
-import { inject } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { IAddressService } from "./interfaces";
 import { Request, Response } from "express";
 
+@injectable()
 export class AddressController{
 
   constructor(@inject("AddressService") private service: IAddressService){}

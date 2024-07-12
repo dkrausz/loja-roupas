@@ -11,7 +11,7 @@ import { employeeAuthRouter } from "./employee.auth/routes";
 export const app = express();
 
 app.use(json());
-// app.use("/address",addressRoute);
+app.use("/address",addressRoute);
 // app.use("/products",productRoute);
 app.use("/store", storeRoutes);
 app.use("/employee", employeeRoutes);
