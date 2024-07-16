@@ -3,10 +3,8 @@ import { ClientAuthenticationService } from "./services";
 import { ClientAuthenticationController } from "./controllers";
 import { Router } from "express";
 
-container.registerSingleton(
-  "ClientAuthenticationService",
-  ClientAuthenticationService
-);
+container.registerSingleton("ClientAuthenticationService",ClientAuthenticationService);
+
 const clientAuthenticationController = container.resolve(
   ClientAuthenticationController
 );
