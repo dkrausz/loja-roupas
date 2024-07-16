@@ -8,7 +8,7 @@ export class OrderControllers {
 
   register = async (req: Request, res: Response): Promise<Response> => {
     const response = await this.orderServices.register(req.body);
-
+    console.log(response);
     return res.status(201).json(response);
   };
 
