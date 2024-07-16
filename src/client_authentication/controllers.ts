@@ -4,10 +4,13 @@ import { ClientAuthenticationService } from "./services";
 
 @autoInjectable()
 export class ClientAuthenticationController {
-  constructor(@inject(ClientAuthenticationService) private clientAuthenticationService: ClientAuthenticationService) {}
+  constructor(
+    @inject("ClientAuthenticationService")
+    private clientAuthenticationService: ClientAuthenticationService
+  ) {}
 
   login = async (req: Request, res: Response): Promise<Response> => {
-    const response = this.clientAuthenticationService.login(req.body);
+    const response = await this.clientAuthenticationService.login(req.body);
 
     return res.status(201).json(response);
   };

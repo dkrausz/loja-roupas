@@ -2,12 +2,16 @@ import { injectable } from "tsyringe";
 import { TOrder, TOrderRegister, TOrderUpdate } from "./interfaces";
 import { prisma } from "../database/prisma";
 import { orderSchema } from "./schemas";
+import { date } from "zod";
 
 @injectable()
 export class OrderServices {
-  register = async (data: TOrderRegister): Promise<TOrder> => {
-    const newOrder: TOrder = await prisma.order.create({ data });
-
+  register = async (payload: TOrderRegister): Promise<TOrder> => {
+    console.log(payload);
+    const orderData = { ...payload, date: new Date() };
+    console.log(orderData);
+    const newOrder: TOrder = await prisma.order.create({ data: orderData });
+    console.log(newOrder);
     return orderSchema.parse(newOrder);
   };
 

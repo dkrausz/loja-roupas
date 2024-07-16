@@ -7,12 +7,20 @@ import { productRoute } from "./products/routes";
 import { storeRoutes } from "./store/routes";
 import { employeeRoutes } from "./employee/routes";
 import { employeeAuthRouter } from "./employee.auth/routes";
+import { clientAuthenticationRouter } from "./client_authentication/routes";
+import { clientRouter } from "./client/routes";
+import { orderRouter } from "./order/routes";
+import { HandleErrors } from "./@shared/handleErrors";
 
 export const app = express();
 
 app.use(json());
-app.use("/address",addressRoute);
+app.use("/address", addressRoute);
 // app.use("/products",productRoute);
 app.use("/store", storeRoutes);
 app.use("/employee", employeeRoutes);
-app.use('/employeeLogin', employeeAuthRouter);
+app.use("/employeeLogin", employeeAuthRouter);
+app.use("/login", clientAuthenticationRouter);
+app.use("/clients", clientRouter);
+app.use("/order", orderRouter);
+app.use(HandleErrors.execute);
