@@ -5,7 +5,7 @@ import { ClientAuthenticationService } from "./services";
 @autoInjectable()
 export class ClientAuthenticationController {
   constructor(
-    @inject(ClientAuthenticationService)
+    @inject("ClientAuthenticationService")
     private clientAuthenticationService: ClientAuthenticationService
   ) {}
 
