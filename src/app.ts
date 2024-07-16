@@ -7,6 +7,7 @@ import { productRoute } from "./products/routes";
 import { storeRoutes } from "./store/routes";
 import { employeeRoutes } from "./employee/routes";
 import { employeeAuthRouter } from "./employee.auth/routes";
+import { HandleErrors } from "./@shared/HandleErrors";
 
 export const app = express();
 

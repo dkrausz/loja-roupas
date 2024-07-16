@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-// import { AppError } from "./appError";
+import { AppError } from "./appError";
 import jwt from "jsonwebtoken";
 
 export class ValidateToken {
