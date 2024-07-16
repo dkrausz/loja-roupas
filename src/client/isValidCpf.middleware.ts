@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { AppError } from "../@shared/errors";
 
 export class IsValidcpf {
   static execute = (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +18,7 @@ export class IsValidcpf {
 
     const validCpf = checkSum1 && checkSum2;
     if (!validCpf) {
-      throw new Error("Client cpf is not valid.");
+      throw new AppError(417, "Client cpf is not valid.");
     }
 
     return next();

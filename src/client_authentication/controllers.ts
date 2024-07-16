@@ -10,7 +10,7 @@ export class ClientAuthenticationController {
   ) {}
 
   login = async (req: Request, res: Response): Promise<Response> => {
-    const response = this.clientAuthenticationService.login(req.body);
+    const response = await this.clientAuthenticationService.login(req.body);
 
     return res.status(201).json(response);
   };

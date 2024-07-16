@@ -2,13 +2,22 @@ import { container } from "tsyringe";
 import { ClientServices } from "./services";
 import { ClientControllers } from "./controllers";
 import { Router } from "express";
+import { IsUniqueEmail } from "./isUniqueEmail.middleware";
+import { IsValidcpf } from "./isValidCpf.middleware";
+import { IsUniqueCpf } from "./isUniqueCpf.middleware";
 
 container.registerSingleton("ClientServices", ClientServices);
 const clientControllers = container.resolve(ClientControllers);
 
 export const clientRouter = Router();
 
-clientRouter.post("/", (req, res) => clientControllers.register(req, res));
+clientRouter.post(
+  "/",
+  IsUniqueEmail.execute,
+  IsValidcpf.execute,
+  IsUniqueCpf.execute,
+  (req, res) => clientControllers.register(req, res)
+);
 
 clientRouter.get("/", (req, res) => clientControllers.get(req, res));
 

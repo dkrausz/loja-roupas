@@ -32,7 +32,6 @@ export class ClientAuthenticationService {
       subject: loadedUser.id.toString(),
     });
 
-    console.log(tokenGen);
     return { token: tokenGen, client: clientReturnSchema.parse(loadedUser) };
   };
 }

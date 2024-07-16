@@ -8,6 +8,9 @@ import { storeRoutes } from "./store/routes";
 import { employeeRoutes } from "./employee/routes";
 import { employeeAuthRouter } from "./employee.auth/routes";
 import { clientAuthenticationRouter } from "./client_authentication/routes";
+import { clientRouter } from "./client/routes";
+import { orderRoutes } from "./order/routes";
+import { HandleErrors } from "./@shared/handleErrors";
 
 export const app = express();
 
@@ -18,3 +21,6 @@ app.use("/store", storeRoutes);
 app.use("/employee", employeeRoutes);
 app.use("/employeeLogin", employeeAuthRouter);
 app.use("/login", clientAuthenticationRouter);
+app.use("/clients", clientRouter);
+app.use("/order", orderRoutes);
+app.use(HandleErrors.execute);
