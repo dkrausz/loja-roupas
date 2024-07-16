@@ -32,9 +32,13 @@ export class EmployeeServices {
     };
 
     async update(id: number, body: TUpdateEmployee): Promise<TEmployeeReturn> {
+
         const updateEmployee = await prisma.employee.findFirst({ where: { id } });
 
         const updatedEmployee = { ...updateEmployee, ...body };
+
+        console.log(updatedEmployee);
+
 
         return returnEmployeeSchema.parse(updatedEmployee);
     };

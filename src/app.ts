@@ -15,6 +15,8 @@ import { HandleErrors } from "./@shared/handleErrors";
 export const app = express();
 
 app.use(json());
+
+
 app.use("/address", addressRoute);
 // app.use("/products",productRoute);
 app.use("/store", storeRoutes);
@@ -24,3 +26,4 @@ app.use("/login", clientAuthenticationRouter);
 app.use("/clients", clientRouter);
 app.use("/order", orderRouter);
 app.use(HandleErrors.execute);
+

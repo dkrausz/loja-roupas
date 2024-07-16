@@ -39,7 +39,7 @@ export class EmployeeControllers {
     async delete(req: Request, res: Response): Promise<Response<void>> {
         const id = req.params.id;
 
-        const response = await this.employeeServices.delete(Number(id));
+        await this.employeeServices.delete(Number(id));
 
         return res.status(204).json();
     };
