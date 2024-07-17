@@ -19,14 +19,14 @@ export class OrderControllers {
   };
 
   getOrder = async (req: Request, res: Response): Promise<Response> => {
-    const response = await this.orderServices.getOrder(Number(req.params.id));
+    const response = await this.orderServices.getOrder(req.params.id);
 
     return res.status(200).json(response);
   };
 
   updateOrder = async (req: Request, res: Response): Promise<Response> => {
     const response = await this.orderServices.updateOrder(
-      Number(req.params.id),
+      req.params.id,
       req.body
     );
 
@@ -34,7 +34,7 @@ export class OrderControllers {
   };
 
   deleteOrder = async (req: Request, res: Response): Promise<Response> => {
-    await this.orderServices.deleteOrder(Number(req.params.id));
+    await this.orderServices.deleteOrder(req.params.id);
 
     return res.status(204).json();
   };

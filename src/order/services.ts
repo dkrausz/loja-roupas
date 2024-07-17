@@ -2,8 +2,6 @@ import { injectable } from "tsyringe";
 import { TOrder, TOrderRegister, TOrderUpdate } from "./interfaces";
 import { prisma } from "../database/prisma";
 import { orderSchema } from "./schemas";
-import { date } from "zod";
-
 @injectable()
 export class OrderServices {
   register = async (payload: TOrderRegister): Promise<TOrder> => {
@@ -21,24 +19,27 @@ export class OrderServices {
     return orderSchema.array().parse(ordersList);
   };
 
-  getOrder = async (id: number): Promise<TOrder> => {
+  getOrder = async (publicId: string): Promise<TOrder> => {
     const orderFound: TOrder = (await prisma.order.findFirst({
-      where: { id },
+      where: { publicId },
     })) as TOrder;
 
     return orderSchema.parse(orderFound);
   };
 
-  updateOrder = async (id: number, newData: TOrderUpdate): Promise<TOrder> => {
+  updateOrder = async (
+    publicId: string,
+    newData: TOrderUpdate
+  ): Promise<TOrder> => {
     const orderToUpdate: TOrder = (await prisma.order.findFirst({
-      where: { id },
+      where: { publicId },
     })) as TOrder;
     const orderUpdated: TOrder = { ...orderToUpdate, ...newData };
 
     return orderSchema.parse(orderUpdated);
   };
 
-  deleteOrder = async (id: number) => {
-    return prisma.order.delete({ where: { id } });
+  deleteOrder = async (publicId: string) => {
+    return await prisma.order.deleteMany({ where: { publicId } });
   };
 }
