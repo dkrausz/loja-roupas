@@ -8,9 +8,9 @@ import { IsUniqueCpf } from "./isUniqueCpf.middleware";
 import { ValidateClientToken } from "../@shared/validateClientToken";
 import { ClientAccessPermission } from "./clientAccessPermission.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
-import { Schema } from "zod";
 import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
 import { IsIdExisting } from "./isIdExisting.middleware";
+import { StoreIdValid } from "./storeIdValid.middleware";
 
 container.registerSingleton("ClientServices", ClientServices);
 const clientControllers = container.resolve(ClientControllers);
@@ -23,6 +23,7 @@ clientRouter.post(
   IsUniqueEmail.execute,
   IsValidcpf.execute,
   IsUniqueCpf.execute,
+  StoreIdValid.execute,
   (req, res) => clientControllers.register(req, res)
 );
 
