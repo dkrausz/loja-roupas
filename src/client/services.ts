@@ -8,6 +8,7 @@ import {
 } from "./interfaces";
 import bcryptjs from "bcryptjs";
 import { clientReturnSchema } from "./schemas";
+import { string } from "zod";
 @injectable()
 export class ClientServices {
   register = async (payload: TClientRegister): Promise<TClientReturn> => {
@@ -30,23 +31,27 @@ export class ClientServices {
     return clientReturnSchema.array().parse(loadClients);
   };
 
-  getOne = async (id: number): Promise<TClientReturn> => {
+  getOne = async (publicId: string): Promise<TClientReturn> => {
     const clientFound: TClient = (await prisma.client.findFirst({
-      where: { id },
+      where: { publicId },
     })) as TClient;
     return clientReturnSchema.parse(clientFound);
   };
 
-  update = async (id: number, data: TClientUpdate): Promise<TClientReturn> => {
+  update = async (
+    publicId: string,
+    data: TClientUpdate
+  ): Promise<TClientReturn> => {
     const clientFound: TClient = (await prisma.client.findFirst({
-      where: { id },
+      where: { publicId },
     })) as TClient;
     const clientUpdated = { ...clientFound, ...data };
 
     return clientReturnSchema.parse(clientUpdated);
   };
 
-  remove = async (id: number) => {
-    return await prisma.client.delete({ where: { id } });
+  remove = async (publicId: string): Promise<void> => {
+    await prisma.client.delete({ where: { publicId } });
+    return;
   };
 }

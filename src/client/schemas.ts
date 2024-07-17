@@ -20,7 +20,7 @@ export const clientSchema = z.object({
     .min(8)
     .max(50)
     .regex(/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/),
-  birthDate: z.date().max(new Date(minValidDate())),
+  birthDate: z.coerce.date().max(new Date(minValidDate())),
   cpf: z.string().max(11),
   phone: z.string().max(11),
   storeId: z.number().positive(),

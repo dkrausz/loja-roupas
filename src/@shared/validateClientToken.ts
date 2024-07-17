@@ -5,16 +5,16 @@ import { verify } from "jsonwebtoken";
 
 export class ValidateClientToken {
   static execute(req: Request, res: Response, next: NextFunction) {
-    const userToken = req.headers.authorization;
+    const clientToken = req.headers.authorization;
 
-    if (!userToken) {
-      throw new AppError(401, "Token is required");
+    if (!clientToken) {
+      throw new AppError(401, "Token is required.");
     }
 
-    const [_prefix, token] = userToken?.split(" ");
+    const [_prefix, token] = clientToken?.split(" ");
     const { jwtKey } = jwtConfig();
     const tokenDecoded = verify(token, jwtKey);
-    res.locals.userId = tokenDecoded.sub;
+    res.locals.clientToken = tokenDecoded.sub;
 
     return next();
   }

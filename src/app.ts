@@ -7,7 +7,7 @@ import { productRoute } from "./products/routes";
 import { storeRoutes } from "./store/routes";
 import { employeeRoutes } from "./employee/routes";
 import { employeeAuthRouter } from "./employee.auth/routes";
-import { clientAuthenticationRouter } from "./client_authentication/routes";
+import { clientAuthenticationRouter } from "./client_auth/routes";
 import { clientRouter } from "./client/routes";
 import { orderRouter } from "./order/routes";
 import { HandleErrors } from "./@shared/handleErrors";
@@ -15,7 +15,6 @@ import { HandleErrors } from "./@shared/handleErrors";
 export const app = express();
 
 app.use(json());
-
 
 app.use("/address", addressRoute);
 // app.use("/products",productRoute);
@@ -26,4 +25,3 @@ app.use("/login", clientAuthenticationRouter);
 app.use("/clients", clientRouter);
 app.use("/order", orderRouter);
 app.use(HandleErrors.execute);
-
