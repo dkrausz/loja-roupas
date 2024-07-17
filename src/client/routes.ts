@@ -30,10 +30,11 @@ clientRouter.post(
 // Somente o administrador?
 clientRouter.get("/", (req, res) => clientControllers.get(req, res));
 
+clientRouter.use("/:id", IsIdExisting.execute);
+
 clientRouter.get(
   "/:id",
   ValidateClientToken.execute,
-  IsIdExisting.execute,
   ClientAccessPermission.execute,
   (req, res) => clientControllers.getOne(req, res)
 );
@@ -42,7 +43,6 @@ clientRouter.patch(
   "/:id",
   bodyMiddleware.bodyIsValid(clientUpdateSchema),
   ValidateClientToken.execute,
-  IsIdExisting.execute,
   ClientAccessPermission.execute,
   (req, res) => clientControllers.update(req, res)
 );
@@ -51,7 +51,6 @@ clientRouter.patch(
 clientRouter.delete(
   "/:id",
   ValidateClientToken.execute,
-  IsIdExisting.execute,
   ClientAccessPermission.execute,
   (req, res) => clientControllers.remove(req, res)
 );
