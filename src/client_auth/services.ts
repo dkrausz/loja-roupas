@@ -6,6 +6,7 @@ import { TClient } from "../client/interfaces";
 import { jwtConfig } from "../configs/auth.config";
 import { sign } from "jsonwebtoken";
 import { clientReturnSchema } from "../client/schemas";
+import { AppError } from "../@shared/errors";
 
 @injectable()
 export class ClientAuthenticationService {
@@ -23,13 +24,13 @@ export class ClientAuthenticationService {
       loadedUser.password
     );
     if (!pwdMatch) {
-      throw new Error("Email and password doesn't match.");
+      throw new AppError(401, "Email and password doesn't match.");
     }
 
     const { jwtKey, expiresIn } = jwtConfig();
     const tokenGen: string = sign({}, jwtKey, {
       expiresIn: expiresIn,
-      subject: loadedUser.id.toString(),
+      subject: loadedUser.publicId,
     });
 
     return { token: tokenGen, client: clientReturnSchema.parse(loadedUser) };
