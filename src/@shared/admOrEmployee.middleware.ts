@@ -7,10 +7,7 @@ export class AdmAuth {
     const { decode } = res.locals;
 
     if (!decode || decode.accessLevel !== "ADM" || "FUNCIONARIO") {
-      throw new AppError(
-        403,
-        "You don't have permission to perform this action"
-      );
+      throw new AppError(403,"You don't have permission to perform this action" );
     }
 
     next();

@@ -7,12 +7,8 @@ export const employeeSchema = z.object({
     id: z.number().positive(),
     publicId: z.string(),
     name: z.string().max(255).min(1),
-    password: z
-        .string()
-        .min(8)
-        .max(50)
-        .regex(/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/),
-    birthDate: z.date(),
+    password: z.string().min(8).max(50).regex(/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/),
+    birthDate: z.coerce.date().max(new Date()),
     CPF: z.string().max(11).min(1),
     addressId: z.number().nullish(),
     phone: z.string().max(11).nullish(),

@@ -1,8 +1,8 @@
-import { inject } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { IProductService } from "./interfaces";
 import { Request, Response } from "express";
 
-
+@injectable()
 export class ProductController{
 
   constructor(@inject("ProductService") private service:IProductService){}
