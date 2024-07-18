@@ -35,9 +35,8 @@ export class EmployeeServices {
 
         const updateEmployee = await prisma.employee.findFirst({ where: { id } });
 
-        const updatedEmployee = { ...updateEmployee, ...body };
 
-        console.log(updatedEmployee);
+        const updatedEmployee = { ...updateEmployee, ...body };
 
 
         return returnEmployeeSchema.parse(updatedEmployee);
