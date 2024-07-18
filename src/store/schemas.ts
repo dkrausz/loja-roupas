@@ -10,12 +10,12 @@ export const storeSchema = z.object({
     publicId: z.string(),
     name: z.string().max(255).min(1),
     CNPJ: z.string().max(14).min(1),
-    adressId: z.number(),
+    addressId: z.number(),
 });
 
-export const returnStoreSchema = storeSchema.extend({adress: addressSchema.nullish()}).omit({id: true});
+export const returnStoreSchema = storeSchema.extend({address: addressSchema.nullish()}).omit({id: true});
 
-export const getStoreSchema = returnStoreSchema.omit({ adress: true});
+export const getStoreSchema = returnStoreSchema.omit({ address: true});
 
 export const createStoreSchema = storeSchema.omit({id: true, publicId: true});
 

@@ -10,6 +10,6 @@ const employeeAuthController = container.resolve(EmployeeAuthController);
 
 export const employeeAuthRouter = Router();
 
-employeeAuthRouter.get("/", (req, res) => employeeAuthController.login(req, res));
+employeeAuthRouter.post("/", (req, res) => employeeAuthController.login(req, res));
 
 
