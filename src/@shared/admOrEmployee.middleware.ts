@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "./errors";
-<<<<<<< HEAD
 
-=======
->>>>>>> c2ef8ee220b80c6eabdb56c274ce4a289f035e51
 
 export class AdmAuth {
   static execute(req: Request, res: Response, next: NextFunction) {
