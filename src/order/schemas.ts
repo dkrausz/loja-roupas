@@ -33,7 +33,6 @@ export const orderUpdateSchema = orderSchema
 
 export const returnOrderSchema = orderSchema
   .omit({ id: true, storeId: true })
-  .extend({ products: productSchema.array() });
-// .extend({
-//   products: productSchema.array().nullish(),
-// });
+  .extend({
+    products: productSchema.omit({ id: true, StoreId: true }).array(),
+  });
