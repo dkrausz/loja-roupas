@@ -18,7 +18,7 @@ orderRouter.use("/:id", IsIdExisting.execute);
 orderRouter.get("/:id", (req, res) => orderController.getOrder(req, res));
 
 // Listagem do pedido com todos os produtos
-// orderRouter.get("/:id/products", (req, res) => orderController.getOrder(req, res));
+// orderRouter.get("/:id/products", (req, res) => orderController.getOrderProducts(req, res));
 
 orderRouter.patch("/:id", (req, res) => orderController.updateOrder(req, res));
 

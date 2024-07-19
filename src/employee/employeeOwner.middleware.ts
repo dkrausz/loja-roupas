@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { prisma } from "../database/prisma";
+
 import { AppError } from "../@shared/errors";
 
 export class EmployeeOwner {
@@ -10,10 +11,8 @@ export class EmployeeOwner {
     if (decode && (decode.sub === employeeId || decode.accessLevel === "ADM")) {
       next();
     } else {
-      throw new AppError(
-        403,
-        "You don't have permission to perform this action"
-      );
+      throw new AppError(403, "You don't have permission to perform this action");
     }
   }
 }
+

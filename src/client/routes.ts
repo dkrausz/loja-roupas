@@ -5,7 +5,7 @@ import { Router } from "express";
 import { IsUniqueEmail } from "./isUniqueEmail.middleware";
 import { IsValidcpf } from "./isValidCpf.middleware";
 import { IsUniqueCpf } from "./isUniqueCpf.middleware";
-import { ValidateClientToken } from "../@shared/validateClientToken";
+import { ValidateToken } from "../@shared/validateToken.middleware";
 import { ClientAccessPermission } from "./clientAccessPermission.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
 import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
@@ -34,7 +34,7 @@ clientRouter.use("/:id", IsIdExisting.execute);
 
 clientRouter.get(
   "/:id",
-  ValidateClientToken.execute,
+  ValidateToken.execute,
   ClientAccessPermission.execute,
   (req, res) => clientControllers.getOne(req, res)
 );
@@ -42,7 +42,7 @@ clientRouter.get(
 clientRouter.patch(
   "/:id",
   bodyMiddleware.bodyIsValid(clientUpdateSchema),
-  ValidateClientToken.execute,
+  ValidateToken.execute,
   ClientAccessPermission.execute,
   (req, res) => clientControllers.update(req, res)
 );
@@ -50,7 +50,7 @@ clientRouter.patch(
 // O cliente pode ser excluir mesmo???
 clientRouter.delete(
   "/:id",
-  ValidateClientToken.execute,
+  ValidateToken.execute,
   ClientAccessPermission.execute,
   (req, res) => clientControllers.remove(req, res)
 );

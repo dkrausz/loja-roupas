@@ -13,7 +13,7 @@ CREATE TABLE "Store" (
     "publicId" TEXT NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "CNPJ" VARCHAR(14) NOT NULL,
-    "adressId" INTEGER NOT NULL,
+    "addressId" INTEGER NOT NULL,
 
     CONSTRAINT "Store_pkey" PRIMARY KEY ("id")
 );
@@ -99,7 +99,7 @@ CREATE TABLE "_OrderToProduct" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Store_adressId_key" ON "Store"("adressId");
+CREATE UNIQUE INDEX "Store_addressId_key" ON "Store"("addressId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Employee_addressId_key" ON "Employee"("addressId");
@@ -120,7 +120,7 @@ CREATE UNIQUE INDEX "_OrderToProduct_AB_unique" ON "_OrderToProduct"("A", "B");
 CREATE INDEX "_OrderToProduct_B_index" ON "_OrderToProduct"("B");
 
 -- AddForeignKey
-ALTER TABLE "Store" ADD CONSTRAINT "Store_adressId_fkey" FOREIGN KEY ("adressId") REFERENCES "Address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Store" ADD CONSTRAINT "Store_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "Address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Employee" ADD CONSTRAINT "Employee_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "Address"("id") ON DELETE SET NULL ON UPDATE CASCADE;

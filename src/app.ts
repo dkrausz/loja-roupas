@@ -17,10 +17,10 @@ export const app = express();
 app.use(json());
 
 app.use("/address", addressRoute);
-// app.use("/products",productRoute);
+app.use("/products",productRoute);
 app.use("/store", storeRoutes);
 app.use("/employee", employeeRoutes);
-app.use("/employeeLogin", employeeAuthRouter);
+app.use('/employeelogin', employeeAuthRouter);
 app.use("/login", clientAuthenticationRouter);
 app.use("/clients", clientRouter);
 app.use("/order", orderRouter);

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { container } from "tsyringe";
 import { StoreServices } from "./services";
 import { StoreControllers } from "./controllers";
-import { ValidateToken } from "../@shared/validToken.middleware";
+import { ValidateToken } from "../@shared/validateToken.middleware";
 import { AdmAuth } from "../@shared/admAuth.middleware";
 
 container.registerSingleton("StoreServices", StoreServices);

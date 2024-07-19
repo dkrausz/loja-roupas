@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -18,8 +19,8 @@ model Store {
   publicId  String     @default(uuid())
   name      String     @db.VarChar(255)
   CNPJ      String     @db.VarChar(14)
-  adressId  Int        @unique
-  adress    Address    @relation(fields: [adressId], references: [id])
+  addressId Int        @unique
+  address   Address    @relation(fields: [addressId], references: [id])
   products  Product[]
   oders     Order[]
   clients   Client[]

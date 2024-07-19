@@ -4,7 +4,7 @@ import { AppError } from "../@shared/errors";
 
 export class IsIdExisting {
   static execute = async (_req: Request, res: Response, next: NextFunction) => {
-    const clientId: string = res.locals.clientToken;
+    const clientId: string = res.locals.decode;
 
     const foundClient = await prisma.client.findFirst({
       where: { publicId: clientId },
