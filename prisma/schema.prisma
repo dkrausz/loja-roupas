@@ -80,7 +80,7 @@ model Client {
 
 model Order {
   id          Int         @id @default(autoincrement())
-  publicId    String      @unique @default(uuid())
+  publicId    String      @default(uuid())
   date        DateTime
   products    Product[]
   paymentType paymentType

@@ -6,7 +6,13 @@ import {
   TReturnOrder,
 } from "./interfaces";
 import { prisma } from "../database/prisma";
+<<<<<<< HEAD
 import { orderSchema, returnOrderSchema } from "./schemas";
+=======
+import { orderSchema } from "./schemas";
+import { date } from "zod";
+
+>>>>>>> parent of 3318910 (feat: order IsIdExisting.middleware)
 @injectable()
 export class OrderServices {
   register = async (payload: TPayloadOrder): Promise<TReturnOrder> => {
@@ -41,14 +47,15 @@ export class OrderServices {
     return orderSchema.array().parse(ordersList);
   };
 
-  getOrder = async (publicId: string): Promise<TOrder> => {
+  getOrder = async (id: number): Promise<TOrder> => {
     const orderFound: TOrder = (await prisma.order.findFirst({
-      where: { publicId },
+      where: { id },
     })) as TOrder;
 
     return orderSchema.parse(orderFound);
   };
 
+<<<<<<< HEAD
   // getOrder = async (publicId: string) => {
   //   const orderProducts = await prisma.order.findFirst({
   //     where: { publicId },
@@ -62,15 +69,18 @@ export class OrderServices {
     publicId: string,
     newData: TOrderUpdate
   ): Promise<TOrder> => {
+=======
+  updateOrder = async (id: number, newData: TOrderUpdate): Promise<TOrder> => {
+>>>>>>> parent of 3318910 (feat: order IsIdExisting.middleware)
     const orderToUpdate: TOrder = (await prisma.order.findFirst({
-      where: { publicId },
+      where: { id },
     })) as TOrder;
     const orderUpdated: TOrder = { ...orderToUpdate, ...newData };
 
     return orderSchema.parse(orderUpdated);
   };
 
-  deleteOrder = async (publicId: string) => {
-    return await prisma.order.deleteMany({ where: { publicId } });
+  deleteOrder = async (id: number) => {
+    return prisma.order.delete({ where: { id } });
   };
 }

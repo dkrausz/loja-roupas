@@ -50,7 +50,8 @@ export class ClientServices {
     return clientReturnSchema.parse(clientUpdated);
   };
 
-  remove = async (publicId: string) => {
-    return await prisma.client.delete({ where: { publicId } });
+  remove = async (publicId: string): Promise<void> => {
+    await prisma.client.delete({ where: { publicId } });
+    return;
   };
 }
