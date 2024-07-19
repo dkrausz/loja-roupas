@@ -1,32 +1,38 @@
 import { injectable } from "tsyringe";
 import {
   TOrder,
-  TOrderRegister,
   TOrderUpdate,
-  TRegisterProductInOrder,
-  TOrderList,
   TPayloadOrder,
+  TReturnOrder,
 } from "./interfaces";
 import { prisma } from "../database/prisma";
 import { orderSchema, returnOrderSchema } from "./schemas";
 @injectable()
 export class OrderServices {
-  register = async (payload: TPayloadOrder) => {
-    const orderData = { ...payload, date: new Date(), products: {} };
-
-    const newOrderData: TOrder = await prisma.order.create({ data: orderData });
+  register = async (payload: TPayloadOrder): Promise<TReturnOrder> => {
     const itemsList = payload.products.map((item) => {
       return { id: item };
     });
 
-    const completOrder = await prisma.order.update({
-      where: { id: newOrderData.id },
+    const newOrder = await prisma.order.create({
       data: {
-        products: { connect: itemsList },
+        paymentType: payload.paymentType,
+        clientId: payload.clientId,
+        status: payload.status,
+        discount: payload.discount,
+        total: payload.total,
+        storeId: payload.storeId,
+        date: new Date(),
+        products: {
+          connect: itemsList,
+        },
       },
-      include: { products: true },
+      include: {
+        products: true,
+      },
     });
-    return returnOrderSchema.parse(completOrder);
+
+    return returnOrderSchema.parse(newOrder);
   };
 
   get = async (): Promise<Array<TOrder>> => {
