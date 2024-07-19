@@ -4,7 +4,6 @@ import {
   orderSchema,
   orderUpdateSchema,
   registerProductInOrderSchema,
-  returnOrderSchema,
 } from "./schemas";
 import { TProduct } from "../products/interfaces";
 
@@ -17,4 +16,3 @@ export type TRegisterProductInOrder = z.infer<
 export type TPayloadOrder = TOrderRegister & { products: number[] };
 
 export type TOrderList = TOrder & { items: TProduct[] };
-export type TReturnOrder = z.infer<typeof returnOrderSchema>;

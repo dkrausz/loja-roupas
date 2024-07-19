@@ -1,9 +1,11 @@
 import { injectable } from "tsyringe";
 import {
   TOrder,
+  TOrderRegister,
   TOrderUpdate,
+  TRegisterProductInOrder,
+  TOrderList,
   TPayloadOrder,
-  TReturnOrder,
 } from "./interfaces";
 import { prisma } from "../database/prisma";
 <<<<<<< HEAD
@@ -15,30 +17,22 @@ import { date } from "zod";
 >>>>>>> parent of 3318910 (feat: order IsIdExisting.middleware)
 @injectable()
 export class OrderServices {
-  register = async (payload: TPayloadOrder): Promise<TReturnOrder> => {
+  register = async (payload: TPayloadOrder) => {
+    const orderData = { ...payload, date: new Date(), products: {} };
+
+    const newOrderData: TOrder = await prisma.order.create({ data: orderData });
     const itemsList = payload.products.map((item) => {
       return { id: item };
     });
 
-    const newOrder = await prisma.order.create({
+    const completOrder = await prisma.order.update({
+      where: { id: newOrderData.id },
       data: {
-        paymentType: payload.paymentType,
-        clientId: payload.clientId,
-        status: payload.status,
-        discount: payload.discount,
-        total: payload.total,
-        storeId: payload.storeId,
-        date: new Date(),
-        products: {
-          connect: itemsList,
-        },
+        products: { connect: itemsList },
       },
-      include: {
-        products: true,
-      },
+      include: { products: true },
     });
-
-    return returnOrderSchema.parse(newOrder);
+    return returnOrderSchema.parse(completOrder);
   };
 
   get = async (): Promise<Array<TOrder>> => {

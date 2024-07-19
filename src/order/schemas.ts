@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { productSchema } from "../products/schemas";
+import { productSchema, returnProductSchema } from "../products/schemas";
 
 export const orderSchema = z.object({
   id: z.number().positive(),
@@ -33,4 +33,7 @@ export const orderUpdateSchema = orderSchema
 
 export const returnOrderSchema = orderSchema
   .omit({ id: true, storeId: true })
-  .extend({ products: productSchema.omit({ id: true }).array() });
+  .extend({ products: productSchema.array() });
+// .extend({
+//   products: productSchema.array().nullish(),
+// });
