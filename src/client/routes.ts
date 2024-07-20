@@ -3,14 +3,13 @@ import { ClientServices } from "./services";
 import { ClientControllers } from "./controllers";
 import { Router } from "express";
 import { IsUniqueEmail } from "./isUniqueEmail.middleware";
-import { IsValidcpf } from "./isValidCpf.middleware";
-import { IsUniqueCpf } from "./isUniqueCpf.middleware";
 import { ValidateToken } from "../@shared/validateToken.middleware";
 import { ClientAccessPermission } from "./clientAccessPermission.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
 import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
-import { IsIdExisting } from "./isIdExisting.middleware";
 import { StoreIdValid } from "./storeIdValid.middleware";
+import { Cpf } from "./cpf.middleware";
+import { IsIdExisting } from "./isIdExisting.middleware";
 
 container.registerSingleton("ClientServices", ClientServices);
 const clientControllers = container.resolve(ClientControllers);
@@ -21,8 +20,8 @@ clientRouter.post(
   "/",
   bodyMiddleware.bodyIsValid(clientRegisterSchema),
   IsUniqueEmail.execute,
-  IsValidcpf.execute,
-  IsUniqueCpf.execute,
+  Cpf.isValid,
+  Cpf.isUnique,
   StoreIdValid.execute,
   (req, res) => clientControllers.register(req, res)
 );
