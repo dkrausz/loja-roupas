@@ -1,18 +1,36 @@
 import { injectable } from "tsyringe";
-import { TOrder, TOrderRegister, TOrderUpdate } from "./interfaces";
+import {
+  TOrder,
+  TOrderUpdate,
+  TPayloadOrder,
+  TReturnOrder,
+} from "./interfaces";
 import { prisma } from "../database/prisma";
-import { orderSchema } from "./schemas";
-import { date } from "zod";
+import { orderSchema, returnOrderSchema } from "./schemas";
 
 @injectable()
 export class OrderServices {
-  register = async (payload: TOrderRegister): Promise<TOrder> => {
-    console.log(payload);
-    const orderData = { ...payload, date: new Date() };
-    console.log(orderData);
-    const newOrder: TOrder = await prisma.order.create({ data: orderData });
-    console.log(newOrder);
-    return orderSchema.parse(newOrder);
+  register = async (payload: TPayloadOrder): Promise<TReturnOrder> => {
+    const itemsList = payload.products.map((item) => {
+      return { id: item };
+    });
+
+    const newOrder = await prisma.order.create({
+      data: {
+        paymentType: payload.paymentType,
+        clientId: payload.clientId,
+        status: payload.status,
+        discount: payload.discount,
+        total: payload.total,
+        storeId: payload.storeId,
+        date: new Date(),
+        products: { connect: itemsList },
+      },
+      include: {
+        products: true,
+      },
+    });
+    return returnOrderSchema.parse(newOrder);
   };
 
   get = async (): Promise<Array<TOrder>> => {
@@ -21,17 +39,29 @@ export class OrderServices {
     return orderSchema.array().parse(ordersList);
   };
 
-  getOrder = async (id: number): Promise<TOrder> => {
-    const orderFound: TOrder = (await prisma.order.findFirst({
-      where: { id },
-    })) as TOrder;
+  // getOrder = async (id: number): Promise<TOrder> => {
+  //   const orderFound: TOrder = (await prisma.order.findFirst({
+  //     where: { id },
+  //   })) as TOrder;
 
-    return orderSchema.parse(orderFound);
+  //   return orderSchema.parse(orderFound);
+  // };
+
+  getOrder = async (publicId: string) => {
+    const orderProducts = await prisma.order.findFirst({
+      where: { publicId },
+      include: { products: true },
+    });
+
+    return orderProducts;
   };
 
-  updateOrder = async (id: number, newData: TOrderUpdate): Promise<TOrder> => {
+  updateOrder = async (
+    publicId: string,
+    newData: TOrderUpdate
+  ): Promise<TOrder> => {
     const orderToUpdate: TOrder = (await prisma.order.findFirst({
-      where: { id },
+      where: { publicId },
     })) as TOrder;
     const orderUpdated: TOrder = { ...orderToUpdate, ...newData };
 
