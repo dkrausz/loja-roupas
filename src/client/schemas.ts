@@ -15,11 +15,7 @@ export const clientSchema = z.object({
   publicId: z.string(),
   name: z.string().max(255),
   email: z.string().email(),
-  password: z
-    .string()
-    .min(8)
-    .max(50)
-    .regex(/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/),
+  password: z.string().min(8).max(50).regex(/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/),
   birthDate: z.coerce.date().max(new Date(minValidDate())),
   cpf: z.string().max(11),
   phone: z.string().max(11),
