@@ -1,9 +1,9 @@
 import {z} from "zod";
-import { addressSchema, createBodySchema, updateBodySchema } from "./schemas";
+import { addressSchema, createAddressBodySchema, updateAddressBodySchema } from "./schemas";
 
-type TCreateAddressBody = z.infer<typeof createBodySchema>;
+type TCreateAddressBody = z.infer<typeof createAddressBodySchema>;
 type TReturnAddress = z.infer<typeof addressSchema>;
-type TUpdateAddressBody = z.infer<typeof updateBodySchema>;
+type TUpdateAddressBody = z.infer<typeof updateAddressBodySchema>;
 
 
 interface IAddressService{

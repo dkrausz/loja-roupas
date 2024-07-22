@@ -34,10 +34,13 @@ model Employee {
   password    String      @db.VarChar(255)
   birthDate   DateTime
   CPF         String      @db.VarChar(11)
+
   addressId   Int?        @unique
   address     Address?    @relation(fields: [addressId], references: [id])
+
   phone       String?     @db.VarChar(11)
   accessLevel AccessLevel
+  
   storeId     Int
   store       Store       @relation(fields: [storeId], references: [id])
 }
