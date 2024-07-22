@@ -7,7 +7,7 @@ import { EmployeeOwner } from "./employeeOwner.middleware";
 import { AdmAuth } from "../@shared/admAuth.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
 import { createEmployeeSchema } from "./schemas";
-import { updateBodySchema } from "../address/schemas";
+import { updateAddressBodySchema } from "../address/schemas";
 
 
 
@@ -24,7 +24,7 @@ employeeRoutes.get("/", ValidateToken.execute, AdmAuth.execute,(req, res) => emp
 
 employeeRoutes.get("/:id", ValidateToken.execute, EmployeeOwner.execute, (req, res) => employeeController.getOne(req, res));
 
-employeeRoutes.patch("/:id", ValidateToken.execute, EmployeeOwner.execute, bodyMiddleware.bodyIsValid(updateBodySchema), (req, res) => employeeController.update(req, res));
+employeeRoutes.patch("/:id", ValidateToken.execute, EmployeeOwner.execute, bodyMiddleware.bodyIsValid(updateAddressBodySchema), (req, res) => employeeController.update(req, res));
 
 employeeRoutes.delete("/:id", ValidateToken.execute, AdmAuth.execute, (req, res) => employeeController.delete(req, res));
 

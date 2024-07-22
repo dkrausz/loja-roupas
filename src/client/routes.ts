@@ -10,7 +10,7 @@ import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
 import { StoreIdValid } from "./storeIdValid.middleware";
 import { Cpf } from "./cpf.middleware";
 import { IsIdExisting } from "./isIdExisting.middleware";
-import { createBodySchema } from "../address/schemas";
+import { createAddressBodySchema } from "../address/schemas";
 import { AddressController } from "../address/controller";
 
 container.registerSingleton("ClientServices", ClientServices);
@@ -35,9 +35,9 @@ clientRouter.patch("/:id", bodyMiddleware.bodyIsValid(clientUpdateSchema), Valid
 // O cliente pode ser excluir mesmo???
 clientRouter.delete("/:id", ValidateToken.execute, ClientAccessPermission.execute, (req, res) =>clientControllers.remove(req, res));
 
-clientRouter.post("/:id/address",ValidateToken.execute, ClientAccessPermission.execute,bodyMiddleware.bodyIsValid(createBodySchema),addressController.createAddress);
+clientRouter.post("/:id/address",ValidateToken.execute, ClientAccessPermission.execute,bodyMiddleware.bodyIsValid(createAddressBodySchema),addressController.createAddress);
 
-// clientRouter.patch("/:clientid/address/id",ValidateToken.execute, ClientAccessPermission.execute,bodyMiddleware.bodyIsValid(createBodySchema),addressController.createAddress);
+// clientRouter.patch("/:clientid/address/id",ValidateToken.execute, ClientAccessPermission.execute,bodyMiddleware.bodyIsValid(createAddressBodySchema),addressController.createAddress);
 
-// clientRouter.delete("/:clientid/address/id",ValidateToken.execute, ClientAccessPermission.execute,bodyMiddleware.bodyIsValid(createBodySchema),addressController.createAddress);
+// clientRouter.delete("/:clientid/address/id",ValidateToken.execute, ClientAccessPermission.execute,bodyMiddleware.bodyIsValid(createAddressBodySchema),addressController.createAddress);
 
