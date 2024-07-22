@@ -8,7 +8,7 @@ export class AddressController{
   constructor(@inject("AddressService") private service: IAddressService){}
 
   public createAddress=async(req:Request,res:Response):Promise<Response>=>{
-    const newAddress = await this.service.createAddress(req.body);
+    const newAddress = await this.service.createAddress(req.body,String(req.params.id));
     return res.status(201).json(newAddress);
   };
 

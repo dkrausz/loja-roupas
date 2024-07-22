@@ -2,12 +2,19 @@ import { injectable } from "tsyringe";
 import { prisma } from "../database/prisma";
 import { IAddressService, TCreateAddressBody, TReturnAddress, TUpdateAddressBody } from "./interfaces";
 import { addressSchema } from "./schemas";
+import { AppError } from "../@shared/errors";
 
 @injectable()
 export class AddressService implements IAddressService{
 
-  public createAddress=async(payload:TCreateAddressBody):Promise<TReturnAddress>=>{
-    const newAddress = await prisma.address.create({data:payload});  
+  public createAddress=async(payload:TCreateAddressBody,publicId:string):Promise<TReturnAddress>=>{
+    const client = await prisma.client.findFirst({where:{publicId}});        
+    
+    if(!client){
+      throw new AppError(404,"Client not Found");
+    }
+    const addressData = {...payload,clientId:client.id };
+    const newAddress = await prisma.address.create({data:addressData});  
     return addressSchema.parse(newAddress); 
   };
 
