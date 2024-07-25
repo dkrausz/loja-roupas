@@ -13,7 +13,7 @@ const addressSchema = z.object({
   clientId: z.number().min(1).nullish(), 
 });
 
-const createBodySchema = addressSchema.omit({id:true});
-const updateBodySchema = createBodySchema.partial();
+const createAddressBodySchema = addressSchema.omit({id:true});
+const updateAddressBodySchema = createAddressBodySchema.partial();
 
-export{addressSchema,createBodySchema, updateBodySchema};
+export{addressSchema,createAddressBodySchema, updateAddressBodySchema};

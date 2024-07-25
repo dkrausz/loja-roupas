@@ -8,6 +8,7 @@ import {
 } from "./schemas";
 import { prisma } from "../database/prisma";
 import bcryptjs from "bcryptjs";
+import { AccessLevel } from "@prisma/client";
 
 injectable();
 export class EmployeeServices {
@@ -24,13 +25,27 @@ export class EmployeeServices {
   }
 
   async create(body: TCreateEmployee): Promise<TEmployeeReturn> {
+    const newAddress = await prisma.address.create({ data: body.address });
+
     const pwd = await bcryptjs.hash(body.password, 10);
 
     const dataValue = new Date(body.birthDate);
 
-    const newEmployee = { ...body, birthDate: dataValue, password: pwd };
+    const newEmployee = {
+      name: body.name,
+      password: pwd,
+      birthDate: dataValue,
+      CPF: body.CPF,
+      addressId: newAddress.id,
+      phone: body.phone,
+      accessLevel: body.accessLevel,
+      storeId: body.storeId,
+    };
 
-    const employee = await prisma.employee.create({ data: newEmployee });
+    const employee = await prisma.employee.create({
+      data: newEmployee,
+      include: { address: true },
+    });
 
     return returnEmployeeSchema.parse(employee);
   }
