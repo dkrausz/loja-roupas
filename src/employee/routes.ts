@@ -6,8 +6,9 @@ import { ValidateToken } from "../@shared/validateToken.middleware";
 import { EmployeeOwner } from "./employeeOwner.middleware";
 import { AdmAuth } from "../@shared/admAuth.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
-import { createEmployeeSchema } from "./schemas";
+import { createEmployeeSchema, updateEmployeeSchema } from "./schemas";
 import { updateAddressBodySchema } from "../address/schemas";
+import { Cpf } from "../@shared/cpf.middleware";
 
 
 
@@ -17,15 +18,15 @@ const employeeController = container.resolve(EmployeeControllers);
 
 export const employeeRoutes = Router();
 
-// employeeRoutes.post("/", ValidateToken.execute, AdmAuth.execute, bodyMiddleware.bodyIsValid(createEmployeeSchema), (req, res) => employeeController.create(req, res));
+// employeeRoutes.post("/", ValidateToken.execute, AdmAuth.execute,Cpf.isValid,Cpf.isUniqueEmployee, bodyMiddleware.bodyIsValid(createEmployeeSchema),employeeController.create);
 employeeRoutes.post("/", bodyMiddleware.bodyIsValid(createEmployeeSchema), (req, res) => employeeController.create(req, res));
 
-employeeRoutes.get("/", ValidateToken.execute, AdmAuth.execute,(req, res) => employeeController.getMany(req, res));
+employeeRoutes.get("/", ValidateToken.execute, AdmAuth.execute,employeeController.getMany);
 
-employeeRoutes.get("/:id", ValidateToken.execute, EmployeeOwner.execute, (req, res) => employeeController.getOne(req, res));
+employeeRoutes.get("/:publicId", ValidateToken.execute, EmployeeOwner.execute,employeeController.getOne);
 
-employeeRoutes.patch("/:id", ValidateToken.execute, EmployeeOwner.execute, bodyMiddleware.bodyIsValid(updateAddressBodySchema), (req, res) => employeeController.update(req, res));
+employeeRoutes.patch("/:publicId", ValidateToken.execute, EmployeeOwner.execute, bodyMiddleware.bodyIsValid(updateEmployeeSchema), employeeController.update);
 
-employeeRoutes.delete("/:id", ValidateToken.execute, AdmAuth.execute, (req, res) => employeeController.delete(req, res));
+employeeRoutes.delete("/:publicId", ValidateToken.execute, AdmAuth.execute, employeeController.delete);
 
 

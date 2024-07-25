@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import { TemployeeLogin, TemployeeLoginReturn } from "./schema";
 import { prisma } from "../database/prisma";
-import { returnEmployeeSchema } from "../employee/schemas";
+import { returnEmployeeCreateSchema } from "../employee/schemas";
 import bcryptjs from "bcryptjs";
 import { jwtConfig } from "../configs/auth.config";
 import { sign } from "jsonwebtoken";
@@ -31,7 +31,7 @@ export class EmployeeAuthService {
       subject: employee.id.toString(),
     });
 
-    return { token: tokenGen, employee: returnEmployeeSchema.parse(employee) };
+    return { token: tokenGen, employee: returnEmployeeCreateSchema.parse(employee) };
   };
 };
 

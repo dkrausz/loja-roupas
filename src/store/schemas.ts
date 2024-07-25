@@ -1,9 +1,6 @@
 import { z } from "zod";
-import { addressSchema } from "../address/schemas";
-import { productSchema } from "../products/schemas";
-import { orderSchema } from "../order/schemas";
-import { clientSchema } from "../client/schemas";
-import { employeeSchema } from "../employee/schemas";
+import { addressSchema, returnAddressBodySchema } from "../address/schemas";
+
 
 export const storeSchema = z.object({
     id: z.number(),
@@ -13,19 +10,12 @@ export const storeSchema = z.object({
     addressId: z.number(),
 });
 
-export const returnStoreSchema = storeSchema.extend({address: addressSchema.nullish()}).omit({id: true});
+export const returnStoreSchema = storeSchema.extend({address: returnAddressBodySchema.nullish()}).omit({id: true,addressId:true});
 
 export const getStoreSchema = returnStoreSchema.omit({ address: true});
 
-export const createStoreSchema = storeSchema.omit({id: true, publicId: true});
+export const createStoreSchema = storeSchema.omit({id: true, addressId:true}).extend({address:addressSchema});
 
 export const updateStoreSchema = createStoreSchema.partial();
 
-export type TReturnStore = z.infer<typeof returnStoreSchema>;
-
-export type TGetStore = z.infer<typeof getStoreSchema>;
-
-export type TCreateStore = z.infer<typeof createStoreSchema>;
-
-export type TUpdateStore = z.infer<typeof updateStoreSchema>;
 

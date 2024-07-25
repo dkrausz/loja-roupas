@@ -8,7 +8,7 @@ import { ClientAccessPermission } from "./clientAccessPermission.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
 import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
 import { StoreIdValid } from "./storeIdValid.middleware";
-import { Cpf } from "./cpf.middleware";
+import { Cpf } from "../@shared/cpf.middleware";
 import { IsIdExisting } from "./isIdExisting.middleware";
 import { createAddressBodySchema } from "../address/schemas";
 import { AddressController } from "../address/controller";

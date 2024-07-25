@@ -29,7 +29,7 @@ model Store {
 
 model Employee {
   id          Int         @id @default(autoincrement())
-  publicId    String      @default(uuid())
+  publicId    String      @unique @default(uuid())
   name        String      @db.VarChar(255)
   password    String      @db.VarChar(255)
   birthDate   DateTime

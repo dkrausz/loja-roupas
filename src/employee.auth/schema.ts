@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { employeeSchema, TEmployeeReturn } from "../employee/schemas";
+import { employeeSchema } from "../employee/schemas";
+import {TEmployeeReturn} from "../employee/interfaces"
 
 
 export const employeeLogin = employeeSchema.pick({

@@ -26,7 +26,7 @@ export class ClientServices {
   };
 
   get = async (): Promise<Array<TClientReturn>> => {
-    const loadClients = await prisma.client.findMany();
+    const loadClients = await prisma.client.findMany({include:{address:true}});
 
     return clientReturnSchema.array().parse(loadClients);
   };
