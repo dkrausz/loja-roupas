@@ -15,8 +15,20 @@ export class Cpf {
     return next();
   };
 
+  static isUniqueEmployee = async (req: Request, res: Response, next: NextFunction) => {
+    const employee = await prisma.employee.findFirst({
+      where: { CPF: req.body.CPF },
+    });
+
+    if (employee) {
+      throw new AppError(409, "Cpf already registered.");
+    }
+
+    return next();
+  };
+
   static isValid = (req: Request, res: Response, next: NextFunction) => {
-    const cpf = req.body.cpf;
+    const cpf = req.body.CPF;
     let sum: number = 0;
     for (let i: number = 2; i <= 10; i++) {
       sum += Number(cpf[10 - i]) * i;
@@ -31,7 +43,7 @@ export class Cpf {
 
     const validCpf = checkSum1 && checkSum2;
     if (!validCpf) {
-      throw new AppError(417, "Client cpf is not valid.");
+      throw new AppError(417, "Cpf is not valid.");
     }
 
     return next();

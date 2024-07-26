@@ -1,13 +1,14 @@
 import { injectable } from "tsyringe";
-import { TCreateStore, TReturnStore, TUpdateStore, getStoreSchema, returnStoreSchema } from "./schemas";
+import {getStoreSchema, returnStoreSchema } from "./schemas";
+import { TCreateStore, TReturnStore, TUpdateStore} from "./interfaces"
 import { prisma } from "../database/prisma";
 
 @injectable()
 export class StoreServices {
     async getMany(): Promise<TReturnStore[]> {
-        const storeList = await prisma.store.findMany();
+        const storeList = await prisma.store.findMany({include:{address:true}});
 
-        return getStoreSchema.array().parse(storeList);
+        return returnStoreSchema.array().parse(storeList);
     };
 
     async getOne(id: number): Promise<TReturnStore> {
@@ -17,7 +18,15 @@ export class StoreServices {
     };
 
     async create(body: TCreateStore): Promise<TReturnStore> {
-        const newStore = await prisma.store.create({ data: body });
+        const newAddress = await prisma.address.create({data: body.address});
+
+        const storeData = {
+            name: body.name,
+            CNPJ: body.CNPJ,
+            addressId: newAddress.id
+        };
+
+        const newStore = await prisma.store.create({ data: storeData });
 
         return returnStoreSchema.parse(newStore);
     };

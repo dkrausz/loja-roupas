@@ -1,48 +1,48 @@
 import { inject, injectable } from "tsyringe";
 import { EmployeeServices } from "./services";
 import { Request, Response } from "express";
-import { TEmployeeReturn } from "./schemas";
-
+import { TEmployeeReturn } from "./interfaces";
 
 @injectable()
 export class EmployeeControllers {
-    constructor(@inject(EmployeeServices) private employeeServices: EmployeeServices){}
+  constructor(@inject(EmployeeServices) private employeeServices: EmployeeServices) {}
 
-    async getMany(req: Request, res: Response): Promise<Response<TEmployeeReturn[]>> {
-        const response = await this.employeeServices.getMany();
+  public getMany=async(req: Request, res: Response): Promise<Response<TEmployeeReturn[]>>=> {
+    const response = await this.employeeServices.getMany();
 
-        return res.status(200).json(response);
-    };
+    return res.status(200).json(response);
+  }
 
-    async getOne(req: Request, res: Response): Promise<Response<TEmployeeReturn | null>> {
-        const id = req.params.id;
+   public getOne=async(req: Request, res: Response): Promise<Response<TEmployeeReturn | null>> =>{
+    const { publicId } = req.params;
 
-        const response = await this.employeeServices.getOne(Number(id));
+    const response = await this.employeeServices.getOne(publicId);
 
-        return res.status(200).json(response);
-    };
+    return res.status(200).json(response);
+  }
 
-    async create(req: Request, res: Response): Promise<Response<TEmployeeReturn>> {
-        const response = await this.employeeServices.create(req.body);
+  public create = async (req: Request, res: Response): Promise<Response<TEmployeeReturn>> => {
+    const response = await this.employeeServices.create(req.body);
 
-        return res.status(201).json(response);
-    };
+    return res.status(201).json(response);
+  };
 
-    async update(req: Request, res: Response): Promise<Response<TEmployeeReturn>> {
-        const id = req.params.id;
+  public update = async (req: Request, res: Response): Promise<Response<TEmployeeReturn>> => {
+    const { publicId } = req.params;
 
-        console.log(req.body);
+    console.log(publicId);
+    console.log(req.body);
 
-        const response = await this.employeeServices.update(Number(id), req.body);
+    const response = await this.employeeServices.update(publicId, req.body);
 
-        return res.status(200).json(response);
-    };
+    return res.status(200).json(response);
+  };
 
-    async delete(req: Request, res: Response): Promise<Response<void>> {
-        const id = req.params.id;
+  public delete=async(req: Request, res: Response): Promise<Response<void>>=> {
+    const {publicId} = req.params;
 
-        await this.employeeServices.delete(Number(id));
+    await this.employeeServices.delete(publicId);
 
-        return res.status(204).json();
-    };
-};
+    return res.status(204).json();
+  }
+}

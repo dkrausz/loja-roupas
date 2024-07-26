@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { addressSchema, createAddressBodySchema } from "../address/schemas";
-import { storeSchema } from "../store/schemas";
+import { addressSchema, createAddressBodySchema, returnAddressBodySchema } from "../address/schemas";
+import { createStoreSchema, getStoreSchema, storeSchema } from "../store/schemas";
 import { AccessLevel } from "@prisma/client";
 
-export const employeeSchema = z.object({
+ const employeeSchema = z.object({
     id: z.number().positive(),
     publicId: z.string(),
     name: z.string().max(255).min(1),
@@ -12,24 +12,17 @@ export const employeeSchema = z.object({
     CPF: z.string().max(11).min(1),
     addressId: z.number().nullish(),
     phone: z.string().max(11).nullish(),
-    accessLevel: z.nativeEnum(AccessLevel),    
+    accessLevel: z.nativeEnum(AccessLevel,{message:"You have to choose between FUNCIONARIO or ADM "}),    
     storeId: z.number(),
 });
 
-export const returnEmployeeSchema = employeeSchema.extend({ address: addressSchema.nullish(), store: storeSchema.nullish() }).omit({ id: true, password: true});
+ const returnEmployeeCreateSchema = employeeSchema.extend({ address: returnAddressBodySchema.nullish(), store: getStoreSchema.nullish() }).omit({ id: true, password: true , addressId:true, storeId:true});
 
-export const createEmployeeSchema = employeeSchema.omit({id: true, publicId: true}).extend({address:createAddressBodySchema});
+ const createEmployeeSchema = employeeSchema.omit({id: true, publicId: true}).extend({address:createAddressBodySchema});
 
-export const updateEmployeeSchema = createEmployeeSchema.partial();
-
-export type TEmployee = z.infer<typeof employeeSchema>;
-
-export type TCreateEmployee = z.infer<typeof createEmployeeSchema>;
-
-export type TUpdateEmployee = z.infer<typeof updateEmployeeSchema>;
-
-export type TEmployeeReturn = z.infer<typeof returnEmployeeSchema>;
+ const updateEmployeeSchema = createEmployeeSchema.partial(); 
 
 
+export {employeeSchema,returnEmployeeCreateSchema,createEmployeeSchema,updateEmployeeSchema};
 
 

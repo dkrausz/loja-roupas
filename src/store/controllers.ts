@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { StoreServices } from "./services";
 import { Request, Response } from "express";
-import { TReturnStore } from "./schemas";
+import { TReturnStore } from "./interfaces";
 
 @injectable()
 export class StoreControllers {

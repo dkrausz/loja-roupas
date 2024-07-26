@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import { TemployeeLogin, TemployeeLoginReturn } from "./schema";
 import { prisma } from "../database/prisma";
-import { returnEmployeeSchema } from "../employee/schemas";
+import { returnEmployeeCreateSchema } from "../employee/schemas";
 import bcryptjs from "bcryptjs";
 import { jwtConfig } from "../configs/auth.config";
 import { sign } from "jsonwebtoken";
@@ -20,18 +20,17 @@ export class EmployeeAuthService {
 
     const compare = await bcryptjs.compare(body.password, employee.password);
 
-    if (!compare) {
-      console.log(compare);
+    if (!compare) {      
       throw new Error("name and password doesn't match.");
     }
 
     const { jwtKey, expiresIn } = jwtConfig();
     const tokenGen: string = sign({ accessLevel: employee.accessLevel }, jwtKey, {
       expiresIn: expiresIn,
-      subject: employee.id.toString(),
+      subject: employee.publicId,
     });
 
-    return { token: tokenGen, employee: returnEmployeeSchema.parse(employee) };
+    return { token: tokenGen, employee: returnEmployeeCreateSchema.parse(employee) };
   };
 };
 
