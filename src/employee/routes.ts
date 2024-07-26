@@ -3,13 +3,10 @@ import { EmployeeServices } from "./services";
 import { EmployeeControllers } from "./controllers";
 import { Router } from "express";
 import { ValidateToken } from "../@shared/validateToken.middleware";
-import { EmployeeOwner } from "./employeeOwner.middleware";
-import { AdmAuth } from "../@shared/admAuth.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
 import { createEmployeeSchema, updateEmployeeSchema } from "./schemas";
-import { updateAddressBodySchema } from "../address/schemas";
 import { Cpf } from "../@shared/cpf.middleware";
-
+import { whoHasAcess } from "../@shared/whoHasAccess.middleware";
 
 
 container.registerSingleton("EmployeeServices", EmployeeServices);
@@ -18,15 +15,16 @@ const employeeController = container.resolve(EmployeeControllers);
 
 export const employeeRoutes = Router();
 
+employeeRoutes.post("/", ValidateToken.execute, whoHasAcess.permission("ADM"),Cpf.isValid,Cpf.isUniqueEmployee, bodyMiddleware.bodyIsValid(createEmployeeSchema),employeeController.create);
 // employeeRoutes.post("/", ValidateToken.execute, AdmAuth.execute,Cpf.isValid,Cpf.isUniqueEmployee, bodyMiddleware.bodyIsValid(createEmployeeSchema),employeeController.create);
-employeeRoutes.post("/", bodyMiddleware.bodyIsValid(createEmployeeSchema), (req, res) => employeeController.create(req, res));
+// employeeRoutes.post("/", bodyMiddleware.bodyIsValid(createEmployeeSchema), (req, res) => employeeController.create(req, res));
 
-employeeRoutes.get("/", ValidateToken.execute, AdmAuth.execute,employeeController.getMany);
+employeeRoutes.get("/", ValidateToken.execute, whoHasAcess.permission("ADM"),employeeController.getMany);
 
-employeeRoutes.get("/:publicId", ValidateToken.execute, EmployeeOwner.execute,employeeController.getOne);
+employeeRoutes.get("/:publicId", ValidateToken.execute, whoHasAcess.permission("ADM","owner"),employeeController.getOne);
 
-employeeRoutes.patch("/:publicId", ValidateToken.execute, EmployeeOwner.execute, bodyMiddleware.bodyIsValid(updateEmployeeSchema), employeeController.update);
+employeeRoutes.patch("/:publicId", ValidateToken.execute, whoHasAcess.permission("ADM","owner"), bodyMiddleware.bodyIsValid(updateEmployeeSchema), employeeController.update);
 
-employeeRoutes.delete("/:publicId", ValidateToken.execute, AdmAuth.execute, employeeController.delete);
+employeeRoutes.delete("/:publicId", ValidateToken.execute, whoHasAcess.permission("ADM"), employeeController.delete);
 
 
