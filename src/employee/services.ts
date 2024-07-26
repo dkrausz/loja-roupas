@@ -1,10 +1,14 @@
 import { injectable } from "tsyringe";
+
 import { IEmployeeService, TCreateEmployee, TEmployee, TEmployeeReturn, TUpdateEmployee } from "./interfaces";
 import {returnEmployeeCreateSchema} from "./schemas";
+
+
 import { prisma } from "../database/prisma";
 import bcryptjs from "bcryptjs";
 
 injectable();
+
 export class EmployeeServices implements IEmployeeService {
   async getMany(): Promise<TEmployeeReturn[]> {
     const employeeList = await prisma.employee.findMany();
@@ -25,6 +29,7 @@ export class EmployeeServices implements IEmployeeService {
     const pwd = await bcryptjs.hash(body.password, 10);
 
     const dataValue = new Date(body.birthDate);
+
 
     const newEmployee = {
       name: body.name,
@@ -53,5 +58,8 @@ export class EmployeeServices implements IEmployeeService {
   async delete(publicId:string):Promise<void> {
     await prisma.employee.delete({where: {publicId}});     
     return 
+
+    
+
   }
 }

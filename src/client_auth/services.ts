@@ -13,6 +13,7 @@ export class ClientAuthenticationService {
   login = async (payload: TClientLogin): Promise<TClientLoginReturn> => {
     const loadedUser: TClient = (await prisma.client.findFirst({
       where: { email: payload.email },
+      include: { address: true },
     })) as TClient;
 
     if (!loadedUser) {
@@ -32,6 +33,7 @@ export class ClientAuthenticationService {
       expiresIn: expiresIn,
       subject: loadedUser.publicId,
     });
+    console.log(loadedUser);
 
     return { token: tokenGen, client: clientReturnSchema.parse(loadedUser) };
   };

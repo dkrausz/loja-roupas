@@ -9,8 +9,12 @@ container.registerSingleton(
   ClientAuthenticationService
 );
 
-const clientAuthenticationController = container.resolve(ClientAuthenticationController);
+const clientAuthenticationController = container.resolve(
+  ClientAuthenticationController
+);
 
 export const clientAuthenticationRouter = Router();
 
-clientAuthenticationRouter.post("/", ExistingLoginEmail.execute, (req, res) => clientAuthenticationController.login(req, res));
+clientAuthenticationRouter.get("/", ExistingLoginEmail.execute, (req, res) =>
+  clientAuthenticationController.login(req, res)
+);
