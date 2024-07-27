@@ -20,9 +20,11 @@ import { AccessLevel } from "@prisma/client";
 
  const createEmployeeSchema = employeeSchema.omit({id: true, publicId: true}).extend({address:createAddressBodySchema});
 
+ const employeeBodyWithoutAddress= employeeSchema.omit({id:true,publicId:true, addressId:true});
+//  const updateEmployeeSchema = employeeSchema.partial().omit({id:true,publicId:true}); 
  const updateEmployeeSchema = createEmployeeSchema.partial(); 
+ 
 
-
-export {employeeSchema,returnEmployeeCreateSchema,createEmployeeSchema,updateEmployeeSchema};
+export {employeeSchema,returnEmployeeCreateSchema,createEmployeeSchema,updateEmployeeSchema,employeeBodyWithoutAddress};
 
 

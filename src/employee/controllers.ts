@@ -30,9 +30,6 @@ export class EmployeeControllers {
   public update = async (req: Request, res: Response): Promise<Response<TEmployeeReturn>> => {
     const { publicId } = req.params;
 
-    console.log(publicId);
-    console.log(req.body);
-
     const response = await this.employeeServices.update(publicId, req.body);
 
     return res.status(200).json(response);

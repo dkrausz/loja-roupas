@@ -8,10 +8,7 @@ class WhoHasAccess{
        const {accessLevel} = res.locals.decode;
        const {sub} = res.locals.decode;
        const {publicId} = req.params;
-      console.log(sub);
-      console.log(accessLevel);
-      
-      
+          
           
     if(accessLevel1=== "ADM" || accessLevel2=== "ADM" || accessLevel3 === "ADM"){      
       if(accessLevel =="ADM"){        

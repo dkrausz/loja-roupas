@@ -56,13 +56,8 @@ export class OrderServices {
     return orderProducts;
   };
 
-  updateOrder = async (
-    publicId: string,
-    newData: TOrderUpdate
-  ): Promise<TOrder> => {
-    const orderToUpdate: TOrder = (await prisma.order.findFirst({
-      where: { publicId },
-    })) as TOrder;
+  updateOrder = async (publicId: string,newData: TOrderUpdate): Promise<TOrder> => {
+    const orderToUpdate: TOrder = (await prisma.order.findFirst({where: { publicId },})) as TOrder;
     const orderUpdated: TOrder = { ...orderToUpdate, ...newData };
 
     return orderSchema.parse(orderUpdated);

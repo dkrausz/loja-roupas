@@ -16,7 +16,7 @@ const employeeController = container.resolve(EmployeeControllers);
 export const employeeRoutes = Router();
 
 employeeRoutes.post("/", ValidateToken.execute, whoHasAcess.permission("ADM"),Cpf.isValid,Cpf.isUniqueEmployee, bodyMiddleware.bodyIsValid(createEmployeeSchema),employeeController.create);
-// employeeRoutes.post("/", ValidateToken.execute, AdmAuth.execute,Cpf.isValid,Cpf.isUniqueEmployee, bodyMiddleware.bodyIsValid(createEmployeeSchema),employeeController.create);
+
 // employeeRoutes.post("/", bodyMiddleware.bodyIsValid(createEmployeeSchema), (req, res) => employeeController.create(req, res));
 
 employeeRoutes.get("/", ValidateToken.execute, whoHasAcess.permission("ADM"),employeeController.getMany);
