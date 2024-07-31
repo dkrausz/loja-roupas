@@ -13,7 +13,8 @@ export class ClientServices {
   register = async (payload: TClientRegister): Promise<TClientReturn> => {
     const pwd: string = await bcryptjs.hash(payload.password, 10);
     const dateValue = new Date(payload.birthDate);
-
+    console.log(payload);
+    
     const newClient: TClientRegister = {
       ...payload,
       birthDate: dateValue,

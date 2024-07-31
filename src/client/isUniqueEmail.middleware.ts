@@ -3,7 +3,8 @@ import { prisma } from "../database/prisma";
 import { AppError } from "../@shared/errors";
 
 export class IsUniqueEmail {
-  static execute = async (req: Request, res: Response, next: NextFunction) => {
+  static execute = async (req: Request, res: Response, next: NextFunction) => {   
+    
     const loadRegisteredUser = await prisma.client.findFirst({
       where: { email: req.body.email },
     });

@@ -7,7 +7,7 @@ class WhoHasAccess{
   (req:Request,res:Response,next: NextFunction):void=>{
        const {accessLevel} = res.locals.decode;
        const {sub} = res.locals.decode;
-       const {publicId} = req.params;
+       const {id} = req.params;
           
           
     if(accessLevel1=== "ADM" || accessLevel2=== "ADM" || accessLevel3 === "ADM"){      
@@ -22,7 +22,7 @@ class WhoHasAccess{
       }
     } 
     if(accessLevel1=== "owner" || accessLevel2=== "owner" || accessLevel3 === "owner"){    
-      if(publicId === sub){        
+      if(id === sub){        
         return next();  
       }      
       

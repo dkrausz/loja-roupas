@@ -3,13 +3,11 @@ import { prisma } from "../database/prisma";
 import { AppError } from "../@shared/errors";
 
 export class ExistingLoginEmail {
-  static execute = async (req: Request, res: Response, next: NextFunction) => {
-    console.log("middleware");
+  static execute = async (req: Request, res: Response, next: NextFunction) => {    
     const foundEmail = await prisma.client.findUnique({
       where: { email: req.body.email },
     });
 
-    console.log(foundEmail);
     if (!foundEmail) {
       throw new AppError(404, "User not found.");
     }

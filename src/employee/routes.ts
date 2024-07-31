@@ -4,7 +4,7 @@ import { EmployeeControllers } from "./controllers";
 import { Router } from "express";
 import { ValidateToken } from "../@shared/validateToken.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
-import { createEmployeeSchema, updateEmployeeSchema } from "./schemas";
+import { createEmployeeSchema, employeeLogin, updateEmployeeSchema } from "./schemas";
 import { Cpf } from "../@shared/cpf.middleware";
 import { whoHasAcess } from "../@shared/whoHasAccess.middleware";
 
@@ -21,10 +21,12 @@ employeeRoutes.post("/", ValidateToken.execute, whoHasAcess.permission("ADM"),Cp
 
 employeeRoutes.get("/", ValidateToken.execute, whoHasAcess.permission("ADM"),employeeController.getMany);
 
-employeeRoutes.get("/:publicId", ValidateToken.execute, whoHasAcess.permission("ADM","owner"),employeeController.getOne);
+employeeRoutes.get("/:id", ValidateToken.execute, whoHasAcess.permission("ADM","owner"),employeeController.getOne);
 
-employeeRoutes.patch("/:publicId", ValidateToken.execute, whoHasAcess.permission("ADM","owner"), bodyMiddleware.bodyIsValid(updateEmployeeSchema), employeeController.update);
+employeeRoutes.patch("/:id", ValidateToken.execute, whoHasAcess.permission("ADM","owner"), bodyMiddleware.bodyIsValid(updateEmployeeSchema), employeeController.update);
 
-employeeRoutes.delete("/:publicId", ValidateToken.execute, whoHasAcess.permission("ADM"), employeeController.delete);
+employeeRoutes.delete("/:id", ValidateToken.execute, whoHasAcess.permission("ADM"), employeeController.delete);
+
+employeeRoutes.post("/login",bodyMiddleware.bodyIsValid(employeeLogin),employeeController.login)
 
 
