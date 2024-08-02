@@ -31,10 +31,8 @@ export class ProductService implements IProductService {
   };
 
   public updateProduct = async (payload: TUpdateProductBody, publicId: string): Promise<TReturnProduct> => {
-    console.log(publicId);
-
+  
     const productId = await prisma.product.findFirst({ where: { publicId } });
-    console.log(productId);
 
     if (!productId) {
       throw new AppError(404, "Product not found");
