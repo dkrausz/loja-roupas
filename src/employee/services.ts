@@ -1,9 +1,6 @@
 import { injectable } from "tsyringe";
-
 import { IEmployeeService, TCreateEmployee, TEmployee, TEmployeeReturn, TUpdateEmployee } from "./interfaces";
-import {employeeBodyWithoutAddress, returnEmployeeCreateSchema} from "./schemas";
-
-
+import { returnEmployeeCreateSchema} from "./schemas";
 import { prisma } from "../database/prisma";
 import bcryptjs from "bcryptjs";
 import { AppError } from "../@shared/errors";
