@@ -10,8 +10,12 @@ import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
 import { StoreIdValid } from "./storeIdValid.middleware";
 import { Cpf } from "../@shared/cpf.middleware";
 import { IsIdExisting } from "./isIdExisting.middleware";
-import { createAddressBodySchema } from "../address/schemas";
+import {
+  createAddressBodySchema,
+  updateAddressBodySchema,
+} from "../address/schemas";
 import { AddressController } from "../address/controller";
+import { whoHasAcess } from "../@shared/whoHasAccess.middleware";
 
 container.registerSingleton("ClientServices", ClientServices);
 const clientControllers = container.resolve(ClientControllers);
@@ -60,13 +64,30 @@ clientRouter.delete(
 clientRouter.post(
   "/:id/address",
   ValidateToken.execute,
-  ClientAccessPermission.execute,
+  whoHasAcess.permission("owner", "ADM"),
   bodyMiddleware.bodyIsValid(createAddressBodySchema),
   addressController.createAddress
 );
 
-// clientRouter.patch("/:clientid/address/id",ValidateToken.execute, ClientAccessPermission.execute,bodyMiddleware.bodyIsValid(createAddressBodySchema),addressController.createAddress);
+clientRouter.get(
+  "/:id/address",
+  ValidateToken.execute,
+  whoHasAcess.permission("owner", "ADM"),
+  bodyMiddleware.bodyIsValid(updateAddressBodySchema),
+  addressController.getAddressByUser
+);
 
-// clientRouter.delete("/:clientid/address/id",ValidateToken.execute, ClientAccessPermission.execute,bodyMiddleware.bodyIsValid(createAddressBodySchema),addressController.createAddress);
+clientRouter.patch(
+  "/:id/address/:addressid",
+  ValidateToken.execute,
+  whoHasAcess.permission("owner", "ADM"),
+  bodyMiddleware.bodyIsValid(updateAddressBodySchema),
+  addressController.updateAddress
+);
 
-// clientRouter.delete("/:clientid/address/id",ValidateToken.execute, ClientAccessPermission.execute,bodyMiddleware.bodyIsValid(createBodySchema),addressController.createAddress);
+clientRouter.delete(
+  "/:id/address/:addressid",
+  ValidateToken.execute,
+  whoHasAcess.permission("owner", "ADM"),
+  addressController.deleteAddress
+);

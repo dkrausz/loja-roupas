@@ -6,11 +6,11 @@ import { addressRoute } from "./address/routes";
 import { productRoute } from "./products/routes";
 import { storeRoutes } from "./store/routes";
 import { employeeRoutes } from "./employee/routes";
-import { employeeAuthRouter } from "./employee.auth/routes";
 import { clientAuthenticationRouter } from "./client_auth/routes";
 import { clientRouter } from "./client/routes";
 import { orderRouter } from "./order/routes";
 import { HandleErrors } from "./@shared/handleErrors";
+import { employeeAuthRouter } from "./employee.auth/routes";
 
 export const app = express();
 

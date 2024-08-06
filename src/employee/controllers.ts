@@ -7,19 +7,19 @@ import { TEmployeeReturn } from "./interfaces";
 export class EmployeeControllers {
   constructor(@inject(EmployeeServices) private employeeServices: EmployeeServices) {}
 
-  public getMany=async(req: Request, res: Response): Promise<Response<TEmployeeReturn[]>>=> {
+  public getMany = async (req: Request, res: Response): Promise<Response<TEmployeeReturn[]>> => {
     const response = await this.employeeServices.getMany();
 
     return res.status(200).json(response);
-  }
+  };
 
-   public getOne=async(req: Request, res: Response): Promise<Response<TEmployeeReturn | null>> =>{
-    const { publicId } = req.params;
+  public getOne = async (req: Request, res: Response): Promise<Response<TEmployeeReturn | null>> => {
+    const { id } = req.params;
 
-    const response = await this.employeeServices.getOne(publicId);
+    const response = await this.employeeServices.getOne(id);
 
     return res.status(200).json(response);
-  }
+  };
 
   public create = async (req: Request, res: Response): Promise<Response<TEmployeeReturn>> => {
     const response = await this.employeeServices.create(req.body);
@@ -28,21 +28,24 @@ export class EmployeeControllers {
   };
 
   public update = async (req: Request, res: Response): Promise<Response<TEmployeeReturn>> => {
-    const { publicId } = req.params;
+    const { id } = req.params;
 
-    console.log(publicId);
-    console.log(req.body);
-
-    const response = await this.employeeServices.update(publicId, req.body);
+    const response = await this.employeeServices.update(id, req.body);
 
     return res.status(200).json(response);
   };
 
-  public delete=async(req: Request, res: Response): Promise<Response<void>>=> {
-    const {publicId} = req.params;
+  public delete = async (req: Request, res: Response): Promise<Response<void>> => {
+    const { id } = req.params;
 
-    await this.employeeServices.delete(publicId);
+    await this.employeeServices.delete(id);
 
     return res.status(204).json();
-  }
+  };
+
+  public login = async (req: Request, res: Response): Promise<Response> => {
+    const response = await this.employeeServices.login(req.body);
+
+    return res.status(201).json(response);
+  };
 }

@@ -5,7 +5,7 @@ import { AppError } from "../@shared/errors";
 export class Cpf {
   static isUnique = async (req: Request, res: Response, next: NextFunction) => {
     const loadRegisteredUser = await prisma.client.findFirst({
-      where: { cpf: req.body.cpf },
+      where: { CPF: req.body.CPF },
     });
 
     if (loadRegisteredUser) {
@@ -46,6 +46,7 @@ export class Cpf {
     const checkSum2 = (sum * 10) % 11 === Number(cpf[10]);
 
     const validCpf = checkSum1 && checkSum2;
+
     if (!validCpf) {
       throw new AppError(417, "Cpf is not valid.");
     }

@@ -18,17 +18,18 @@ export class AddressController{
   };
 
   public getAddressByUser = async(req:Request,res:Response):Promise<Response>=>{//nao sei se faz sentido essa pesquisa
-    const addresses = await this.service.getAddressByUser(Number(req.params));
+    const addresses = await this.service.getAddressByUser(req.params.id);
     return res.status(200).json(addresses);
   };
 
-  public updateAddress = async(req:Request, res:Response):Promise<Response>=>{
-    const updatedAddress = await this.service.updateAddress(req.body,Number(req.params));
+  public updateAddress = async(req:Request, res:Response):Promise<Response>=>{ 
+    
+    const updatedAddress = await this.service.updateAddress(req.body,Number(req.params.addressid));
     return res.status(200).json(updatedAddress);
   };
 
   public deleteAddress = async(req:Request, res:Response):Promise<Response>=>{
-    await this.service.deleteAddress(Number(req.params));
+    await this.service.deleteAddress(Number(req.params.addressid));
     return res.status(204).json("");
   };
 

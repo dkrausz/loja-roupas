@@ -33,7 +33,7 @@ export class ClientAuthenticationService {
       expiresIn: expiresIn,
       subject: loadedUser.publicId,
     });
-    console.log(loadedUser);
+    
 
     return { token: tokenGen, client: clientReturnSchema.parse(loadedUser) };
   };
