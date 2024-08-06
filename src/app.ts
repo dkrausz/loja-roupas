@@ -10,7 +10,6 @@ import { clientAuthenticationRouter } from "./client_auth/routes";
 import { clientRouter } from "./client/routes";
 import { orderRouter } from "./order/routes";
 import { HandleErrors } from "./@shared/handleErrors";
-import { employeeAuthRouter } from "./employee.auth/routes";
 
 export const app = express();
 
@@ -20,7 +19,6 @@ app.use("/address", addressRoute);
 app.use("/products", productRoute);
 app.use("/store", storeRoutes);
 app.use("/employee", employeeRoutes);
-app.use("/employeelogin", employeeAuthRouter);
 app.use("/login", clientAuthenticationRouter);
 app.use("/clients", clientRouter);
 app.use("/orders", orderRouter);
