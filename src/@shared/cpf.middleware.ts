@@ -45,6 +45,8 @@ export class Cpf {
     const validCpf = checkSum1 && checkSum2;
 
     if (!validCpf) {
+      console.log( req.body.CPF);
+      
       throw new AppError(417, "Cpf is not valid.");
     }
 

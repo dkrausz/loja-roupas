@@ -5,14 +5,18 @@
   "main": "index.js",
   "scripts": {
     "migrate:test": "dotenv -e .env.test --npx prisma migrate dev",
-    "prismastudio:test":"dotenv -e .env.test --npx prisma studio",
-    "test": "dotenv -e .env.test --jest --verbose --runInBand",
-    "dev": "tsnd --respawn src/server.ts"
+    "prismastudio:test": "dotenv -e .env.test --npx prisma studio",
+    "test": "dotenv -e .env.test -- jest --verbose --runInBand",
+    "script":"dotenv -e .env.test -- npx ts-node test.ts",
+    "dev": "tsnd --respawn src/server.ts",
+    "dev:test": "dotenv -e .env.test -- tsnd --respawn src/server.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@js-brasil/fakerbr": "^0.0.2",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",

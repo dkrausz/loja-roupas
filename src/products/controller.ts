@@ -13,8 +13,9 @@ export class ProductController{
   }; 
 
   public getProducts = async(req:Request, res:Response):Promise<Response>=>{
-    const {productName} = req.query;
-    const products = await this.service.getProducts(productName as string);
+    const {searchProduct} = req.query;
+    const {page, perPage} = res.locals.pagination;
+    const products = await this.service.getProducts(page, perPage,searchProduct as string);
     return res.status(200).json(products);
   };
 
