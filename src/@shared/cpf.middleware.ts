@@ -15,7 +15,11 @@ export class Cpf {
     return next();
   };
 
-  static isUniqueEmployee = async (req: Request, res: Response, next: NextFunction) => {
+  static isUniqueEmployee = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     const employee = await prisma.employee.findFirst({
       where: { CPF: req.body.CPF },
     });
@@ -30,14 +34,14 @@ export class Cpf {
   static isValid = (req: Request, res: Response, next: NextFunction) => {
     const cpf = req.body.CPF;
     let sum: number = 0;
-    for (let i: number = 2; i <= 10; i++) {
-      sum += Number(cpf[10 - i]) * i;
+    for (let i: number = 0; i < 9; i++) {
+      sum += Number(cpf[i]) * (10 - i);
     }
     const checkSum1 = (sum * 10) % 11 === Number(cpf[9]);
 
     sum = 0;
-    for (let i: number = 2; i <= 11; i++) {
-      sum += Number(cpf[11 - i]) * i;
+    for (let i: number = 0; i < 10; i++) {
+      sum += Number(cpf[i]) * (11 - i);
     }
     const checkSum2 = (sum * 10) % 11 === Number(cpf[10]);
 

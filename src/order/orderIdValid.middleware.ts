@@ -3,8 +3,8 @@ import { prisma } from "../database/prisma";
 import { AppError } from "../@shared/errors";
 
 export class OrderIdValid {
-  static execute = async (req: Request, res: Response, next: NextFunction) => {
-    const existingOrder = await prisma.order.findUnique({
+  static execute = async (req: Request, _res: Response, next: NextFunction) => {
+    const existingOrder = await prisma.order.findFirst({
       where: { publicId: req.params.orderId },
     });
 

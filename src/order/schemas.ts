@@ -11,15 +11,17 @@ export const orderSchema = z.object({
   discount: z.boolean(),
   total: z.number().positive(),
   storeId: z.number(),
+  products: productSchema.array().nullish(),
 });
 
-export const registerProductInOrderSchema = orderSchema
-  .pick({ id: true })
-  .extend({ idProduct: z.number().positive(), qtd: z.number().positive() });
+// export const registerProductInOrderSchema = orderSchema
+//   .pick({ id: true })
+//   .extend({ idProduct: z.number().positive(), qtd: z.number().positive() });
 
 export const orderRegisterSchema = orderSchema.omit({
   id: true,
   publicId: true,
+  // products: true,
 });
 
 export const orderUpdateSchema = orderSchema
@@ -28,6 +30,7 @@ export const orderUpdateSchema = orderSchema
     status: true,
     discount: true,
     total: true,
+    // products: true,
   })
   .partial();
 

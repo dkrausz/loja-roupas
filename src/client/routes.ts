@@ -24,8 +24,8 @@ clientRouter.post(
   bodyMiddleware.bodyIsValid(clientRegisterSchema),
   IsUniqueEmail.execute,
   Cpf.isValid,
-  Cpf.isUnique,
-  StoreIdValid.execute,
+  // Cpf.isUnique,
+  // StoreIdValid.execute,
   (req, res) => clientControllers.register(req, res)
 );
 
