@@ -6,14 +6,16 @@ import {
   TReturnOrder,
 } from "./interfaces";
 import { prisma } from "../database/prisma";
-import { orderSchema, returnOrderSchema } from "./schemas";
+import { orderSchema, orderUpdateSchema, returnOrderSchema } from "./schemas";
+import { TProduct } from "../products/interfaces";
+import { populate } from "dotenv";
 
 @injectable()
 export class OrderServices {
   register = async (payload: TPayloadOrder): Promise<TReturnOrder> => {
-    const itemsList = payload.products.map((item) => {
+    const itemsList = payload.products?.map((item) => {
       return { id: item };
-    });
+    }) as [];
 
     const newOrder = await prisma.order.create({
       data: {
@@ -33,10 +35,12 @@ export class OrderServices {
     return returnOrderSchema.parse(newOrder);
   };
 
-  get = async (): Promise<Array<TOrder>> => {
-    const ordersList: TOrder[] = await prisma.order.findMany();
+  get = async (): Promise<Array<TReturnOrder>> => {
+    const ordersList: TOrder[] = await prisma.order.findMany({
+      include: { products: true },
+    });
 
-    return orderSchema.array().parse(ordersList);
+    return returnOrderSchema.array().parse(ordersList);
   };
 
   // getOrder = async (id: number): Promise<TOrder> => {
@@ -53,17 +57,26 @@ export class OrderServices {
       include: { products: true },
     });
 
-    return orderProducts;
+    return returnOrderSchema.parse(orderProducts);
   };
 
-  updateOrder = async (publicId: string,newData: TOrderUpdate): Promise<TOrder> => {
-    const orderToUpdate: TOrder = (await prisma.order.findFirst({where: { publicId },})) as TOrder;
-    const orderUpdated: TOrder = { ...orderToUpdate, ...newData };
+  updateOrder = async (
+    publicId: string,
+    newData: TOrderUpdate
+  ): Promise<TOrder> => {
+    const getOrder: TOrder = (await prisma.order.findFirst({
+      where: { publicId },
+    })) as TOrder;
+
+    const orderUpdated = await prisma.order.update({
+      where: { id: getOrder.id },
+      data: newData,
+    });
 
     return orderSchema.parse(orderUpdated);
   };
 
-  deleteOrder = async (id: number) => {
-    return prisma.order.delete({ where: { id } });
+  deleteOrder = async (publicId: string) => {
+    return prisma.order.deleteMany({ where: { publicId } });
   };
 }

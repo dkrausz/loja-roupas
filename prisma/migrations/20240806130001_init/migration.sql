@@ -23,7 +23,8 @@ CREATE TABLE "Employee" (
     "id" SERIAL NOT NULL,
     "publicId" TEXT NOT NULL,
     "name" VARCHAR(255) NOT NULL,
-    "password" VARCHAR(50) NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" VARCHAR(255) NOT NULL,
     "birthDate" TIMESTAMP(3) NOT NULL,
     "CPF" VARCHAR(11) NOT NULL,
     "addressId" INTEGER,
@@ -58,7 +59,7 @@ CREATE TABLE "Client" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "birthDate" TIMESTAMP(3) NOT NULL,
-    "cpf" VARCHAR(11) NOT NULL,
+    "CPF" VARCHAR(11) NOT NULL,
     "phone" VARCHAR(11),
     "storeId" INTEGER NOT NULL,
 
@@ -102,7 +103,16 @@ CREATE TABLE "_OrderToProduct" (
 CREATE UNIQUE INDEX "Store_addressId_key" ON "Store"("addressId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Employee_publicId_key" ON "Employee"("publicId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Employee_email_key" ON "Employee"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Employee_addressId_key" ON "Employee"("addressId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Client_publicId_key" ON "Client"("publicId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Client_email_key" ON "Client"("email");
