@@ -6,6 +6,7 @@ import { AppError } from "../@shared/errors";
 
 @injectable()
 export class ProductService implements IProductService {
+
   public createProduct = async (payload: TCreateProductBody): Promise<TReturnProduct> => {
     const newProduct = await prisma.product.create({ data: payload });
     return returnProductSchema.parse(newProduct);
@@ -19,16 +20,19 @@ export class ProductService implements IProductService {
     return returnProductSchema.parse(product);
   };
 
-  public getProducts = async (search?: string): Promise<Array<TReturnProduct>> => {
+  public getProducts = async (page:number,perPage:number,search?: string): Promise<Array<TReturnProduct>> => {
     let products;  
 
     if (search) {
-      products = await prisma.product.findMany({ where: { name: search } });
+      products = await prisma.product.findMany({ where: { name: search } ,skip:perPage*(page-1),take:perPage});
     } else {
-      products = await prisma.product.findMany();
+      products = await prisma.product.findMany({skip:perPage*(page-1),
+        take:perPage,
+      });
     }
     return returnProductSchema.array().parse(products);
   };
+
 
   public updateProduct = async (payload: TUpdateProductBody, publicId: string): Promise<TReturnProduct> => {
   

@@ -10,6 +10,8 @@ export class HandleErrors {
     }
 
     if (err instanceof ZodError) {     
+      console.log(err);
+      
       return res.status(400).json(err);
            
     }
