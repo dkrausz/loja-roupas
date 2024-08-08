@@ -37,19 +37,19 @@ export class Cpf {
     for (let i: number = 0; i < 9; i++) {
       sum += Number(cpf[i]) * (10 - i);
     }
-    const checkSum1 = (sum * 10) % 11 === Number(cpf[9]);
+    const digit1 = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+    const checkSum1 = digit1 === Number(cpf[9]);
 
     sum = 0;
     for (let i: number = 0; i < 10; i++) {
       sum += Number(cpf[i]) * (11 - i);
     }
-    const checkSum2 = (sum * 10) % 11 === Number(cpf[10]);
+    const digit2 = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+    const checkSum2 = digit2 === Number(cpf[10]);
 
     const validCpf = checkSum1 && checkSum2;
 
     if (!validCpf) {
-      console.log( req.body.CPF);
-      
       throw new AppError(417, "Cpf is not valid.");
     }
 
