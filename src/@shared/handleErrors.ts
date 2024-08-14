@@ -9,9 +9,7 @@ export class HandleErrors {
       return res.status(err.statusCode).json({ message: err.message });
     }
 
-    if (err instanceof ZodError) {     
-      console.log(err);
-      
+    if (err instanceof ZodError) {             
       return res.status(400).json(err);
            
     }
@@ -19,8 +17,7 @@ export class HandleErrors {
     if (err instanceof JsonWebTokenError) {
       res.status(401).json({ message: err.message });
     }
-
-    console.error(err.message);
+   
     return res.status(500).json({ error: "Internal server error." });
   }
 }
