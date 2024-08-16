@@ -31,12 +31,7 @@ describe("Unit test: update client data", () => {
     const newClient = ClientFactory.build(newStore.id);
 
     const registeredClient = await prisma.client.create({ data: newClient });
-    console.log(registeredClient);
-    // name: true,
-    // email: true,
-    // birthDate: true,
-    // phone: true,
-    // password: true,
+
     const updateData = {
       name: "Cintia Rodrigues",
       email: "cintia@gmail.com",
@@ -53,7 +48,6 @@ describe("Unit test: update client data", () => {
       registeredClient.publicId,
       updateData
     );
-    console.log(updateClientServiceTest);
 
     const expectedValue = (client: TClientRegister) => {
       return {
@@ -67,10 +61,7 @@ describe("Unit test: update client data", () => {
         address: [],
       };
     };
-    console.log("Retorno da funçao expected", expectedValue(updatedClient));
 
-    // console.log("Esperado:", expectedValue);
-    // console.log("Atualizado:", updateClientServiceTest);
     expect(updateClientServiceTest).toEqual(expectedValue(updatedClient));
   });
 });
