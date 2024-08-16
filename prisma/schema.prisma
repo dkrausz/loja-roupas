@@ -53,11 +53,11 @@ enum AccessLevel {
 
 model Address {
   id           Int     @id @default(autoincrement())
-  street       String  @db.VarChar(100)
+  street       String  @db.VarChar(255)
   number       Int
   complement   String? @db.VarChar(100)
   zipCode      String  @db.VarChar(9)
-  neighborhood String  @db.VarChar(20)
+  neighborhood String  @db.VarChar(255)
   state        String  @db.VarChar(20)
   city         String  @db.VarChar(20)
   country      String  @db.VarChar(20)

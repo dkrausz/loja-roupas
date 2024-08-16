@@ -2,14 +2,14 @@ import { container } from "tsyringe";
 import { ClientServices } from "./services";
 import { ClientControllers } from "./controllers";
 import { Router } from "express";
-import { IsUniqueEmail } from "./isUniqueEmail.middleware";
+import { IsUniqueEmail } from "./middlewares/isUniqueEmail.middleware";
 import { ValidateToken } from "../@shared/validateToken.middleware";
-import { ClientAccessPermission } from "./clientAccessPermission.middleware";
+import { ClientAccessPermission } from "./middlewares/clientAccessPermission.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
 import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
-import { StoreIdValid } from "./storeIdValid.middleware";
+import { StoreIdValid } from "./middlewares/storeIdValid.middleware";
 import { Cpf } from "../@shared/cpf.middleware";
-import { IsIdExisting } from "./isIdExisting.middleware";
+import { IsIdExisting } from "./middlewares/isIdExisting.middleware";
 import {
   createAddressBodySchema,
   updateAddressBodySchema,

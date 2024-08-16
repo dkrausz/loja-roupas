@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AppError } from "../@shared/errors";
+import { AppError } from "../../@shared/errors";
 
 export class ClientAccessPermission {
   static execute = (req: Request, res: Response, next: NextFunction) => {

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { prisma } from "../database/prisma";
-import { AppError } from "../@shared/errors";
+import { prisma } from "../../database/prisma";
+import { AppError } from "../../@shared/errors";
 
 export class IsIdExisting {
   static execute = async (_req: Request, res: Response, next: NextFunction) => {
