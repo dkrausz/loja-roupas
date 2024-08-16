@@ -16,9 +16,12 @@ export const clientSchema = z.object({
   publicId: z.string(),
   name: z.string().max(255),
   email: z.string().email(),
-  password: z.string().min(8).max(50)
+  password: z
+    .string()
+    .min(8)
+    .max(50)
     .regex(/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/),
-  birthDate: z.coerce.date().max(new Date(minValidDate())),
+  birthDate: z.date().max(new Date(minValidDate())),
   CPF: z.string().max(11),
   phone: z.string().max(11),
   addressId: z.number().array().nullish(),
@@ -35,7 +38,8 @@ export const clientReturnSchema = clientSchema
   .extend({ address: addressSchema.array() });
 
 export const clientUpdateSchema = clientSchema
-  .pick({name: true,
+  .pick({
+    name: true,
     email: true,
     birthDate: true,
     phone: true,

@@ -3,7 +3,7 @@ import { OrderServices } from "./services";
 import { OrderControllers } from "./controllers";
 import { Router } from "express";
 import { ValidateToken } from "../@shared/validateToken.middleware";
-import { ClientAccessPermission } from "../client/clientAccessPermission.middleware";
+import { ClientAccessPermission } from "../client/middlewares/clientAccessPermission.middleware";
 import { OrderIdValid } from "./orderIdValid.middleware";
 
 container.registerSingleton("OrderServices", OrderServices);
