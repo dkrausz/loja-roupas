@@ -43,7 +43,6 @@ export class ProductService implements IProductService {
     return returnPagination;
   };
 
-
   public updateProduct = async (payload: TUpdateProductBody, publicId: string): Promise<TReturnProduct> => {
   
     const productId = await prisma.product.findFirst({ where: { publicId } });
@@ -58,6 +57,9 @@ export class ProductService implements IProductService {
 
   public deleteProduct = async (publicId: string): Promise<void> => {
     const productId = await prisma.product.findFirst({ where: { publicId } });
+    if(!productId){
+      throw new AppError(404, "Product not found");
+    };
     await prisma.product.delete({ where: { id: productId!.id } });
   };
 }

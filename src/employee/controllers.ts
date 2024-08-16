@@ -46,6 +46,6 @@ export class EmployeeControllers {
   public login = async (req: Request, res: Response): Promise<Response> => {
     const response = await this.employeeServices.login(req.body);
 
-    return res.status(201).json(response);
+    return res.status(200).json(response);
   };
 }

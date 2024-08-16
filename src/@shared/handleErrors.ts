@@ -9,7 +9,9 @@ export class HandleErrors {
       return res.status(err.statusCode).json({ message: err.message });
     }
 
-    if (err instanceof ZodError) {             
+    if (err instanceof ZodError) {     
+      console.log(err);
+              
       return res.status(400).json(err);
            
     }

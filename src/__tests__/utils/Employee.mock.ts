@@ -1,5 +1,5 @@
 import { hash } from "bcrypt";
-import { TCreateEmployee, TemployeeBodyWithoutAddress } from "../../../employee/interfaces";
+import { TCreateEmployee, TemployeeBodyWithoutAddress } from "../../employee/interfaces";
 import { ZodEnum, ZodNativeEnum } from "zod";
 import { AccessLevel } from "@prisma/client";
 
