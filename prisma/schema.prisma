@@ -59,7 +59,7 @@ model Address {
   zipCode      String  @db.VarChar(9)
   neighborhood String  @db.VarChar(20)
   state        String  @db.VarChar(20)
-  city         String  @db.VarChar(20)
+  city         String  @db.VarChar(50)
   country      String  @db.VarChar(20)
 
   clientId Int?
