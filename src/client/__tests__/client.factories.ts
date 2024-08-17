@@ -10,7 +10,9 @@ export class ClientFactory {
       name: (firstName + " " + lastName).slice(0, 255),
       email: faker.internet.email({ firstName, lastName }).toLowerCase(),
       password: "Abc1234!",
-      birthDate: faker.date.birthdate({ min: 18, max: 95, mode: "age" }),
+      birthDate: new Date(
+        faker.date.birthdate({ min: 18, max: 95, mode: "age" })
+      ),
       CPF: fakerBr.cpf().replaceAll(".", "").replaceAll("-", ""),
       phone: faker.string.numeric({ length: { min: 10, max: 11 } }),
       storeId: storeId,

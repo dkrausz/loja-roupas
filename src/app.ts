@@ -10,9 +10,9 @@ import { clientAuthenticationRouter } from "./client_auth/routes";
 import { clientRouter } from "./client/routes";
 import { orderRouter } from "./order/routes";
 import { HandleErrors } from "./@shared/handleErrors";
+import { initStore } from "./configs/initStore.config";
 
 export const app = express();
-
 app.use(json());
 
 app.use("/address", addressRoute);
