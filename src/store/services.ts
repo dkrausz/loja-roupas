@@ -2,6 +2,8 @@ import { injectable } from "tsyringe";
 import { getStoreSchema, returnStoreSchema } from "./schemas";
 import { TCreateStore, TReturnStore, TUpdateStore } from "./interfaces";
 import { prisma } from "../database/prisma";
+import { initStore } from "../configs/initStore.config";
+import { loadedStore } from "../server";
 
 export let storeIdActive = 0;
 @injectable()
@@ -30,7 +32,8 @@ export class StoreServices {
     };
 
     const newStore = await prisma.store.create({ data: storeData });
-    storeIdActive = newStore.id;
+    await initStore(loadedStore);
+    console.log(loadedStore);
 
     return returnStoreSchema.parse(newStore);
   }

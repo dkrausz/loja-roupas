@@ -30,7 +30,10 @@ clientRouter.post(
   Cpf.isValid,
   Cpf.isUnique,
   StoreIdValid.execute,
-  (req, res) => clientControllers.register(req, res)
+  (req, res) => {
+    console.log("executando a rota");
+    clientControllers.register(req, res);
+  }
 );
 
 // Somente o administrador?

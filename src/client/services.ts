@@ -8,7 +8,7 @@ import {
 } from "./interfaces";
 import bcryptjs from "bcryptjs";
 import { clientReturnSchema } from "./schemas";
-import { storeIdActive } from "../store/services";
+import { loadedStore } from "../server";
 
 @injectable()
 export class ClientServices {
@@ -20,7 +20,7 @@ export class ClientServices {
       ...payload,
       birthDate: dateValue,
       password: pwd,
-      storeId: storeIdActive,
+      storeId: loadedStore.id,
     };
 
     const createdClient = await prisma.client.create({
