@@ -3,6 +3,7 @@ import { getStoreSchema, returnStoreSchema } from "./schemas";
 import { TCreateStore, TReturnStore, TUpdateStore } from "./interfaces";
 import { prisma } from "../database/prisma";
 
+export let storeIdActive = 0;
 @injectable()
 export class StoreServices {
   async getMany(): Promise<TReturnStore[]> {
@@ -29,6 +30,7 @@ export class StoreServices {
     };
 
     const newStore = await prisma.store.create({ data: storeData });
+    storeIdActive = newStore.id;
 
     return returnStoreSchema.parse(newStore);
   }
