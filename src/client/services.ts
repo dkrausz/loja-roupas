@@ -52,7 +52,13 @@ export class ClientServices {
     const clientFound: TClient = (await prisma.client.findFirst({
       where: { publicId },
     })) as TClient;
-    const newDataClient = { ...clientFound, ...data };
+    let newDataClient;
+    if (data.password) {
+      const pwd: string = await bcryptjs.hash(data.password, 10);
+      newDataClient = { ...clientFound, ...data, password: pwd };
+    } else {
+      newDataClient = { ...clientFound, ...data };
+    }
 
     const clientUpdated = await prisma.client.update({
       where: { publicId },

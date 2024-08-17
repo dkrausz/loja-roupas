@@ -14,8 +14,10 @@ storeRoutes.post("/", (req, res) => storeController.create(req, res));
 
 storeRoutes.get("/", (req, res) => storeController.getMany(req, res));
 
-// storeRoutes.get("/:id", (req, res) => storeController.getOne(req, res));
+storeRoutes.get("/:id", (req, res) => storeController.getOne(req, res));
 
-storeRoutes.patch("/:id", ValidateToken.execute, AdmAuth.execute, (req, res) => storeController.update(req, res));
+storeRoutes.patch("/:id", ValidateToken.execute, AdmAuth.execute, (req, res) =>
+  storeController.update(req, res)
+);
 
 // storeRoutes.delete("/:id", ValidateToken.execute, AdmAuth.execute, (req, res) => storeController.delete(req, res));

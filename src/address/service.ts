@@ -11,8 +11,10 @@ import { AppError } from "../@shared/errors";
 
 @injectable()
 export class AddressService implements IAddressService {
-
-  public createAddress = async (payload: TCreateAddressBody, publicId: string): Promise<TReturnAddress> => {
+  public createAddress = async (
+    payload: TCreateAddressBody,
+    publicId: string
+  ): Promise<TReturnAddress> => {
     const client = await prisma.client.findFirst({ where: { publicId } });
 
     if (!client) {
@@ -29,17 +31,28 @@ export class AddressService implements IAddressService {
     return addressSchema.parse(address);
   };
 
-  public getAddressByUser = async (clientId: string): Promise<Array<TReturnAddress>> => {
-    const client = await prisma.client.findFirst({where:{publicId:clientId}});        
+  public getAddressByUser = async (
+    clientId: string
+  ): Promise<Array<TReturnAddress>> => {
+    const client = await prisma.client.findFirst({
+      where: { publicId: clientId },
+    });
 
-    const addresses = await prisma.address.findMany({ where: { clientId:client?.id } });
+    const addresses = await prisma.address.findMany({
+      where: { clientId: client?.id },
+    });
 
     return addressSchema.array().parse(addresses);
   };
 
-  public updateAddress = async (payload: TUpdateAddressBody, addressId: number): Promise<TReturnAddress> => {
-        
-    const address = await prisma.address.update({where: { id:addressId },data: payload,});
+  public updateAddress = async (
+    payload: TUpdateAddressBody,
+    addressId: number
+  ): Promise<TReturnAddress> => {
+    const address = await prisma.address.update({
+      where: { id: addressId },
+      data: payload,
+    });
     return addressSchema.parse(address);
   };
 

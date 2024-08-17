@@ -1,5 +1,13 @@
 import { z } from "zod";
-import { createStoreSchema, getStoreSchema, returnStoreSchema, updateStoreSchema } from "./schemas";
+import {
+  createStoreSchema,
+  getStoreSchema,
+  returnStoreSchema,
+  storeSchema,
+  updateStoreSchema,
+} from "./schemas";
+
+type TStore = z.infer<typeof storeSchema>;
 
 type TReturnStore = z.infer<typeof returnStoreSchema>;
 
@@ -9,4 +17,4 @@ type TCreateStore = z.infer<typeof createStoreSchema>;
 
 type TUpdateStore = z.infer<typeof updateStoreSchema>;
 
-export { TReturnStore, TGetStore, TCreateStore, TUpdateStore };
+export { TReturnStore, TGetStore, TCreateStore, TUpdateStore, TStore };

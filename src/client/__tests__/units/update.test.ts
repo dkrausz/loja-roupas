@@ -13,7 +13,7 @@ describe("Unit test: update client data", () => {
     await prisma.address.deleteMany();
   });
 
-  test("Should be able to update some data from client", async () => {
+  test("Should be able to update a client data", async () => {
     const clientServices = container.resolve(ClientServices);
 
     const newAddress = AddressFactory.build();
