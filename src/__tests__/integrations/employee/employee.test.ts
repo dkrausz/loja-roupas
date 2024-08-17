@@ -1,8 +1,8 @@
 import supertest from "supertest";
 import { app } from "../../../app";
-import { Factory } from "../../factory";
+import { Factory } from "../../utils/factory";
 import { prisma } from "../../../database/prisma";
-import { createAdmEmployee, address1,address2,createFuncEmployee } from "../../utils/Employee.mock";
+import { createAdmEmployee, address1,address2,createFuncEmployee,store } from "../../utils/Employee.mock";
 import {jwtConfig} from "../../../configs/auth.config";
 import { sign } from "jsonwebtoken";
 
@@ -13,24 +13,47 @@ describe("Employee test",()=>{
 
   beforeEach( async()=>{
     await prisma.employee.deleteMany();
+    await prisma.product.deleteMany();
+    await prisma.order.deleteMany();
+    await prisma.client.deleteMany();
+    await prisma.store.deleteMany();
+    await prisma.address.deleteMany();    
     
+  });
+
+  afterAll( async()=>{
+    await prisma.employee.deleteMany();
+    await prisma.product.deleteMany();
+    await prisma.order.deleteMany();
+    await prisma.client.deleteMany();
+    await prisma.store.deleteMany();
+    await prisma.address.deleteMany();
   });
 
 
 test("Should be able to create a new employee",async ()=>{
 
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+
   const employeeAddress= await prisma.address.create({data:address1});
   const employeeADM = await createAdmEmployee();
+  employeeADM.storeId=createdStore.id;
+
   employeeADM.addressId=employeeAddress.id;
   const createdAdm = await prisma.employee.create({data:employeeADM});
-  const { jwtKey, expiresIn } = jwtConfig();
 
+  const { jwtKey, expiresIn } = jwtConfig();
   const token: string = sign({ accessLevel: createdAdm.accessLevel }, jwtKey, {
     expiresIn: expiresIn,
     subject: createdAdm.publicId,
   });
  
   const newEmployee = factory.employeeFactory();
+  newEmployee.storeId=createdStore.id;
 
   const response = await request.post("/employee").send(newEmployee).set("Authorization", `Bearer ${token}`);
 
@@ -55,9 +78,9 @@ test("Should be able to create a new employee",async ()=>{
     }	,
 
     store: {
-      publicId: '4b87e500-240b-4df5-8cf1-752660306f9c',
-      name: 'loja do zé',
-      CNPJ: '1234567800200'
+      publicId: createdStore.publicId,
+      name: createdStore.name,
+      CNPJ: createdStore.CNPJ
     }
   };
   
@@ -69,9 +92,17 @@ test("Should be able to create a new employee",async ()=>{
 
 test("Should return a error if dont use required keys",async ()=>{
 
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+
   const employeeAddress= await prisma.address.create({data:address1});
   const employeeADM = await createAdmEmployee();
   employeeADM.addressId=employeeAddress.id;
+  employeeADM.storeId=createdStore.id;
+
   const createdAdm = await prisma.employee.create({data:employeeADM});
   const { jwtKey, expiresIn } = jwtConfig();
 
@@ -140,9 +171,17 @@ test("Should return an error if use a expired token",async()=>{
 
 test("Should return an error if dont use an ADM token",async ()=>{
   
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+
   const employeeAddress= await prisma.address.create({data:address2});
   const employeeFunc = await createFuncEmployee();
   employeeFunc.addressId=employeeAddress.id;
+  employeeFunc.storeId=createdStore.id;
+
   const createFunc = await prisma.employee.create({data:employeeFunc});
   const { jwtKey, expiresIn } = jwtConfig();
 
@@ -162,9 +201,16 @@ test("Should return an error if dont use an ADM token",async ()=>{
 
 test("Should be able to get all the employees as a ADM",async ()=>{
 
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+
   const employeeAddress= await prisma.address.create({data:address1});
   const employeeADM = await createAdmEmployee();
   employeeADM.addressId=employeeAddress.id;
+  employeeADM.storeId=createdStore.id;
   const createdAdm = await prisma.employee.create({data:employeeADM});
   const { jwtKey, expiresIn } = jwtConfig();
 
@@ -175,12 +221,14 @@ test("Should be able to get all the employees as a ADM",async ()=>{
  
   const newEmployee = factory.employeeFactory();
   const newEmployee2 = factory.employeeFactory();  
+  newEmployee.storeId=createdStore.id;
+  newEmployee2.storeId=createdStore.id;
 
   const {address , ...filteredNewEmployee} = newEmployee;
-  const {address:address2 , ...filteredNewEmployee2} = newEmployee2;
+  const {address:address3 , ...filteredNewEmployee2} = newEmployee2;
 
   const employee1Address= await prisma.address.create({data:address});
-  const employee2Address= await prisma.address.create({data:address2});
+  const employee2Address= await prisma.address.create({data:address3});
 
   filteredNewEmployee.addressId = employee1Address.id;
   filteredNewEmployee2.addressId = employee2Address.id;
@@ -208,9 +256,17 @@ test("Should return an error if there is no token",async()=>{
 
 test("Should return an error if dont use an ADM token",async ()=>{
   
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+
   const employeeAddress= await prisma.address.create({data:address2});
   const employeeFunc = await createFuncEmployee();
   employeeFunc.addressId=employeeAddress.id;
+  employeeFunc.storeId=createdStore.id;
+
   const createFunc = await prisma.employee.create({data:employeeFunc});
   const { jwtKey, expiresIn } = jwtConfig();
 
@@ -227,9 +283,17 @@ test("Should return an error if dont use an ADM token",async ()=>{
 
 test("Should be able to update your own information",async ()=>{
   
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+
   const employeeAddress= await prisma.address.create({data:address2});
   const employeeFunc = await createFuncEmployee();
   employeeFunc.addressId=employeeAddress.id;
+  employeeFunc.storeId = createdStore.id;
+
   const createFunc = await prisma.employee.create({data:employeeFunc});
   const { jwtKey, expiresIn } = jwtConfig();
 
@@ -253,9 +317,17 @@ test("Should be able to update your own information",async ()=>{
 
 test("Should be able to update other information as an ADM",async ()=>{
 
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+
   const employeeAddress= await prisma.address.create({data:address1});
   const employeeADM = await createAdmEmployee();
   employeeADM.addressId=employeeAddress.id;
+  employeeADM.storeId=createdStore.id;
+
   const createdAdm = await prisma.employee.create({data:employeeADM});
   const { jwtKey, expiresIn } = jwtConfig();
 
@@ -267,6 +339,8 @@ test("Should be able to update other information as an ADM",async ()=>{
   const employeeAddress2= await prisma.address.create({data:address2});
   const employeeFunc = await createFuncEmployee();
   employeeFunc.addressId=employeeAddress2.id;
+  employeeFunc.storeId=createdStore.id;
+
   const createFunc = await prisma.employee.create({data:employeeFunc});
 
   const {publicId} = createFunc;
@@ -284,9 +358,17 @@ test("Should be able to update other information as an ADM",async ()=>{
 
 test("Should return an error if there is no token",async ()=>{
   
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+
   const employeeAddress= await prisma.address.create({data:address2});
   const employeeFunc = await createFuncEmployee();
   employeeFunc.addressId=employeeAddress.id;
+  employeeFunc.storeId=createdStore.id;
+
   const createFunc = await prisma.employee.create({data:employeeFunc});
   const { jwtKey, expiresIn } = jwtConfig();
 
@@ -309,9 +391,17 @@ test("Should return an error if there is no token",async ()=>{
 
 test("Should return a error if a employee tries to update other employee",async ()=>{
 
+  const addressStore = address1;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
  
   const employee1 = await createFuncEmployee();
   const employee2 = factory.employeeFactory();
+
+  employee1.storeId=createdStore.id;
+  employee2.storeId=createdStore.id;
   
   const address = address1;
   const {address:address2,...filteredEmployee2} = employee2;
@@ -347,12 +437,20 @@ test("Should return a error if a employee tries to update other employee",async 
 
 });
 
-test("Should be able to delete an employee been an ADM",async ()=>{
+test("Should be able to delete an employee as an ADM",async ()=>{
 
-  
+  const addressStore = address1;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+    
   const employee1 = await createAdmEmployee();
   const employee2 = factory.employeeFactory();
   
+  employee1.storeId=createdStore.id;
+  employee2.storeId=createdStore.id;
+
   const address =address1;
   const {address:address2,...filteredEmployee2} = employee2;
 
@@ -382,9 +480,17 @@ test("Should be able to delete an employee been an ADM",async ()=>{
 
 test("Should return a error if a employee tries to delete other employee",async ()=>{
 
+  const addressStore = address1;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
   
   const employee1 = await createFuncEmployee();
   const employee2 = factory.employeeFactory();
+
+  employee1.storeId=createdStore.id;
+  employee2.storeId=createdStore.id;
   
   const address =address1;
   const {address:address2,...filteredEmployee2} = employee2;
@@ -415,9 +521,16 @@ test("Should return a error if a employee tries to delete other employee",async 
 
 test("Should be able to Login as an ADM",async ()=>{
 
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+
   const employeeAddress= await prisma.address.create({data:address1});
   const employeeADM = await createAdmEmployee();
   employeeADM.addressId=employeeAddress.id;
+  employeeADM.storeId = createdStore.id;
   const createdAdm = await prisma.employee.create({data:employeeADM});
  
 const loginData = {
@@ -448,9 +561,16 @@ const loginData = {
 
 test("Should be able to Login as an Employee",async ()=>{
 
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
+
   const employeeAddress= await prisma.address.create({data:address1});
   const employee = await createFuncEmployee();
   employee.addressId=employeeAddress.id;
+  employee.storeId=createdStore.id;
   const createdEmployee = await prisma.employee.create({data:employee});
  
 const loginData = {
@@ -479,11 +599,18 @@ const loginData = {
 
 });
 
-test("Should return an error if use a wrong email",async ()=>{
+test("Should return an error if try to login with a wrong email",async ()=>{
+
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
 
   const employeeAddress= await prisma.address.create({data:address1});
   const employee = await createFuncEmployee();
   employee.addressId=employeeAddress.id;
+  employee.storeId = createdStore.id;
   const createdEmployee = await prisma.employee.create({data:employee});
  
 const loginData = {
@@ -498,10 +625,17 @@ const loginData = {
 
 });
 
-test("Should return an error if use a wrong password",async ()=>{
+test("Should return an error if try to login with a wrong password",async ()=>{
+
+  const addressStore = address2;
+  const newStore = store;
+  const createdStoreAddress= await prisma.address.create({data:addressStore});
+  newStore.addressId=createdStoreAddress.id;
+  const createdStore = await prisma.store.create({data:newStore});
 
   const employeeAddress= await prisma.address.create({data:address1});
   const employee = await createFuncEmployee();
+  employee.storeId=createdStore.id;
   employee.addressId=employeeAddress.id;
   const createdEmployee = await prisma.employee.create({data:employee});
  
