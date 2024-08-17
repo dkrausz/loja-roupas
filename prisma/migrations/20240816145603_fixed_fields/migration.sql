@@ -38,13 +38,13 @@ CREATE TABLE "Employee" (
 -- CreateTable
 CREATE TABLE "Address" (
     "id" SERIAL NOT NULL,
-    "street" VARCHAR(100) NOT NULL,
+    "street" VARCHAR(255) NOT NULL,
     "number" INTEGER NOT NULL,
     "complement" VARCHAR(100),
     "zipCode" VARCHAR(9) NOT NULL,
-    "neighborhood" VARCHAR(20) NOT NULL,
+    "neighborhood" VARCHAR(255) NOT NULL,
     "state" VARCHAR(20) NOT NULL,
-    "city" VARCHAR(20) NOT NULL,
+    "city" VARCHAR(50) NOT NULL,
     "country" VARCHAR(20) NOT NULL,
     "clientId" INTEGER,
 

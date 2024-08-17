@@ -26,6 +26,7 @@ export class EmployeeServices implements IEmployeeService {
 
   async create(body: TCreateEmployee): Promise<TEmployeeReturn> {
     
+    
     const newAddress = await prisma.address.create({ data: body.address });
 
     const pwd = await bcryptjs.hash(body.password, 10);

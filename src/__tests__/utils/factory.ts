@@ -1,8 +1,8 @@
 import { fakerBr } from "@js-brasil/fakerbr";
 import { fakerPT_BR as faker } from "@faker-js/faker";
-import { TClient, TClientRegister } from "../client/interfaces";
-import { TCreateProductBody } from "../products/interfaces";
-import { TCreateEmployee } from "../employee/interfaces";
+import { TClient, TClientRegister } from "../../client/interfaces";
+import { TCreateProductBody } from "../../products/interfaces";
+import { TCreateEmployee } from "../../employee/interfaces";
 
 export class Factory {
   public clientFactory = (): TClientRegister => {
@@ -40,7 +40,6 @@ export class Factory {
 
     return newProduct;
   };
-
   
   public employeeFactory = (): TCreateEmployee => {
     const firstName = faker.person.firstName();
@@ -78,7 +77,8 @@ export class Factory {
     return newEmployee
   
   };
-
+  
+  
   private convertDate = (dateString: string) => {
     const date = new Date(dateString);
 

@@ -17,7 +17,6 @@ export class HandleErrors {
     if (err instanceof JsonWebTokenError) {
       res.status(401).json({ message: err.message });
     }
-
     return res.status(500).json({ error: "Internal server error." });
   }
 }
