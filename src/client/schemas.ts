@@ -31,6 +31,7 @@ export const clientSchema = z.object({
 export const clientRegisterSchema = clientSchema.omit({
   id: true,
   publicId: true,
+  storeId: true,
 });
 
 export const clientReturnSchema = clientSchema

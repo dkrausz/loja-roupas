@@ -8,16 +8,19 @@ import {
 } from "./interfaces";
 import bcryptjs from "bcryptjs";
 import { clientReturnSchema } from "./schemas";
+import { storeIdActive } from "../store/services";
+
 @injectable()
 export class ClientServices {
   register = async (payload: TClientRegister): Promise<TClientReturn> => {
     const pwd: string = await bcryptjs.hash(payload.password, 10);
     const dateValue = new Date(payload.birthDate);
 
-    const newClient: TClientRegister = {
+    const newClient = {
       ...payload,
       birthDate: dateValue,
       password: pwd,
+      storeId: storeIdActive,
     };
 
     const createdClient = await prisma.client.create({
