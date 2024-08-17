@@ -9,6 +9,8 @@ import { paginationResponse } from "../@shared/pagination.interface";
 export class ProductService implements IProductService {
 
   public createProduct = async (payload: TCreateProductBody): Promise<TReturnProduct> => {
+   
+    
     const newProduct = await prisma.product.create({ data: payload });
     return returnProductSchema.parse(newProduct);
   };

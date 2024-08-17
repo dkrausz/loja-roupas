@@ -30,6 +30,11 @@ export const address2 = {
   country: "Brasil"
 };
 
+export const store ={
+  name: "loja do zé",
+  CNPJ:"77262040000136",
+  addressId:1
+};
 
 
 

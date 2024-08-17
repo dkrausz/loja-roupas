@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Address" ALTER COLUMN "city" SET DATA TYPE VARCHAR(50);
