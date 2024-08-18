@@ -20,6 +20,9 @@ export class EmployeeServices implements IEmployeeService {
 
   async getOne(publicId: string): Promise<TEmployeeReturn> {
     const employee = await prisma.employee.findFirst({ where: { publicId },include:{address:true} });
+    if(!employee){
+      throw new AppError(404, "User not found!")
+    }
 
     return returnEmployeeCreateSchema.parse(employee);
   }
