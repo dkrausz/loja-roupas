@@ -10,10 +10,9 @@ export class AddressController {
     req: Request,
     res: Response
   ): Promise<Response> => {
-    console.log("criando address...");
     const newAddress = await this.service.createAddress(
       req.body,
-      String(req.params.id)
+      req.params.id
     );
     return res.status(201).json(newAddress);
   };

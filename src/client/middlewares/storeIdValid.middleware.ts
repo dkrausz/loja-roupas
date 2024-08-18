@@ -9,12 +9,16 @@ export class StoreIdValid {
     _res: Response,
     next: NextFunction
   ) => {
-    const storeIdFound = await prisma.store.findUnique({
-      where: { id: loadedStore.id },
-    });
+    if (loadedStore.id === 0) {
+      throw new AppError(404, "No one store registered.");
+    } else {
+      const storeIdFound = await prisma.store.findUnique({
+        where: { id: loadedStore.id },
+      });
 
-    if (!storeIdFound) {
-      throw new AppError(404, "Store not found.");
+      if (!storeIdFound) {
+        throw new AppError(404, "Store not found.");
+      }
     }
 
     return next();

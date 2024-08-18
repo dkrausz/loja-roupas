@@ -33,7 +33,6 @@ export class StoreServices {
 
     const newStore = await prisma.store.create({ data: storeData });
     await initStore(loadedStore);
-    console.log(loadedStore);
 
     return returnStoreSchema.parse(newStore);
   }

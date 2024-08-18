@@ -43,8 +43,8 @@ clientRouter.use("/:id", IsIdExisting.execute);
 
 clientRouter.get(
   "/:id",
-  ValidateToken.execute,
-  ClientAccessPermission.execute,
+  // ValidateToken.execute,
+  // ClientAccessPermission.execute,
   (req, res) => clientControllers.getOne(req, res)
 );
 
