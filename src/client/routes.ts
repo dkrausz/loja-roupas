@@ -25,9 +25,12 @@ clientRouter.post(
   bodyMiddleware.bodyIsValid(clientRegisterSchema),
   IsUniqueEmail.execute,
   Cpf.isValid,
-  // Cpf.isUnique,
-  // StoreIdValid.execute,
-  (req, res) => clientControllers.register(req, res)
+  Cpf.isUnique,
+  StoreIdValid.execute,
+  (req, res) => {
+    console.log("executando a rota");
+    clientControllers.register(req, res);
+  }
 );
 
 // Somente o administrador?

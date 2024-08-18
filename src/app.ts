@@ -12,7 +12,6 @@ import { orderRouter } from "./order/routes";
 import { HandleErrors } from "./@shared/handleErrors";
 
 export const app = express();
-
 app.use(json());
 
 app.use("/address", addressRoute);

@@ -5,14 +5,14 @@ import { AddressFactory } from "../address.factories";
 import { fakerBr } from "@js-brasil/fakerbr";
 import { ClientFactory } from "../client.factories";
 
-describe("Unit test: get one client", () => {
+describe("Unit test: get a client", () => {
   beforeEach(async () => {
     await prisma.client.deleteMany();
     await prisma.store.deleteMany();
     await prisma.address.deleteMany();
   });
 
-  test("Should be able do get one client by his uuid", async () => {
+  test("Should be able do get one client by publicId", async () => {
     const clientServices = container.resolve(ClientServices);
 
     const newAddress = AddressFactory.build();

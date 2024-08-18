@@ -10,7 +10,6 @@
     "script": "dotenv -e .env.test -- npx ts-node test.ts",
     "dev": "tsnd --respawn src/server.ts",
     "dev:test": "dotenv -e .env.test -- tsnd --respawn src/server.ts"
-    
   },
   "keywords": [],
   "author": "",
@@ -37,6 +36,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.15.1",
+    "axios": "^1.7.4",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -49,6 +49,7 @@
     "gerar-cpf": "^3.1.0",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
+    "prompt-sync": "^4.2.0",
     "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.8.0",
     "zod": "^3.23.8"
