@@ -1,11 +1,6 @@
 import { injectable } from "tsyringe";
 import { prisma } from "../database/prisma";
-import {
-  IAddressService,
-  TCreateAddressBody,
-  TReturnAddress,
-  TUpdateAddressBody,
-} from "./interfaces";
+import {IAddressService,TCreateAddressBody,TReturnAddress,TUpdateAddressBody,} from "./interfaces";
 import { addressSchema } from "./schemas";
 import { AppError } from "../@shared/errors";
 

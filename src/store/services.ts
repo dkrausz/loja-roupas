@@ -3,7 +3,8 @@ import { getStoreSchema, returnStoreSchema } from "./schemas";
 import { TCreateStore, TReturnStore, TUpdateStore } from "./interfaces";
 import { prisma } from "../database/prisma";
 import { initStore } from "../configs/initStore.config";
-import { loadedStore } from "../server";
+import { loadedStore } from "../app";
+
 
 export let storeIdActive = 0;
 @injectable()

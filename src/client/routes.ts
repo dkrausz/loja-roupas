@@ -10,10 +10,7 @@ import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
 import { StoreIdValid } from "./middlewares/storeIdValid.middleware";
 import { Cpf } from "../@shared/cpf.middleware";
 import { IsIdExisting } from "./middlewares/isIdExisting.middleware";
-import {
-  createAddressBodySchema,
-  updateAddressBodySchema,
-} from "../address/schemas";
+import {createAddressBodySchema,updateAddressBodySchema} from "../address/schemas";
 import { AddressController } from "../address/controller";
 import { whoHasAcess } from "../@shared/whoHasAccess.middleware";
 
@@ -64,13 +61,8 @@ clientRouter.delete(
   (req, res) => clientControllers.remove(req, res)
 );
 
-clientRouter.post(
-  "/:id/address",
-  ValidateToken.execute,
-  whoHasAcess.permission("owner", "ADM"),
-  bodyMiddleware.bodyIsValid(createAddressBodySchema),
-  addressController.createAddress
-);
+clientRouter.post("/:id/address", ValidateToken.execute, whoHasAcess.permission("owner", "ADM"),
+  bodyMiddleware.bodyIsValid(createAddressBodySchema), addressController.createAddress);
 
 clientRouter.get(
   "/:id/address",

@@ -1,14 +1,9 @@
 import { injectable } from "tsyringe";
 import { prisma } from "../database/prisma";
-import {
-  TClient,
-  TClientRegister,
-  TClientReturn,
-  TClientUpdate,
-} from "./interfaces";
+import {TClient,TClientRegister, TClientReturn,TClientUpdate,} from "./interfaces";
 import bcryptjs from "bcryptjs";
 import { clientReturnSchema } from "./schemas";
-import { loadedStore } from "../server";
+import { loadedStore } from "../app";
 
 @injectable()
 export class ClientServices {
@@ -19,9 +14,10 @@ export class ClientServices {
     const newClient = {
       ...payload,
       birthDate: dateValue,
-      password: pwd,
+      password: pwd,      
       storeId: loadedStore.id,
     };
+
 
     const createdClient = await prisma.client.create({
       data: newClient,
