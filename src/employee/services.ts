@@ -8,6 +8,7 @@ import { TUpdateAddressBody } from "../address/interfaces";
 import { jwtConfig } from "../configs/auth.config";
 import { sign } from "jsonwebtoken";
 import { TemployeeLogin, TemployeeLoginReturn } from "./interfaces";
+import { loadedStore } from "../app";
 
 injectable();
 
@@ -38,6 +39,8 @@ export class EmployeeServices implements IEmployeeService {
 
     // const {address, ...newEmployee} = body;   
 
+    console.log("loadStore", loadedStore.id);
+    
     const newEmployee = {
       name: body.name,
       email:body.email,
@@ -47,7 +50,7 @@ export class EmployeeServices implements IEmployeeService {
       addressId: newAddress.id,
       phone: body.phone,
       accessLevel: body.accessLevel,
-      storeId: body.storeId,
+      storeId: loadedStore.id,
     };
 
     const employee = await prisma.employee.create({ data: newEmployee, include: { address: true , store:true} });

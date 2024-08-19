@@ -2,17 +2,17 @@ import { container } from "tsyringe";
 import { ClientServices } from "./services";
 import { ClientControllers } from "./controllers";
 import { Router } from "express";
-import { IsUniqueEmail } from "./middlewares/isUniqueEmail.middleware";
 import { ValidateToken } from "../@shared/validateToken.middleware";
 import { ClientAccessPermission } from "./middlewares/clientAccessPermission.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
 import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
-import { StoreIdValid } from "./middlewares/storeIdValid.middleware";
 import { Cpf } from "../@shared/cpf.middleware";
 import { IsIdExisting } from "./middlewares/isIdExisting.middleware";
 import {createAddressBodySchema,updateAddressBodySchema} from "../address/schemas";
 import { AddressController } from "../address/controller";
 import { whoHasAcess } from "../@shared/whoHasAccess.middleware";
+import { isUniqueEmail } from "../@shared/isUniqueEmail.middleware";
+import { StoreIdValid } from "../@shared/storeIdValid.middleware";
 
 container.registerSingleton("ClientServices", ClientServices);
 const clientControllers = container.resolve(ClientControllers);
@@ -22,13 +22,7 @@ export const clientRouter = Router();
 
 clientRouter.post(
   "/",
-  bodyMiddleware.bodyIsValid(clientRegisterSchema),
-  IsUniqueEmail.execute,
-  Cpf.isValid,
-  Cpf.isUnique,
-  StoreIdValid.execute,
-  (req, res) => {
-    console.log("executando a rota");
+  bodyMiddleware.bodyIsValid(clientRegisterSchema), isUniqueEmail.client , Cpf.isValid, Cpf.isUnique, StoreIdValid.execute,(req, res) => { 
     clientControllers.register(req, res);
   }
 );

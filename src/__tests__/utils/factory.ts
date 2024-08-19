@@ -69,9 +69,7 @@ export class Factory {
         country:"Brasil"
       },
       phone:phone,
-      accessLevel:accessLevel as "ADM" | "FUNCIONARIO",
-      storeId:1
-      
+      accessLevel:accessLevel as "ADM" | "FUNCIONARIO",            
     };
 
     return newEmployee
