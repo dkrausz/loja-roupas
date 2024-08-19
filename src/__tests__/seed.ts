@@ -1,19 +1,21 @@
-import supertest from "supertest";
-import { app } from "../app";
+import { prisma } from "../database/prisma";
+import { Factory } from "./utils/factory"
 
+const factory = new Factory();
 
+const createProducts = async (quantity:number)=>{
 
-class seed{
-
+  const store = await prisma.store.findFirst();
   
-public createClients=async(qty:number)=>{
-  const request = supertest(app);
+  for(let i=0;i<quantity;i++){
+    const newProduct = factory.productFactory();
+   const newProductWithStoreId = {...newProduct, storeId:store!.id};
+   const createdProduct = await prisma.product.create({data:newProductWithStoreId});
 
+   
+  };
+
+
+};
   
-  const response = await request.post("/clients").send
-  
-  return
-}
-
-
-}
+createProducts(1500);

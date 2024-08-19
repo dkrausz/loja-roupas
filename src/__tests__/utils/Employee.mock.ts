@@ -54,7 +54,8 @@ export const createAdmEmployee = async()=>{
     addressId:4,
     phone:"45920193948",
     accessLevel:accessLevel as AccessLevel,
-    storeId: 1
+    storeId:1
+    
   };
   return employeeAdm;
 }
@@ -73,7 +74,8 @@ export const createFuncEmployee = async()=>{
     addressId:4,
     phone:"45920193948",
     accessLevel:accessLevel as AccessLevel,
-    storeId: 1
+    storeId:1
+    
   };
   return employeeFunc;
 }
