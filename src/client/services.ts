@@ -8,7 +8,7 @@ import {
 } from "./interfaces";
 import bcryptjs from "bcryptjs";
 import { clientReturnSchema } from "./schemas";
-import { loadedStore } from "../server";
+import { loadedStore } from "../app";
 
 @injectable()
 export class ClientServices {

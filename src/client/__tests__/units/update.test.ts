@@ -57,7 +57,6 @@ describe("Unit test: update client data", () => {
         birthDate: client.birthDate,
         CPF: client.CPF,
         phone: client.phone,
-        storeId: client.storeId,
         address: [],
       };
     };

@@ -38,7 +38,8 @@ describe("Unit test: delete a client", () => {
 
     const clientList = await Promise.all(
       clientListTest.map(async (client) => {
-        return await prisma.client.create({ data: client });
+        const clientx = { ...client, storeId: newStore.id };
+        return await prisma.client.create({ data: clientx });
       })
     );
     clientList.sort(function (a, b) {

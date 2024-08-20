@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { prisma } from "../../database/prisma";
 import { AppError } from "../../@shared/errors";
-import { loadedStore } from "../../server";
+import { loadedStore } from "../../app";
 
 export class StoreIdValid {
   static execute = async (

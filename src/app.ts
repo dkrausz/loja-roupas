@@ -10,8 +10,17 @@ import { clientAuthenticationRouter } from "./client_auth/routes";
 import { clientRouter } from "./client/routes";
 import { orderRouter } from "./order/routes";
 import { HandleErrors } from "./@shared/handleErrors";
+import { initStore } from "./configs/initStore.config";
+import { IStoreId } from "./store/interfaces";
 
 export const app = express();
+export const loadedStore: IStoreId = { id: 0 };
+
+const initApp = async () => {
+  await initStore(loadedStore);
+};
+initApp();
+
 app.use(json());
 
 app.use("/address", addressRoute);
