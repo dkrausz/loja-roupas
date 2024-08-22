@@ -10,19 +10,20 @@ import { clientAuthenticationRouter } from "./client_auth/routes";
 import { clientRouter } from "./client/routes";
 import { orderRouter } from "./order/routes";
 import { HandleErrors } from "./@shared/handleErrors";
-import { initStore } from "./configs/initStore.config";
 import { IStoreId } from "./store/interfaces";
+import { initStore } from "./configs/initStore.config";
+
+export let loadedStore: IStoreId = { id: 0 };
 
 export const app = express();
-export const loadedStore: IStoreId = { id: 0 };
 
 const initApp = async () => {
   await initStore(loadedStore);
+  // console.log(`Id carregado: ${loadedStore.id}`);
 };
+
 initApp();
-
 app.use(json());
-
 app.use("/address", addressRoute);
 app.use("/products", productRoute);
 app.use("/store", storeRoutes);

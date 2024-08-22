@@ -4,15 +4,16 @@ import { IProductService, TCreateProductBody, TReturnProduct, TUpdateProductBody
 import { returnProductSchema } from "./schemas";
 import { AppError } from "../@shared/errors";
 import { paginationResponse } from "../@shared/pagination.interface";
+import { loadedStore } from "../app";
 
 @injectable()
 export class ProductService implements IProductService {
 
   public createProduct = async (payload: TCreateProductBody): Promise<TReturnProduct> => {
-   
+    const newProduct ={...payload,storeId:loadedStore.id};
     
-    const newProduct = await prisma.product.create({ data: payload });
-    return returnProductSchema.parse(newProduct);
+    const createProduct = await prisma.product.create({ data: newProduct });
+    return returnProductSchema.parse(createProduct);
   };
 
   public getOneProduct = async (publicId: string): Promise<TReturnProduct> => {
@@ -27,8 +28,9 @@ export class ProductService implements IProductService {
     let products;  
     let count;
     if (search) {
-      products = await prisma.product.findMany({ where: { name: search } ,skip:perPage*(page-1),take:perPage});
-      count = await prisma.product.count({where:{name:search}});
+      products = await prisma.product.findMany({ where: {name:{contains: search,mode:"insensitive"}, } ,skip:perPage*(page-1),take:perPage});
+
+      count = await prisma.product.count({where:{name:{contains:search,mode:"insensitive"}}});
     } else {
       products = await prisma.product.findMany({skip:perPage*(page-1),take:perPage,});
       count = await prisma.product.count();

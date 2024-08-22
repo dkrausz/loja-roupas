@@ -12,7 +12,7 @@ class Pagination{
     const perPage = queryPerPage && queryPerPage>0 && queryPerPage<40? queryPerPage:10;
 
             
-    const url = `${req.protocol}://${req.headers.host}${req.baseUrl}`
+    const url = `${req.protocol}://${req.headers.host}${req.baseUrl}/`
     const previousPage = `${url}?page=${(page-1)<1?page:page-1}&perPage=${perPage}`;
     const nextPage = `${url}?page=lastpage&perPage=${perPage}`;
    

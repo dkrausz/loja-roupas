@@ -1,42 +1,45 @@
-import { container } from "tsyringe";
+// import { container } from "tsyringe";
 import { prisma } from "../../../database/prisma";
-import { ClientFactory } from "../client.factories";
 import { AddressFactory } from "../address.factories";
 import { fakerBr } from "@js-brasil/fakerbr";
-import { loadedStore } from "../../../app";
-import { initStore } from "../../../configs/initStore.config";
-import { ClientServices } from "../../services";
+import { ClientFactory } from "../client.factories";
 import { TClientRegister } from "../../interfaces";
+import { ClientServices } from "../../services";
+import { customContainer } from "../../../configs/container";
+import { register } from "module";
 
-describe("Unit test: update client", () => {
-  beforeAll(async () => {
+describe("Unit test: update client data", () => {
+  const mockClientServices = {
+    update: jest.fn(),
+    register: jest.fn(),
+    getOne: jest.fn(),
+    get: jest.fn(),
+    remove: jest.fn(),
+  };
+
+  beforeEach(async () => {
     await prisma.client.deleteMany();
     await prisma.store.deleteMany();
     await prisma.address.deleteMany();
 
-    const addressStore = AddressFactory.build();
+    customContainer.reset();
+    customContainer.registerInstance(ClientServices, mockClientServices);
+  });
+
+  test("Should be able to update a client data", async () => {
+    const clientServices = customContainer.resolve("ClientServices");
+    // const clientServices = new ClientServices();
+    const newAddress = AddressFactory.build();
     const newStore = await prisma.store.create({
       data: {
         name: "Loja Teste",
         CNPJ: fakerBr.cnpj(),
         address: {
-          create: addressStore,
+          create: newAddress,
         },
       },
     });
-    loadedStore.id = newStore.id;
-    await initStore(loadedStore);
-  });
-
-  beforeEach(async () => {
-    container.reset();
-    await prisma.client.deleteMany();
-  });
-
-  test("Should be able to update data client publicId.", async () => {
-    const clientServices = container.resolve(ClientServices);
-
-    const newClient = ClientFactory.build(loadedStore.id);
+    const newClient = ClientFactory.build(newStore.id);
     const registeredClient = await prisma.client.create({ data: newClient });
     const updateData = {
       name: "Cintia Rodrigues",
@@ -64,8 +67,6 @@ describe("Unit test: update client", () => {
         address: [],
       };
     };
-    console.log("Dado enviado para o bd", updateClientServiceTest);
-    console.log("Dados de teste:", expectedValue(updatedClient));
-    // expect(updateClientServiceTest).toEqual(expectedValue(updatedClient));
+    expect(updateClientServiceTest).toEqual(expectedValue(updatedClient));
   });
 });

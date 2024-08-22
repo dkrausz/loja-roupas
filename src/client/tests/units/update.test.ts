@@ -1,43 +1,37 @@
 import { container } from "tsyringe";
 import { prisma } from "../../../database/prisma";
-import { ClientFactory } from "../client.factories";
+import { ClientServices } from "../../services";
 import { AddressFactory } from "../address.factories";
 import { fakerBr } from "@js-brasil/fakerbr";
-import { loadedStore } from "../../../app";
-import { initStore } from "../../../configs/initStore.config";
-import { ClientServices } from "../../services";
+import { ClientFactory } from "../client.factories";
 import { TClientRegister } from "../../interfaces";
 
-describe("Unit test: update client", () => {
-  beforeAll(async () => {
+describe("Unit test: update client data", () => {
+  beforeEach(async () => {
     await prisma.client.deleteMany();
     await prisma.store.deleteMany();
     await prisma.address.deleteMany();
+  });
 
-    const addressStore = AddressFactory.build();
+  test("Should be able to update a client data", async () => {
+    const clientServices = container.resolve(ClientServices);
+
+    const newAddress = AddressFactory.build();
+
     const newStore = await prisma.store.create({
       data: {
         name: "Loja Teste",
         CNPJ: fakerBr.cnpj(),
         address: {
-          create: addressStore,
+          create: newAddress,
         },
       },
     });
-    loadedStore.id = newStore.id;
-    await initStore(loadedStore);
-  });
 
-  beforeEach(async () => {
-    container.reset();
-    await prisma.client.deleteMany();
-  });
+    const newClient = ClientFactory.build(newStore.id);
 
-  test("Should be able to update data client publicId.", async () => {
-    const clientServices = container.resolve(ClientServices);
-
-    const newClient = ClientFactory.build(loadedStore.id);
     const registeredClient = await prisma.client.create({ data: newClient });
+
     const updateData = {
       name: "Cintia Rodrigues",
       email: "cintia@gmail.com",
@@ -49,10 +43,12 @@ describe("Unit test: update client", () => {
       ...newClient,
       ...updateData,
     };
+
     const updateClientServiceTest = await clientServices.update(
       registeredClient.publicId,
       updateData
     );
+
     const expectedValue = (client: TClientRegister) => {
       return {
         publicId: expect.any(String),
@@ -64,8 +60,7 @@ describe("Unit test: update client", () => {
         address: [],
       };
     };
-    console.log("Dado enviado para o bd", updateClientServiceTest);
-    console.log("Dados de teste:", expectedValue(updatedClient));
-    // expect(updateClientServiceTest).toEqual(expectedValue(updatedClient));
+
+    expect(updateClientServiceTest).toEqual(expectedValue(updatedClient));
   });
 });

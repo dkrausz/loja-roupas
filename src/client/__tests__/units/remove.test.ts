@@ -1,33 +1,41 @@
 import { container } from "tsyringe";
 import { prisma } from "../../../database/prisma";
-import { ClientServices } from "../../services";
+import { ClientFactory } from "../client.factories";
 import { AddressFactory } from "../address.factories";
 import { fakerBr } from "@js-brasil/fakerbr";
-import { ClientFactory } from "../client.factories";
+import { loadedStore } from "../../../app";
+import { initStore } from "../../../configs/initStore.config";
+import { ClientServices } from "../../services";
 
-describe("Unit test: delete a client", () => {
-  beforeEach(async () => {
+describe("Unit test: remove client", () => {
+  beforeAll(async () => {
     await prisma.client.deleteMany();
     await prisma.store.deleteMany();
     await prisma.address.deleteMany();
-  });
 
-  test("Should be able to delete a client by publicId", async () => {
-    const clientServices = container.resolve(ClientServices);
-
-    const newAddress = AddressFactory.build();
-
+    const addressStore = AddressFactory.build();
     const newStore = await prisma.store.create({
       data: {
         name: "Loja Teste",
         CNPJ: fakerBr.cnpj(),
         address: {
-          create: newAddress,
+          create: addressStore,
         },
       },
     });
+    loadedStore.id = newStore.id;
+    await initStore(loadedStore);
+  });
 
-    const clientListTest = ClientFactory.buildMany(5, newStore.id);
+  beforeEach(async () => {
+    container.reset();
+    await prisma.client.deleteMany();
+  });
+
+  test("Should be able to remove a client by publicId.", async () => {
+    const clientServices = container.resolve(ClientServices);
+
+    const clientListTest = ClientFactory.buildMany(5, loadedStore.id);
     clientListTest.sort(function (a, b) {
       if (a.name < b.name) {
         return -1;
@@ -38,7 +46,7 @@ describe("Unit test: delete a client", () => {
 
     const clientList = await Promise.all(
       clientListTest.map(async (client) => {
-        const clientx = { ...client, storeId: newStore.id };
+        const clientx = { ...client, storeId: loadedStore.id };
         return await prisma.client.create({ data: clientx });
       })
     );

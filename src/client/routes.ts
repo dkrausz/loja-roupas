@@ -1,13 +1,11 @@
-import { container } from "tsyringe";
+import { container, delay } from "tsyringe";
 import { ClientServices } from "./services";
 import { ClientControllers } from "./controllers";
 import { Router } from "express";
-import { IsUniqueEmail } from "./middlewares/isUniqueEmail.middleware";
 import { ValidateToken } from "../@shared/validateToken.middleware";
 import { ClientAccessPermission } from "./middlewares/clientAccessPermission.middleware";
 import { bodyMiddleware } from "../@shared/body.middeware";
 import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
-import { StoreIdValid } from "./middlewares/storeIdValid.middleware";
 import { Cpf } from "../@shared/cpf.middleware";
 import { IsIdExisting } from "./middlewares/isIdExisting.middleware";
 import {
@@ -17,9 +15,11 @@ import {
 import { AddressController } from "../address/controller";
 import { whoHasAcess } from "../@shared/whoHasAccess.middleware";
 import { AddressService } from "../address/service";
-
+import { IsUniqueEmail } from "./middlewares/isUniqueEmail.middleware";
+import { StoreIdValid } from "../@shared/storeIdValid.middleware";
+import { customContainer } from "../configs/container";
 container.registerSingleton("ClientServices", ClientServices);
-const clientControllers = container.resolve(ClientControllers);
+export const clientControllers = container.resolve(ClientControllers);
 
 // container.registerSingleton("AddressServices", AddressService);
 // const addressController = container.resolve(AddressController);
@@ -52,7 +52,7 @@ clientRouter.get(
 
 clientRouter.patch(
   "/:id",
-  IsUniqueEmail.execute,
+  // IsUniqueEmail.execute,
   // bodyMiddleware.bodyIsValid(clientUpdateSchema),
   // ValidateToken.execute,
   // ClientAccessPermission.execute,

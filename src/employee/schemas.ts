@@ -14,10 +14,10 @@ import { AccessLevel } from "@prisma/client";
     addressId: z.number().nullish(),
     phone: z.string().max(11).nullish(),
     accessLevel: z.nativeEnum(AccessLevel,{message:"You have to choose between FUNCIONARIO or ADM "}),    
-    storeId: z.number(),
+    
 });
 
- const returnEmployeeCreateSchema = employeeSchema.extend({ address: returnAddressBodySchema.nullish(), store: getStoreSchema.nullish() }).omit({ id: true, password: true , addressId:true, storeId:true});
+ const returnEmployeeCreateSchema = employeeSchema.extend({ address: returnAddressBodySchema.nullish(), store: getStoreSchema.nullish() }).omit({ id: true, password: true , addressId:true});
  const createEmployeeSchema = employeeSchema.omit({id: true, publicId: true}).extend({address:createAddressBodySchema});
  const employeeBodyWithoutAddress= employeeSchema.omit({id:true,publicId:true, addressId:true});
  const updateEmployeeSchema = createEmployeeSchema.partial(); 

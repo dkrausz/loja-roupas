@@ -1,45 +1,32 @@
 import { prisma } from "../../../database/prisma";
-import { request } from "../utils/request";
-import { ClientFactory } from "../client.factories";
-import { AddressFactory } from "../address.factories";
+// import { request } from "../utils/request";
+// import { ClientFactory } from "../client.factories";
 import { fakerBr } from "@js-brasil/fakerbr";
-import { loadedStore } from "../../../app";
-import { initStore } from "../../../configs/initStore.config";
 
 describe("Integration test: register client", () => {
   const endpoint = "/clients";
 
-  beforeAll(async () => {
-    await prisma.client.deleteMany();
-    await prisma.store.deleteMany();
-    await prisma.address.deleteMany();
+  const startData = async () => {
+    const newAddress = AddressFactory.build();
 
-    const addressStore = AddressFactory.build();
     const newStore = await prisma.store.create({
       data: {
         name: "Loja Teste",
         CNPJ: fakerBr.cnpj(),
         address: {
-          create: addressStore,
+          create: newAddress,
         },
       },
     });
-    loadedStore.id = newStore.id;
-    await initStore(loadedStore);
-  });
+    return newStore.id;
+  };
 
   beforeEach(async () => {
     await prisma.client.deleteMany();
   });
 
-  afterAll(async () => {
-    await prisma.client.deleteMany();
-    await prisma.store.deleteMany();
-    await prisma.address.deleteMany();
-  });
-
   test("Should be able to create a user correctly with valid data.", async () => {
-    const newValidClient = ClientFactory.build(loadedStore.id);
+    const newValidClient = ClientFactory.build(await startData());
 
     const data = await request
       .post(endpoint)
@@ -53,10 +40,11 @@ describe("Integration test: register client", () => {
       birthDate: newValidClient.birthDate.toISOString(),
       CPF: newValidClient.CPF,
       phone: newValidClient.phone,
-      storeId: loadedStore.id,
+      storeId: newValidClient.storeId,
       publicId: expect.any(String),
       address: [],
     };
+
     expect(data).toEqual(expectResponseBody);
   });
 
@@ -75,15 +63,17 @@ describe("Integration test: register client", () => {
   });
 
   test("Should throw error if email is already registered.", async () => {
-    let newValidClient1;
-    let newValidClient2;
-    newValidClient1 = ClientFactory.build(loadedStore.id);
-    newValidClient2 = {
-      ...ClientFactory.build(loadedStore.id),
+    const newValidClient1 = ClientFactory.build(await startData());
+    const newValidClient2 = {
+      ...ClientFactory.build(newValidClient1.storeId),
       email: newValidClient1.email,
     };
 
-    await request.post(endpoint).send(newValidClient1).expect(201);
+    await request
+      .post(endpoint)
+      .send(newValidClient1)
+      .expect(201)
+      .then((response) => response.body);
 
     await request
       .post(endpoint)
@@ -94,7 +84,7 @@ describe("Integration test: register client", () => {
 
   test("Should throw error if CPF number is invalid.", async () => {
     const newInvalidCPFClient = {
-      ...ClientFactory.build(loadedStore.id),
+      ...ClientFactory.build(await startData()),
       CPF: "12345678900",
     };
 
@@ -106,9 +96,9 @@ describe("Integration test: register client", () => {
   });
 
   test("Should throw error if a CPF is already registered.", async () => {
-    const newClient = ClientFactory.build(loadedStore.id);
+    const newClient = ClientFactory.build(await startData());
     const newDuplicatedCPFClient = {
-      ...ClientFactory.build(loadedStore.id),
+      ...ClientFactory.build(await startData()),
       CPF: newClient.CPF,
     };
 
@@ -126,15 +116,11 @@ describe("Integration test: register client", () => {
   });
 
   test("Should throw error if storeId is invalid.", async () => {
-    loadedStore.id = 0;
-    const newClient = ClientFactory.build(loadedStore.id);
+    const newClient = ClientFactory.build(0);
 
     await request
-      .post(endpoint)
-      .send(newClient)
+      .get(`/store/${newClient.storeId}`)
       .expect(404)
-      .then((response) => {
-        response.body;
-      });
+      .then((response) => response.body);
   });
 });
