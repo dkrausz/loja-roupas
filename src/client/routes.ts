@@ -15,6 +15,7 @@ import { isUniqueEmail } from "../@shared/isUniqueEmail.middleware";
 import { StoreIdValid } from "../@shared/storeIdValid.middleware";
 
 container.registerSingleton("ClientServices", ClientServices);
+
 const clientControllers = container.resolve(ClientControllers);
 const addressController = container.resolve(AddressController);
 

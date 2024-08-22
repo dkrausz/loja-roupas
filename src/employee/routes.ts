@@ -12,8 +12,8 @@ import { StoreIdValid } from "../@shared/storeIdValid.middleware";
 
 
 container.registerSingleton("EmployeeServices", EmployeeServices);
-
 const employeeController = container.resolve(EmployeeControllers);
+
 
 export const employeeRoutes = Router();
 

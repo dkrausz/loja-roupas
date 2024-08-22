@@ -52,6 +52,7 @@ export class Factory {
     const accessLevel = accessLevelSelector[Math.round(Math.random()*1)];
     const address = fakerBr.endereco();
 
+    
     const newEmployee:TCreateEmployee={
       name:firstName + " " + lastName,
       email:faker.internet.email({ firstName, lastName }),
@@ -69,7 +70,8 @@ export class Factory {
         country:"Brasil"
       },
       phone:phone,
-      accessLevel:accessLevel as "ADM" | "FUNCIONARIO",            
+      accessLevel:accessLevel as "ADM" | "FUNCIONARIO",
+           
     };
 
     return newEmployee

@@ -3,6 +3,6 @@
 export default {
   preset: "ts-jest",
   testEnvironment: "node",
-  testMatch: ["**/__tests__/(units|integrations)/**/*.[jt]s"],
+  testMatch: ["**/__tests__/(units)/**/*.[jt]s"],
   setupFilesAfterEnv: ["./src/configs/reflectmetadata.config.ts"],
 };

@@ -10,7 +10,7 @@ import { sign } from "jsonwebtoken";
 import { TemployeeLogin, TemployeeLoginReturn } from "./interfaces";
 import { loadedStore } from "../app";
 
-injectable();
+injectable()
 
 export class EmployeeServices implements IEmployeeService {
   async getMany(): Promise<TEmployeeReturn[]> {
@@ -32,15 +32,9 @@ export class EmployeeServices implements IEmployeeService {
     
     
     const newAddress = await prisma.address.create({ data: body.address });
-
     const pwd = await bcryptjs.hash(body.password, 10);
-
-    const dataValue = new Date(body.birthDate);
-
-    // const {address, ...newEmployee} = body;   
-
-    console.log("loadStore", loadedStore.id);
-    
+    const dataValue = new Date(body.birthDate);  
+ 
     const newEmployee = {
       name: body.name,
       email:body.email,
