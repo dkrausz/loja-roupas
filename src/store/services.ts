@@ -5,7 +5,6 @@ import { prisma } from "../database/prisma";
 import { initStore } from "../configs/initStore.config";
 import { loadedStore } from "../app";
 
-
 export let storeIdActive = 0;
 @injectable()
 export class StoreServices {
@@ -34,7 +33,6 @@ export class StoreServices {
 
     const newStore = await prisma.store.create({ data: storeData });
     await initStore(loadedStore);
-    console.log(loadedStore);
 
     return returnStoreSchema.parse(newStore);
   }

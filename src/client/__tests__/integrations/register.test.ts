@@ -3,31 +3,43 @@ import { request } from "../utils/request";
 import { ClientFactory } from "../client.factories";
 import { AddressFactory } from "../address.factories";
 import { fakerBr } from "@js-brasil/fakerbr";
+import { loadedStore } from "../../../app";
+import { initStore } from "../../../configs/initStore.config";
 
 describe("Integration test: register client", () => {
   const endpoint = "/clients";
 
-  const startData = async () => {
-    const newAddress = AddressFactory.build();
+  beforeAll(async () => {
+    await prisma.client.deleteMany();
+    await prisma.store.deleteMany();
+    await prisma.address.deleteMany();
 
+    const addressStore = AddressFactory.build();
     const newStore = await prisma.store.create({
       data: {
         name: "Loja Teste",
         CNPJ: fakerBr.cnpj(),
         address: {
-          create: newAddress,
+          create: addressStore,
         },
       },
     });
-    return newStore.id;
-  };
+    loadedStore.id = newStore.id;
+    await initStore(loadedStore);
+  });
 
   beforeEach(async () => {
     await prisma.client.deleteMany();
   });
 
+  afterAll(async () => {
+    await prisma.client.deleteMany();
+    await prisma.store.deleteMany();
+    await prisma.address.deleteMany();
+  });
+
   test("Should be able to create a user correctly with valid data.", async () => {
-    const newValidClient = ClientFactory.build(await startData());
+    const newValidClient = ClientFactory.build(loadedStore.id);
 
     const data = await request
       .post(endpoint)
@@ -41,11 +53,10 @@ describe("Integration test: register client", () => {
       birthDate: newValidClient.birthDate.toISOString(),
       CPF: newValidClient.CPF,
       phone: newValidClient.phone,
-      storeId: newValidClient.storeId,
+      storeId: loadedStore.id,
       publicId: expect.any(String),
       address: [],
     };
-
     expect(data).toEqual(expectResponseBody);
   });
 
@@ -64,17 +75,15 @@ describe("Integration test: register client", () => {
   });
 
   test("Should throw error if email is already registered.", async () => {
-    const newValidClient1 = ClientFactory.build(await startData());
-    const newValidClient2 = {
-      ...ClientFactory.build(newValidClient1.storeId),
+    let newValidClient1;
+    let newValidClient2;
+    newValidClient1 = ClientFactory.build(loadedStore.id);
+    newValidClient2 = {
+      ...ClientFactory.build(loadedStore.id),
       email: newValidClient1.email,
     };
 
-    await request
-      .post(endpoint)
-      .send(newValidClient1)
-      .expect(201)
-      .then((response) => response.body);
+    await request.post(endpoint).send(newValidClient1).expect(201);
 
     await request
       .post(endpoint)
@@ -85,7 +94,7 @@ describe("Integration test: register client", () => {
 
   test("Should throw error if CPF number is invalid.", async () => {
     const newInvalidCPFClient = {
-      ...ClientFactory.build(await startData()),
+      ...ClientFactory.build(loadedStore.id),
       CPF: "12345678900",
     };
 
@@ -97,9 +106,9 @@ describe("Integration test: register client", () => {
   });
 
   test("Should throw error if a CPF is already registered.", async () => {
-    const newClient = ClientFactory.build(await startData());
+    const newClient = ClientFactory.build(loadedStore.id);
     const newDuplicatedCPFClient = {
-      ...ClientFactory.build(await startData()),
+      ...ClientFactory.build(loadedStore.id),
       CPF: newClient.CPF,
     };
 
@@ -117,11 +126,15 @@ describe("Integration test: register client", () => {
   });
 
   test("Should throw error if storeId is invalid.", async () => {
-    const newClient = ClientFactory.build(0);
+    loadedStore.id = 0;
+    const newClient = ClientFactory.build(loadedStore.id);
 
     await request
-      .get(`/store/${newClient.storeId}`)
+      .post(endpoint)
+      .send(newClient)
       .expect(404)
-      .then((response) => response.body);
+      .then((response) => {
+        response.body;
+      });
   });
 });
