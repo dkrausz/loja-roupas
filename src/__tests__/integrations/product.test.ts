@@ -1,118 +1,121 @@
-// import supertest from "supertest";
-// import { app } from "../../app";
-// import { Factory } from "../utils/factory";
-// import { prisma } from "../../database/prisma";
-// import { sign } from "jsonwebtoken";
-// import { jwtConfig } from "../../configs/auth.config";
-// import { address1, createAdmEmployee, createFuncEmployee, store } from "../utils/Employee.mock";
+import supertest from "supertest";
+import { app, loadedStore } from "../../app";
+import { Factory } from "../utils/factory";
+import { prisma } from "../../database/prisma";
+import { sign } from "jsonwebtoken";
+import { jwtConfig } from "../../configs/auth.config";
+import { address1, createAdmEmployee, createFuncEmployee, store } from "../utils/Employee.mock";
+import { initStore } from "../../configs/initStore.config";
 
 
 
-// describe("Product test",()=>{
+describe("Product test",()=>{
+const request = supertest(app);
+const factory = new Factory();
 
-// const request = supertest(app);
-// const factory = new Factory();
+  beforeEach(async()=>{
+    await prisma.employee.deleteMany();
+    await prisma.product.deleteMany();
+    await prisma.order.deleteMany();
+    await prisma.client.deleteMany();
+    await prisma.store.deleteMany();
+    await prisma.address.deleteMany();  
 
-//   beforeEach(async()=>{
-//     await prisma.employee.deleteMany();
-//     await prisma.product.deleteMany();
-//     await prisma.order.deleteMany();
-//     await prisma.client.deleteMany();
-//     await prisma.store.deleteMany();
-//     await prisma.address.deleteMany();  
-//   });
+    const addressStore = address1;
+    const newStore = store;
+    const createdStoreAddress= await prisma.address.create({data:addressStore});
+    newStore.addressId=createdStoreAddress.id;
+    const createdStore = await prisma.store.create({data:newStore});
+    await initStore(loadedStore);
+  });
 
-//   afterAll( async()=>{
-//     await prisma.employee.deleteMany();
-//     await prisma.product.deleteMany();
-//     await prisma.order.deleteMany();
-//     await prisma.client.deleteMany();
-//     await prisma.store.deleteMany();
-//     await prisma.address.deleteMany();
-//   });
 
-// test("Should be able to create a new product as an ADM",async()=>{
+  beforeEach( async()=>{   
+    await prisma.employee.deleteMany();
+    await prisma.product.deleteMany();
+    await prisma.order.deleteMany();
+    await prisma.client.deleteMany();   
+           
+  });
 
-//   const addressStore = address1;
-//   const newStore = store;
-//   const createdStoreAddress= await prisma.address.create({data:addressStore});
-//   newStore.addressId=createdStoreAddress.id;
-//   const createdStore = await prisma.store.create({data:newStore});
+  afterAll( async()=>{
+    await prisma.employee.deleteMany();
+    await prisma.product.deleteMany();
+    await prisma.order.deleteMany();
+    await prisma.client.deleteMany();
+    await prisma.store.deleteMany();
+    await prisma.address.deleteMany();
+  });
 
-//   const employeeAddress= await prisma.address.create({data:address1});
-//   const employeeADM = await createAdmEmployee();
-//   employeeADM.addressId=employeeAddress.id;
-//   employeeADM.storeId=createdStore.id;
+test("Should be able to create a new product as an ADM",async()=>{
+
+
+  const employeeAddress= await prisma.address.create({data:address1});
+  const employeeADM = await createAdmEmployee();
+  employeeADM.addressId=employeeAddress.id;
+  employeeADM.storeId = loadedStore.id;
   
-//   const createdAdm = await prisma.employee.create({data:employeeADM});
-//   const { jwtKey, expiresIn } = jwtConfig();
+  const createdAdm = await prisma.employee.create({data:employeeADM});
+  const { jwtKey, expiresIn } = jwtConfig();
 
-//   const token: string = sign({ accessLevel: createdAdm.accessLevel }, jwtKey, {
-//     expiresIn: expiresIn,
-//     subject: createdAdm.publicId,
-//   });
+  const token: string = sign({ accessLevel: createdAdm.accessLevel }, jwtKey, {
+    expiresIn: expiresIn,
+    subject: createdAdm.publicId,
+  });
 
-//   const newProduct = factory.productFactory();
-//   newProduct.storeId=createdStore.id;
+  const newProduct = factory.productFactory();
 
-//   const expectedBody = {
-//     publicId: expect.any(String),
-//     name:newProduct.name,
-//     description:newProduct.description,
-//     price:newProduct.price,
-//     storeId:createdStore.id
+  const expectedBody = {
+    publicId: expect.any(String),
+    name:newProduct.name,
+    description:newProduct.description,
+    price:newProduct.price,
+    storeId: loadedStore.id
     
-//   };
-  
+  };  
 
-// const response = await request.post("/products").send(newProduct).set("Authorization" ,`Bearer ${token}`);
+const response = await request.post("/products").send(newProduct).set("Authorization" ,`Bearer ${token}`);
 
 
-// expect(response.body).toEqual(expectedBody);
-// expect(response.statusCode).toBe(201);
+expect(response.body).toEqual(expectedBody);
+expect(response.statusCode).toBe(201);
 
-// });
+});
 
-// test("Should be able to create a new product as an Employee",async()=>{
-  
-//   const addressStore = address1;
-//   const newStore = store;
-//   const createdStoreAddress= await prisma.address.create({data:addressStore});
-//   newStore.addressId=createdStoreAddress.id;
-//   const createdStore = await prisma.store.create({data:newStore});
+test("Should be able to create a new product as an Employee",async()=>{
+   
+  const employeeAddress= await prisma.address.create({data:address1});
+  const employee = await createFuncEmployee();
+  employee.addressId=employeeAddress.id;
+  employee.storeId=loadedStore.id;
 
-//   const employeeAddress= await prisma.address.create({data:address1});
-//   const employee = await createFuncEmployee();
-//   employee.addressId=employeeAddress.id;
-//   employee.storeId=createdStore.id;
-//   const createdAdm = await prisma.employee.create({data:employee});
-//   const { jwtKey, expiresIn } = jwtConfig();
+  const createdAdm = await prisma.employee.create({data:employee});
+  const { jwtKey, expiresIn } = jwtConfig();
 
-//   const token: string = sign({ accessLevel: createdAdm.accessLevel }, jwtKey, {
-//     expiresIn: expiresIn,
-//     subject: createdAdm.publicId,
-//   });
+  const token: string = sign({ accessLevel: createdAdm.accessLevel }, jwtKey, {
+    expiresIn: expiresIn,
+    subject: createdAdm.publicId,
+  });
 
-//   const newProduct = factory.productFactory();
-//   newProduct.storeId=createdStore.id;
+  const newProduct = factory.productFactory();
+ 
 
-//   const expectedBody = {
-//     publicId: expect.any(String),
-//     name:newProduct.name,
-//     description:newProduct.description,
-//     price:newProduct.price,
-//     storeId:createdStore.id
+  const expectedBody = {
+    publicId: expect.any(String),
+    name:newProduct.name,
+    description:newProduct.description,
+    price:newProduct.price,
+    storeId:loadedStore.id
     
-//   };
+  };
   
+const response = await request.post("/products").send(newProduct).set("Authorization" ,`Bearer ${token}`);
 
-// const response = await request.post("/products").send(newProduct).set("Authorization" ,`Bearer ${token}`);
 
+expect(response.body).toEqual(expectedBody);
+expect(response.statusCode).toBe(201);
 
-// expect(response.body).toEqual(expectedBody);
-// expect(response.statusCode).toBe(201);
-
-// });
+});
 
 // test("Should return an error if there is no token",async()=>{  
 
@@ -501,4 +504,4 @@
 // });
 
 
-// });
+});

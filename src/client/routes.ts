@@ -13,16 +13,19 @@ import {
   updateAddressBodySchema,
 } from "../address/schemas";
 import { AddressController } from "../address/controller";
+
 import { whoHasAcess } from "../@shared/whoHasAccess.middleware";
 import { AddressService } from "../address/service";
 import { IsUniqueEmail } from "./middlewares/isUniqueEmail.middleware";
+
 import { StoreIdValid } from "../@shared/storeIdValid.middleware";
 import { customContainer } from "../configs/container";
 container.registerSingleton("ClientServices", ClientServices);
-export const clientControllers = container.resolve(ClientControllers);
 
-// container.registerSingleton("AddressServices", AddressService);
-// const addressController = container.resolve(AddressController);
+
+const clientControllers = container.resolve(ClientControllers);
+const addressController = container.resolve(AddressController);
+
 
 export const clientRouter = Router();
 
@@ -67,33 +70,31 @@ clientRouter.delete(
   (req, res) => clientControllers.remove(req, res)
 );
 
-// clientRouter.post(
-//   "/:id/address",
-//   ValidateToken.execute,
-//   whoHasAcess.permission("owner", "ADM"),
-//   bodyMiddleware.bodyIsValid(createAddressBodySchema),
-//   // addressController.createAddress
-// );
 
-// clientRouter.get(
-//   "/:id/address",
-//   ValidateToken.execute,
-//   whoHasAcess.permission("owner", "ADM"),
-//   bodyMiddleware.bodyIsValid(updateAddressBodySchema),
-//   addressController.getAddressByUser
-// );
+clientRouter.post("/:id/address", ValidateToken.execute, whoHasAccess.permission("owner", "ADM"),
+  bodyMiddleware.bodyIsValid(createAddressBodySchema), addressController.createAddress);
 
-// clientRouter.patch(
-//   "/:id/address/:addressid",
-//   ValidateToken.execute,
-//   whoHasAcess.permission("owner", "ADM"),
-//   bodyMiddleware.bodyIsValid(updateAddressBodySchema),
-//   addressController.updateAddress
-// );
+clientRouter.get(
+  "/:id/address",
+  ValidateToken.execute,
+  whoHasAccess.permission("owner", "ADM"),
+  bodyMiddleware.bodyIsValid(updateAddressBodySchema),
+  addressController.getAddressByUser
+);
 
-// clientRouter.delete(
-//   "/:id/address/:addressid",
-//   ValidateToken.execute,
-//   whoHasAcess.permission("owner", "ADM"),
-//   addressController.deleteAddress
-// );
+clientRouter.patch(
+  "/:id/address/:addressid",
+  ValidateToken.execute,
+  whoHasAccess.permission("owner", "ADM"),
+  bodyMiddleware.bodyIsValid(updateAddressBodySchema),
+  addressController.updateAddress
+);
+
+clientRouter.delete(
+  "/:id/address/:addressid",
+  ValidateToken.execute,
+  whoHasAccess.permission("owner", "ADM"),
+  addressController.deleteAddress
+);
+
+

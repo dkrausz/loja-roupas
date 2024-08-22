@@ -5,7 +5,7 @@ import { TEmployeeReturn } from "./interfaces";
 
 @injectable()
 export class EmployeeControllers {
-  constructor(@inject(EmployeeServices) private employeeServices: EmployeeServices) {}
+  constructor(@inject("EmployeeServices") private employeeServices: EmployeeServices) {}
 
   public getMany = async (req: Request, res: Response): Promise<Response<TEmployeeReturn[]>> => {
     const response = await this.employeeServices.getMany();
