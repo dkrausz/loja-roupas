@@ -1,4 +1,4 @@
-import { container } from "tsyringe";
+import { container, delay } from "tsyringe";
 import { ClientServices } from "./services";
 import { ClientControllers } from "./controllers";
 import { Router } from "express";
@@ -8,22 +8,35 @@ import { bodyMiddleware } from "../@shared/body.middeware";
 import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
 import { Cpf } from "../@shared/cpf.middleware";
 import { IsIdExisting } from "./middlewares/isIdExisting.middleware";
-import {createAddressBodySchema,updateAddressBodySchema} from "../address/schemas";
+import {
+  createAddressBodySchema,
+  updateAddressBodySchema,
+} from "../address/schemas";
 import { AddressController } from "../address/controller";
-import { whoHasAccess } from "../@shared/whoHasAccess.middleware";
-import { isUniqueEmail } from "../@shared/isUniqueEmail.middleware";
-import { StoreIdValid } from "../@shared/storeIdValid.middleware";
 
+import { whoHasAcess } from "../@shared/whoHasAccess.middleware";
+import { AddressService } from "../address/service";
+import { IsUniqueEmail } from "./middlewares/isUniqueEmail.middleware";
+
+import { StoreIdValid } from "../@shared/storeIdValid.middleware";
+import { customContainer } from "../configs/container";
 container.registerSingleton("ClientServices", ClientServices);
+
 
 const clientControllers = container.resolve(ClientControllers);
 const addressController = container.resolve(AddressController);
+
 
 export const clientRouter = Router();
 
 clientRouter.post(
   "/",
-  bodyMiddleware.bodyIsValid(clientRegisterSchema), isUniqueEmail.client , Cpf.isValid, Cpf.isUnique, StoreIdValid.execute,(req, res) => { 
+  bodyMiddleware.bodyIsValid(clientRegisterSchema),
+  IsUniqueEmail.execute,
+  Cpf.isValid,
+  Cpf.isUnique,
+  StoreIdValid.execute,
+  (req, res) => {
     clientControllers.register(req, res);
   }
 );
@@ -35,16 +48,17 @@ clientRouter.use("/:id", IsIdExisting.execute);
 
 clientRouter.get(
   "/:id",
-  ValidateToken.execute,
-  ClientAccessPermission.execute,
+  // ValidateToken.execute,
+  // ClientAccessPermission.execute,
   (req, res) => clientControllers.getOne(req, res)
 );
 
 clientRouter.patch(
   "/:id",
-  bodyMiddleware.bodyIsValid(clientUpdateSchema),
-  ValidateToken.execute,
-  ClientAccessPermission.execute,
+  // IsUniqueEmail.execute,
+  // bodyMiddleware.bodyIsValid(clientUpdateSchema),
+  // ValidateToken.execute,
+  // ClientAccessPermission.execute,
   (req, res) => clientControllers.update(req, res)
 );
 
@@ -55,6 +69,7 @@ clientRouter.delete(
   ClientAccessPermission.execute,
   (req, res) => clientControllers.remove(req, res)
 );
+
 
 clientRouter.post("/:id/address", ValidateToken.execute, whoHasAccess.permission("owner", "ADM"),
   bodyMiddleware.bodyIsValid(createAddressBodySchema), addressController.createAddress);
@@ -81,3 +96,5 @@ clientRouter.delete(
   whoHasAccess.permission("owner", "ADM"),
   addressController.deleteAddress
 );
+
+
