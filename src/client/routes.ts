@@ -10,7 +10,7 @@ import { Cpf } from "../@shared/cpf.middleware";
 import { IsIdExisting } from "./middlewares/isIdExisting.middleware";
 import {createAddressBodySchema,updateAddressBodySchema} from "../address/schemas";
 import { AddressController } from "../address/controller";
-import { whoHasAcess } from "../@shared/whoHasAccess.middleware";
+import { whoHasAccess } from "../@shared/whoHasAccess.middleware";
 import { isUniqueEmail } from "../@shared/isUniqueEmail.middleware";
 import { StoreIdValid } from "../@shared/storeIdValid.middleware";
 
@@ -56,13 +56,13 @@ clientRouter.delete(
   (req, res) => clientControllers.remove(req, res)
 );
 
-clientRouter.post("/:id/address", ValidateToken.execute, whoHasAcess.permission("owner", "ADM"),
+clientRouter.post("/:id/address", ValidateToken.execute, whoHasAccess.permission("owner", "ADM"),
   bodyMiddleware.bodyIsValid(createAddressBodySchema), addressController.createAddress);
 
 clientRouter.get(
   "/:id/address",
   ValidateToken.execute,
-  whoHasAcess.permission("owner", "ADM"),
+  whoHasAccess.permission("owner", "ADM"),
   bodyMiddleware.bodyIsValid(updateAddressBodySchema),
   addressController.getAddressByUser
 );
@@ -70,7 +70,7 @@ clientRouter.get(
 clientRouter.patch(
   "/:id/address/:addressid",
   ValidateToken.execute,
-  whoHasAcess.permission("owner", "ADM"),
+  whoHasAccess.permission("owner", "ADM"),
   bodyMiddleware.bodyIsValid(updateAddressBodySchema),
   addressController.updateAddress
 );
@@ -78,6 +78,6 @@ clientRouter.patch(
 clientRouter.delete(
   "/:id/address/:addressid",
   ValidateToken.execute,
-  whoHasAcess.permission("owner", "ADM"),
+  whoHasAccess.permission("owner", "ADM"),
   addressController.deleteAddress
 );

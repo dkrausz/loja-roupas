@@ -34,4 +34,4 @@ class WhoHasAccess{
 
 }
 
-export const whoHasAcess = new WhoHasAccess();
+export const whoHasAccess = new WhoHasAccess();
