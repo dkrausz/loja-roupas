@@ -3,6 +3,9 @@ import { fakerPT_BR as faker } from "@faker-js/faker";
 import { TClient, TClientRegister } from "../../client/interfaces";
 import { TCreateProductBody } from "../../products/interfaces";
 import { TCreateEmployee } from "../../employee/interfaces";
+import { number } from "zod";
+
+type ProductWihtStore = TCreateProductBody & {storeId?:number};
 
 export class Factory {
   public clientFactory = (): TClientRegister => {
@@ -27,7 +30,9 @@ export class Factory {
     return newClient;
   };
 
-  public productFactory = (): TCreateProductBody => {
+  
+
+  public productFactory = (): ProductWihtStore => {
     const name = faker.commerce.product();
     const description = faker.commerce.productDescription();
     const price = Number(faker.commerce.price({ min: 10, max: 500 }));
@@ -36,6 +41,7 @@ export class Factory {
       name,
       description,
       price,
+      storeId:1      
     };
 
     return newProduct;

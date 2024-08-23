@@ -8,13 +8,10 @@ import { createProductBodySchema, updateProductSchema } from "./schemas";
 import { whoHasAccess } from "../@shared/whoHasAccess.middleware";
 import { pagination } from "../@shared/pagination.middleware";
 
-
-
-
 export const productRoute = Router();
+
 container.registerSingleton("ProductService", ProductService);
 const productController = container.resolve(ProductController);
-
 
 productRoute.post("/",ValidateToken.execute,whoHasAccess.permission("ADM","employee"),bodyMiddleware.bodyIsValid(createProductBodySchema),productController.createProduct);
 productRoute.get("/",pagination.handlePagination, productController.getProducts);

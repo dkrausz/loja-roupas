@@ -18,8 +18,7 @@ export let loadedStore: IStoreId = { id: 0 };
 export const app = express();
 
 const initApp = async () => {
-  await initStore(loadedStore);
-  // console.log(`Id carregado: ${loadedStore.id}`);
+  await initStore(loadedStore); 
 };
 
 initApp();
