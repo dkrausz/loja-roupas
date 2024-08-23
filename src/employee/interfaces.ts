@@ -1,11 +1,5 @@
-import {
-  createEmployeeSchema,
-  employeeBodyWithoutAddress,
-  employeeLogin,
-  employeeSchema,
-  returnEmployeeCreateSchema,
-  updateEmployeeSchema,
-} from "./schemas";
+import {createEmployeeSchema,employeeBodyWithoutAddress,employeeLogin,employeeSchema,returnEmployeeCreateSchema,
+  updateEmployeeSchema,} from "./schemas";
 import { z } from "zod";
 
 interface IEmployeeService {
@@ -31,13 +25,5 @@ type TUpdateEmployee = z.infer<typeof updateEmployeeSchema>;
 
 type TEmployeeReturn = z.infer<typeof returnEmployeeCreateSchema>;
 
-export {
-  IEmployeeService,
-  TEmployee,
-  TCreateEmployee,
-  TUpdateEmployee,
-  TEmployeeReturn,
-  TemployeeLogin,
-  TemployeeLoginReturn,
-  TemployeeBodyWithoutAddress
-};
+export {IEmployeeService,TEmployee,TCreateEmployee,TUpdateEmployee,TEmployeeReturn,TemployeeLogin,
+  TemployeeLoginReturn,TemployeeBodyWithoutAddress};

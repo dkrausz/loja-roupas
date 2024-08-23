@@ -14,7 +14,7 @@ import {
 } from "../address/schemas";
 import { AddressController } from "../address/controller";
 
-import { whoHasAcess } from "../@shared/whoHasAccess.middleware";
+import { whoHasAccess } from "../@shared/whoHasAccess.middleware";
 import { AddressService } from "../address/service";
 import { IsUniqueEmail } from "./middlewares/isUniqueEmail.middleware";
 

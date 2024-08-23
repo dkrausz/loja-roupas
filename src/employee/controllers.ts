@@ -37,7 +37,7 @@ export class EmployeeControllers {
 
   public delete = async (req: Request, res: Response): Promise<Response<void>> => {
     const { id } = req.params;
-
+      
     await this.employeeServices.delete(id);
 
     return res.status(204).json();
