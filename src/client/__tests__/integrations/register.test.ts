@@ -1,10 +1,10 @@
 import { prisma } from "../../../database/prisma";
-import { request } from "../utils/request";
 import { ClientFactory } from "../client.factories";
 import { AddressFactory } from "../address.factories";
 import { fakerBr } from "@js-brasil/fakerbr";
 import { loadedStore } from "../../../app";
 import { initStore } from "../../../configs/initStore.config";
+import { request } from "../../../@shared/utils/request";
 
 describe("Integration test: register client", () => {
   const endpoint = "/clients";
@@ -38,7 +38,7 @@ describe("Integration test: register client", () => {
     await prisma.address.deleteMany();
   });
 
-  test("Should be able to create a user correctly with valid data.", async () => {
+  test("Should be able to create a client correctly with valid data.", async () => {
     const newValidClient = ClientFactory.build(loadedStore.id);
 
     const data = await request

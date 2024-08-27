@@ -17,13 +17,14 @@ export class ClientAuthenticationService {
     })) as TClient;
 
     if (!loadedUser) {
-      throw new Error("User not found.");
+      throw new AppError(404, "User not found.");
     }
 
     const pwdMatch = await bcryptjs.compare(
       payload.password,
       loadedUser.password
     );
+
     if (!pwdMatch) {
       throw new AppError(401, "Email and password doesn't match.");
     }
@@ -33,7 +34,6 @@ export class ClientAuthenticationService {
       expiresIn: expiresIn,
       subject: loadedUser.publicId,
     });
-    
 
     return { token: tokenGen, client: clientReturnSchema.parse(loadedUser) };
   };
