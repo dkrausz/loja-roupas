@@ -7,11 +7,11 @@ class WhoHasAccess{
   (req:Request,res:Response,next: NextFunction):void=>{
        const {accessLevel} = res.locals.decode;
        const {sub} = res.locals.decode;
-       const {id} = req.params;
-          
+       const {id} = req.params;    
           
     if(accessLevel1=== "ADM" || accessLevel2=== "ADM" || accessLevel3 === "ADM"){      
       if(accessLevel =="ADM"){        
+               
        return next();     
       }
       
@@ -34,4 +34,4 @@ class WhoHasAccess{
 
 }
 
-export const whoHasAcess = new WhoHasAccess();
+export const whoHasAccess = new WhoHasAccess();

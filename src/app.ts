@@ -19,7 +19,6 @@ export const app = express();
 
 const initApp = async () => {
   await initStore(loadedStore);
-  console.log(`Id carregado: ${loadedStore.id}`);
 };
 
 initApp();
