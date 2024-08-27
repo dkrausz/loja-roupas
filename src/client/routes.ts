@@ -19,7 +19,8 @@ import { AddressService } from "../address/service";
 import { IsUniqueEmail } from "./middlewares/isUniqueEmail.middleware";
 
 import { StoreIdValid } from "../@shared/storeIdValid.middleware";
-import { customContainer } from "../configs/container";
+import { AdmAuth } from "../@shared/admAuth.middleware";
+import { IsUniqueEmailUpdate } from "./middlewares/isUniqueEmailUpdate.middleware";
 container.registerSingleton("ClientServices", ClientServices);
 
 
@@ -41,24 +42,26 @@ clientRouter.post(
   }
 );
 
-// Somente o administrador?
-clientRouter.get("/", (req, res) => clientControllers.get(req, res));
+// Validar token e verificar se é ADM
+clientRouter.get("/", ValidateToken.execute, AdmAuth.execute, (req, res) =>
+  clientControllers.get(req, res)
+);
 
 clientRouter.use("/:id", IsIdExisting.execute);
 
 clientRouter.get(
   "/:id",
-  // ValidateToken.execute,
-  // ClientAccessPermission.execute,
+  ValidateToken.execute,
+  ClientAccessPermission.execute,
   (req, res) => clientControllers.getOne(req, res)
 );
 
 clientRouter.patch(
   "/:id",
-  // IsUniqueEmail.execute,
-  // bodyMiddleware.bodyIsValid(clientUpdateSchema),
-  // ValidateToken.execute,
-  // ClientAccessPermission.execute,
+  IsUniqueEmailUpdate.execute,
+  bodyMiddleware.bodyIsValid(clientUpdateSchema),
+  ValidateToken.execute,
+  ClientAccessPermission.execute,
   (req, res) => clientControllers.update(req, res)
 );
 

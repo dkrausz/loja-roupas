@@ -61,11 +61,12 @@ describe("Unit test: update client", () => {
         birthDate: client.birthDate,
         CPF: client.CPF,
         phone: client.phone,
+        storeId: loadedStore.id,
         address: [],
       };
     };
     console.log("Dado enviado para o bd", updateClientServiceTest);
     console.log("Dados de teste:", expectedValue(updatedClient));
-    // expect(updateClientServiceTest).toEqual(expectedValue(updatedClient));
+    expect(updateClientServiceTest).toEqual(expectedValue(updatedClient));
   });
 });

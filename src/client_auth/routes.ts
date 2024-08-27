@@ -15,4 +15,6 @@ const clientAuthenticationController = container.resolve(
 
 export const clientAuthenticationRouter = Router();
 
-clientAuthenticationRouter.post("/", ExistingLoginEmail.execute, (req, res) =>clientAuthenticationController.login(req, res));
+clientAuthenticationRouter.post("/", ExistingLoginEmail.execute, (req, res) =>
+  clientAuthenticationController.login(req, res)
+);
