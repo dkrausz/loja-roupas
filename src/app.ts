@@ -12,6 +12,7 @@ import { orderRouter } from "./order/routes";
 import { HandleErrors } from "./@shared/handleErrors";
 import { IStoreId } from "./store/interfaces";
 import { initStore } from "./configs/initStore.config";
+import helmet from "helmet";
 
 export let loadedStore: IStoreId = { id: 0 };
 
@@ -21,7 +22,9 @@ const initApp = async () => {
   await initStore(loadedStore);
 };
 
+
 initApp();
+app.use(helmet());
 app.use(json());
 app.use("/address", addressRoute);
 app.use("/products", productRoute);
