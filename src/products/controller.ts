@@ -1,8 +1,8 @@
-import { inject } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { IProductService } from "./interfaces";
 import { Request, Response } from "express";
 
-
+@injectable()
 export class ProductController{
 
   constructor(@inject("ProductService") private service:IProductService){}
@@ -13,8 +13,9 @@ export class ProductController{
   }; 
 
   public getProducts = async(req:Request, res:Response):Promise<Response>=>{
-    const {productName} = req.query;
-    const products = await this.service.getProducts(productName as string);
+    const {searchProduct} = req.query;
+    const {page, perPage,previousPage,nextPage} = res.locals.pagination;
+    const products = await this.service.getProducts(page, perPage,previousPage,nextPage,searchProduct as string);
     return res.status(200).json(products);
   };
 

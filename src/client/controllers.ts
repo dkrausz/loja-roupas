@@ -12,29 +12,26 @@ export class ClientControllers {
     return res.status(201).json(response);
   };
 
-  get = async (req: Request, res: Response): Promise<Response> => {
+  get = async (_req: Request, res: Response): Promise<Response> => {
     const response = await this.clientServices.get();
 
     return res.status(200).json(response);
   };
 
   getOne = async (req: Request, res: Response): Promise<Response> => {
-    const response = await this.clientServices.getOne(Number(req.params.id));
+    const response = await this.clientServices.getOne(req.params.id);
 
     return res.status(200).json(response);
   };
 
   update = async (req: Request, res: Response): Promise<Response> => {
-    const response = await this.clientServices.update(
-      Number(req.params.id),
-      req.body
-    );
+    const response = await this.clientServices.update(req.params.id, req.body);
 
     return res.status(200).json(response);
   };
 
   remove = async (req: Request, res: Response): Promise<Response> => {
-    await this.clientServices.remove(Number(req.params.id));
+    await this.clientServices.remove(req.params.id);
 
     return res.status(204).json();
   };

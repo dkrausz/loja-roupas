@@ -8,45 +8,72 @@ import {
 } from "./interfaces";
 import bcryptjs from "bcryptjs";
 import { clientReturnSchema } from "./schemas";
+import { loadedStore } from "../app";
+
 @injectable()
 export class ClientServices {
   register = async (payload: TClientRegister): Promise<TClientReturn> => {
     const pwd: string = await bcryptjs.hash(payload.password, 10);
     const dateValue = new Date(payload.birthDate);
 
-    const newClient: TClientRegister = {
+    const newClient = {
       ...payload,
       birthDate: dateValue,
       password: pwd,
+      storeId: loadedStore.id,
     };
 
-    const createdClient = await prisma.client.create({ data: newClient });
+    const createdClient = await prisma.client.create({
+      data: newClient,
+      include: { address: true },
+    });
+
     return clientReturnSchema.parse(createdClient);
   };
 
   get = async (): Promise<Array<TClientReturn>> => {
-    const loadClients = await prisma.client.findMany();
+    const loadClients: TClient[] = (await prisma.client.findMany({
+      include: { address: true },
+    })) as TClient[];
 
     return clientReturnSchema.array().parse(loadClients);
   };
 
-  getOne = async (id: number): Promise<TClientReturn> => {
+  getOne = async (publicId: string): Promise<TClientReturn> => {
     const clientFound: TClient = (await prisma.client.findFirst({
-      where: { id },
+      where: { publicId },
+      include: { address: true },
     })) as TClient;
+
     return clientReturnSchema.parse(clientFound);
   };
 
-  update = async (id: number, data: TClientUpdate): Promise<TClientReturn> => {
+  update = async (
+    publicId: string,
+    data: TClientUpdate
+  ): Promise<TClientReturn> => {
     const clientFound: TClient = (await prisma.client.findFirst({
-      where: { id },
+      where: { publicId },
     })) as TClient;
-    const clientUpdated = { ...clientFound, ...data };
+    let newDataClient;
+    if (data.password) {
+      const pwd: string = await bcryptjs.hash(data.password, 10);
+      newDataClient = { ...clientFound, ...data, password: pwd };
+    } else {
+      newDataClient = { ...clientFound, ...data };
+    }
+
+    const clientUpdated = await prisma.client.update({
+      where: { publicId },
+      data: newDataClient,
+      include: { address: true },
+    });
 
     return clientReturnSchema.parse(clientUpdated);
   };
 
-  remove = async (id: number) => {
-    return await prisma.client.delete({ where: { id } });
+  remove = async (publicId: string): Promise<void> => {
+    await prisma.client.delete({ where: { publicId } });
+    return;
   };
 }

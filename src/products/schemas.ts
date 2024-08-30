@@ -7,11 +7,11 @@ const productSchema = z.object({
   description: z.string().min(1),
   price: z.number().min(1).positive(),
   orders: z.number().nullish(),
-  StoreId: z.number().positive().optional(),//mudar para obrigatorio  
+  storeId: z.number().positive().nullish(),
 });
 
 const returnProductSchema = productSchema.omit({id:true});
-const createProductBodySchema = productSchema.omit({id:true, publicId:true,orders:true});
+const createProductBodySchema = productSchema.omit({id:true, publicId:true,orders:true,storeId:true});
 const updateProductSchema = createProductBodySchema.partial();
 
 export{productSchema,returnProductSchema,createProductBodySchema,updateProductSchema};
