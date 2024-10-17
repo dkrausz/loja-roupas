@@ -4,8 +4,8 @@ import { IStoreId } from "../store/interfaces";
 export const initStore = async (loadedStore: IStoreId) => {
   const store = await prisma.store.findFirst();
   if (store) {
-    console.log(`Bem vindo à loja ${await store.name}`);
-    loadedStore.id = await store.id;
+    console.log(`Bem vindo à loja ${store.name}`);
+    loadedStore.id = store.id;
     return loadedStore;
   } else {
     console.log("Nenhuma Loja cadastrada.");

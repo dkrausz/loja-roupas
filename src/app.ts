@@ -13,17 +13,18 @@ import { HandleErrors } from "./@shared/handleErrors";
 import { IStoreId } from "./store/interfaces";
 import { initStore } from "./configs/initStore.config";
 import helmet from "helmet";
+import cors from "cors";
 
 export let loadedStore: IStoreId = { id: 0 };
 
 export const app = express();
 
 const initApp = async () => {
-  await initStore(loadedStore); 
+  await initStore(loadedStore);
 };
 
-
 initApp();
+app.use(cors());
 app.use(helmet());
 app.use(json());
 app.use("/address", addressRoute);
