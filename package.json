@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/server.js",
-    "build":"npx tsc",
+    "build": "npx tsc",
     "prismastudio:test": "dotenv -e .env.test -- npx prisma studio",
     "test": "dotenv -e .env.test -- jest --verbose --runInBand",
     "script": "dotenv -e .env.test -- npx ts-node test.ts",
-    "dev": "tsnd --respawn src/server.ts",
+    "dev": "dotenv -e .env.test -- tsnd --respawn src/server.ts",
     "migrate:test": "dotenv -e .env.test -- npx prisma migrate dev",
-    "migrate:deploy" : "npx prisma migrate deploy",
-    "dev:test": "dotenv -e .env.test -- tsnd --respawn src/server.ts"
+    "migrate:deploy": "npx prisma migrate deploy",
+    "dev:test": "dotenv -e .env.test -- tsnd --respawn src/server.ts",
+    "seed": "dotenv -e .env.test -- ts-node src/seed/productSeed.ts"
   },
   "keywords": [],
   "author": "",
@@ -48,6 +49,7 @@
     "express-async-errors": "^3.1.1",
     "faker": "^5.5.3",
     "faker-br": "^0.4.1",
+    "faker-brasil": "^1.0.2",
     "gerar-cpf": "^3.1.0",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",

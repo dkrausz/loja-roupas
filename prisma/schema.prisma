@@ -86,27 +86,27 @@ model Client {
 }
 
 model Order {
-  id          Int         @id @default(autoincrement())
-  publicId    String      @default(uuid())
-  date        DateTime
-  products    Product[]
+  id          Int            @id @default(autoincrement())
+  publicId    String         @default(uuid())
+  createdAt   DateTime
+  orderItems  OrderProduct[]
   paymentType paymentType
   clientId    Int
   status      Status
-  discount    Boolean     @default(false)
+  discount    Boolean        @default(false)
   total       Int
-  client      Client      @relation(fields: [clientId], references: [id])
+  client      Client         @relation(fields: [clientId], references: [id])
   storeId     Int
-  store       Store       @relation(fields: [storeId], references: [id])
+  store       Store          @relation(fields: [storeId], references: [id])
 }
 
 model Product {
-  id          Int     @id @default(autoincrement())
-  publicId    String  @default(uuid())
-  name        String  @db.VarChar(50)
-  description String  @db.VarChar(255)
+  id          Int            @id @default(autoincrement())
+  publicId    String         @default(uuid())
+  name        String         @db.VarChar(50)
+  description String         @db.VarChar(255)
   price       Int
-  orders      Order[]
+  orderItems  OrderProduct[]
 
   storeId Int?
   store   Store? @relation(fields: [storeId], references: [id])
@@ -122,4 +122,17 @@ enum paymentType {
   PIX
   CARTAO_CREDITO
   BOLETO
+}
+
+model OrderProduct {
+  orderId   Int
+  productId Int
+  quantity  Int
+  priceUnit Int
+  subTotal  Int
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([orderId, productId])
 }

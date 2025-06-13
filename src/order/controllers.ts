@@ -7,7 +7,8 @@ export class OrderControllers {
   constructor(@inject("OrderServices") private orderServices: OrderServices) {}
 
   register = async (req: Request, res: Response): Promise<Response> => {
-    const response = await this.orderServices.register(req.body);
+    const { sub } = res.locals.decode;
+    const response = await this.orderServices.createOrder(req.body, sub);
 
     return res.status(201).json(response);
   };
@@ -24,18 +25,11 @@ export class OrderControllers {
     return res.status(200).json(response);
   };
 
-  // getOrderProducts = async (req: Request, res: Response): Promise<Response> => {
-  //   const response = await this.orderServices.ge;
-  // }
+  // updateOrder = async (req: Request, res: Response): Promise<Response> => {
+  //   const response = await this.orderServices.updateOrder(req.params.orderId, req.body);
 
-  updateOrder = async (req: Request, res: Response): Promise<Response> => {
-    const response = await this.orderServices.updateOrder(
-      req.params.orderId,
-      req.body
-    );
-
-    return res.status(200).json(response);
-  };
+  //   return res.status(200).json(response);
+  // };
 
   deleteOrder = async (req: Request, res: Response): Promise<Response> => {
     await this.orderServices.deleteOrder(req.params.orderId);

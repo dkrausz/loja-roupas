@@ -3,11 +3,7 @@ import { addressSchema } from "../address/schemas";
 
 const minValidDate = () => {
   const nowDate = new Date();
-  const minAge = nowDate.setFullYear(
-    nowDate.getFullYear() - 18,
-    nowDate.getMonth(),
-    nowDate.getDay()
-  );
+  const minAge = nowDate.setFullYear(nowDate.getFullYear() - 18, nowDate.getMonth(), nowDate.getDay());
   return minAge;
 };
 
@@ -34,9 +30,9 @@ export const clientRegisterSchema = clientSchema.omit({
   storeId: true,
 });
 
-export const clientReturnSchema = clientSchema
-  .omit({ id: true, password: true })
-  .extend({ address: addressSchema.array() });
+export const clientReturnSchema = clientSchema.omit({ id: true, password: true }).extend({ address: addressSchema.array() });
+
+export const completeReturnSchema = clientSchema.omit({ password: true }).extend({ address: addressSchema.array() });
 
 export const clientUpdateSchema = clientSchema
   .pick({

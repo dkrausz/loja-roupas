@@ -5,6 +5,9 @@ import { Router } from "express";
 import { ValidateToken } from "../@shared/validateToken.middleware";
 import { ClientAccessPermission } from "../client/middlewares/clientAccessPermission.middleware";
 import { OrderIdValid } from "./orderIdValid.middleware";
+import { whoHasAccess } from "../@shared/whoHasAccess.middleware";
+import { bodyMiddleware } from "../@shared/body.middeware";
+import { orderRegisterSchema } from "./schemas";
 
 container.registerSingleton("OrderServices", OrderServices);
 const orderController = container.resolve(OrderControllers);
@@ -12,32 +15,17 @@ const orderController = container.resolve(OrderControllers);
 export const orderRouter = Router();
 
 orderRouter.post(
-  "/",
+  "/:clientId",
   ValidateToken.execute,
-  //   ClientAccessPermission.execute,
-  (req, res) => orderController.register(req, res)
+  whoHasAccess.permission("ADM", "employee", "owner"),
+  bodyMiddleware.bodyIsValid(orderRegisterSchema),
+  orderController.register
 );
 
-// Precisa de autorização? Só admin?
-orderRouter.get("/", (req, res) => orderController.get(req, res));
+orderRouter.get("/", ValidateToken.execute, whoHasAccess.permission("ADM"), orderController.get);
+// orderRouter.use("/:orderId",ValidateToken.execute, whoHasAccess.permission("ADM") , OrderIdValid.execute);
+orderRouter.get("/:orderId", ValidateToken.execute, whoHasAccess.permission("ADM"), orderController.getOrder);
 
-orderRouter.use("/:orderId", OrderIdValid.execute);
+// orderRouter.patch("/:orderId", ValidateToken.execute, whoHasAccess.permission("ADM"), orderController.updateOrder);
 
-// Verificar se o id existe
-orderRouter.get("/:orderId", (req, res) => orderController.getOrder(req, res));
-
-// Verificar se o id existe
-// Listagem do pedido com todos os produtos
-// orderRouter.get("/:id/products", (req, res) =>
-//   orderController.getOrder(req, res)
-// );
-
-// Verificar se o id existe
-orderRouter.patch("/:orderId", (req, res) =>
-  orderController.updateOrder(req, res)
-);
-
-// Verificar se o id existe
-orderRouter.delete("/:orderId", (req, res) =>
-  orderController.deleteOrder(req, res)
-);
+orderRouter.delete("/:orderId", ValidateToken.execute, whoHasAccess.permission("ADM"), orderController.deleteOrder);

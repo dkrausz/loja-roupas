@@ -5,6 +5,7 @@ import { JsonWebTokenError } from "jsonwebtoken";
 
 export class HandleErrors {
   static execute(err: Error, req: Request, res: Response, next: NextFunction) {
+    console.log("erro", err);
     if (err instanceof AppError) {
       return res.status(err.statusCode).json({ message: err.message });
     }
@@ -14,9 +15,9 @@ export class HandleErrors {
     }
 
     if (err instanceof JsonWebTokenError) {
-      res.status(401).json({ message: err.message });
+      return res.status(401).json({ message: err.message });
     }
-   
+
     return res.status(500).json({ error: "Internal server error." });
   }
 }

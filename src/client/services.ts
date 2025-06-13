@@ -1,18 +1,13 @@
 import { injectable } from "tsyringe";
 import { prisma } from "../database/prisma";
-import {
-  TClient,
-  TClientRegister,
-  TClientReturn,
-  TClientUpdate,
-} from "./interfaces";
+import { TClient, TClientRegister, TClientReturn, TClientReturnComplete, TClientUpdate } from "./interfaces";
 import bcryptjs from "bcryptjs";
-import { clientReturnSchema } from "./schemas";
+import { clientReturnSchema, completeReturnSchema } from "./schemas";
 import { loadedStore } from "../app";
 
 @injectable()
 export class ClientServices {
-  register = async (payload: TClientRegister): Promise<TClientReturn> => {
+  public register = async (payload: TClientRegister): Promise<TClientReturn> => {
     const pwd: string = await bcryptjs.hash(payload.password, 10);
     const dateValue = new Date(payload.birthDate);
 
@@ -31,7 +26,7 @@ export class ClientServices {
     return clientReturnSchema.parse(createdClient);
   };
 
-  get = async (): Promise<Array<TClientReturn>> => {
+  public get = async (): Promise<Array<TClientReturn>> => {
     const loadClients: TClient[] = (await prisma.client.findMany({
       include: { address: true },
     })) as TClient[];
@@ -39,7 +34,7 @@ export class ClientServices {
     return clientReturnSchema.array().parse(loadClients);
   };
 
-  getOne = async (publicId: string): Promise<TClientReturn> => {
+  public getOne = async (publicId: string): Promise<TClientReturn> => {
     const clientFound: TClient = (await prisma.client.findFirst({
       where: { publicId },
       include: { address: true },
@@ -48,10 +43,16 @@ export class ClientServices {
     return clientReturnSchema.parse(clientFound);
   };
 
-  update = async (
-    publicId: string,
-    data: TClientUpdate
-  ): Promise<TClientReturn> => {
+  public getComplete = async (publicId: string): Promise<TClientReturnComplete> => {
+    const clientFound: TClient = (await prisma.client.findFirst({
+      where: { publicId },
+      include: { address: true },
+    })) as TClient;
+
+    return completeReturnSchema.parse(clientFound);
+  };
+
+  public update = async (publicId: string, data: TClientUpdate): Promise<TClientReturn> => {
     const clientFound: TClient = (await prisma.client.findFirst({
       where: { publicId },
     })) as TClient;
@@ -72,7 +73,7 @@ export class ClientServices {
     return clientReturnSchema.parse(clientUpdated);
   };
 
-  remove = async (publicId: string): Promise<void> => {
+  public remove = async (publicId: string): Promise<void> => {
     await prisma.client.delete({ where: { publicId } });
     return;
   };

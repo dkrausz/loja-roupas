@@ -14,6 +14,7 @@ import { IStoreId } from "./store/interfaces";
 import { initStore } from "./configs/initStore.config";
 import helmet from "helmet";
 import cors from "cors";
+import { InvalidJson } from "./@shared/inavlidJSON.middleware";
 
 export let loadedStore: IStoreId = { id: 0 };
 
@@ -27,6 +28,7 @@ initApp();
 app.use(cors());
 app.use(helmet());
 app.use(json());
+app.use(InvalidJson.execute);
 app.use("/address", addressRoute);
 app.use("/products", productRoute);
 app.use("/store", storeRoutes);
