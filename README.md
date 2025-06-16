@@ -1328,7 +1328,7 @@ Este erro ocorre quando o `id` fornecido não corresponde a nenhum client existe
 {
   "message": "Client not found"
 }
-
+```
 
 
 ---
