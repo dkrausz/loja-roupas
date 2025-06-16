@@ -30,7 +30,7 @@ export const clientRegisterSchema = clientSchema.omit({
   storeId: true,
 });
 
-export const clientReturnSchema = clientSchema.omit({ id: true, password: true }).extend({ address: addressSchema.array() });
+export const clientReturnSchema = clientSchema.omit({ id: true, password: true, storeId: true }).extend({ address: addressSchema.array() });
 
 export const completeReturnSchema = clientSchema.omit({ password: true }).extend({ address: addressSchema.array() });
 

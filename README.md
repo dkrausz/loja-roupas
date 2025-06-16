@@ -483,10 +483,15 @@ Este erro ocorre quando o `productId` fornecido não corresponde a nenhum produt
 
 ```json
 {
-  "clientId": 1,
-  "products": [{ "productId": "ebeef689-a4e1-40f9-8bc5-1c6e496439bd", "quantity": 2 }],
-  "paymentMethod": "credit_card",
-  "addressId": 5
+  "paymentType": "PIX",
+  "status": "IN_PROGRESS",
+  "discount": false,
+  "total": 5832794,
+  "orderItems": [
+    { "productPublicId": "8be95f27-ccb0-4e94-8745-36f3fd792d96", "quantity": 2 },
+    { "productPublicId": "80b49a62-25f7-4d43-903b-93d9c8498932", "quantity": 9 },
+    { "productPublicId": "762e53bd-d3bd-43d5-af3c-07d9546d4bb9", "quantity": 1 }
+  ]
 }
 ```
 
@@ -494,11 +499,55 @@ Este erro ocorre quando o `productId` fornecido não corresponde a nenhum produt
 
 ```json
 {
-  "orderId": 15,
-  "clientId": 1,
-  "totalAmount": 15000,
-  "status": "pending",
-  "createdAt": "2025-06-09T12:00:00Z"
+  "publicId": "3887d2f1-61de-4747-b888-23463b1c3416",
+  "date": "2025-06-13T08:50:12.599Z",
+  "paymentType": "PIX",
+  "status": "IN_PROGRESS",
+  "discount": false,
+  "total": 54200,
+  "client": {
+    "publicId": "c16fdbf4-a1d9-4310-9ccb-19d349ecd5f6",
+    "name": "laura",
+    "email": "laura@email.com"
+  },
+  "orderItems": [
+    {
+      "orderId": 4,
+      "quantity": 1,
+      "priceUnit": 2600,
+      "subTotal": 2600,
+      "product": {
+        "publicId": "762e53bd-d3bd-43d5-af3c-07d9546d4bb9",
+        "name": "Tomara-que-caia",
+        "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+        "price": 2600
+      }
+    },
+    {
+      "orderId": 4,
+      "quantity": 9,
+      "priceUnit": 4200,
+      "subTotal": 37800,
+      "product": {
+        "publicId": "80b49a62-25f7-4d43-903b-93d9c8498932",
+        "name": "Cueca box",
+        "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+        "price": 4200
+      }
+    },
+    {
+      "orderId": 4,
+      "quantity": 2,
+      "priceUnit": 6900,
+      "subTotal": 13800,
+      "product": {
+        "publicId": "8be95f27-ccb0-4e94-8745-36f3fd792d96",
+        "name": "Cueca box",
+        "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+        "price": 6900
+      }
+    }
+  ]
 }
 ```
 
@@ -506,7 +555,114 @@ Este erro ocorre quando o `productId` fornecido não corresponde a nenhum produt
 
 ### GET `/orders`
 
-**Lista todos os pedidos**
+#### Resposta (200)
+
+```json
+[
+  {
+    "publicId": "e5748fd0-7d90-4a6a-8b6f-c0672e028ab4",
+    "date": "2025-06-12T13:17:08.115Z",
+    "paymentType": "CARTAO_CREDITO",
+    "status": "IN_PROGRESS",
+    "discount": false,
+    "total": 14700,
+    "client": {
+      "publicId": "a2b490fa-43d6-440f-811a-0d84b58a0ade",
+      "name": "danilo",
+      "email": "sanilo@email.com"
+    },
+    "orderItems": [
+      {
+        "orderId": 1,
+        "quantity": 3,
+        "priceUnit": 1900,
+        "subTotal": 5700,
+        "product": {
+          "publicId": "1858c06f-6e29-4463-98b3-446ac0269f3f",
+          "name": "Meia",
+          "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+          "price": 1900
+        }
+      },
+      {
+        "orderId": 1,
+        "quantity": 1,
+        "priceUnit": 8400,
+        "subTotal": 8400,
+        "product": {
+          "publicId": "9951fccc-a7b0-4064-931e-e75ed71035a8",
+          "name": "Gorro",
+          "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+          "price": 8400
+        }
+      },
+      {
+        "orderId": 1,
+        "quantity": 2,
+        "priceUnit": 300,
+        "subTotal": 600,
+        "product": {
+          "publicId": "0f007cd1-cc97-4196-b705-248d1c5b7de2",
+          "name": "Camisa de manga curta",
+          "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+          "price": 300
+        }
+      }
+    ]
+  },
+  {
+    "publicId": "05b3b28b-9ee8-4568-a9ec-eb02981267ee",
+    "date": "2025-06-12T13:17:08.116Z",
+    "paymentType": "PIX",
+    "status": "IN_PROGRESS",
+    "discount": false,
+    "total": 185300,
+    "client": {
+      "publicId": "c16fdbf4-a1d9-4310-9ccb-19d349ecd5f6",
+      "name": "laura",
+      "email": "laura@email.com"
+    },
+    "orderItems": [
+      {
+        "orderId": 2,
+        "quantity": 1,
+        "priceUnit": 2600,
+        "subTotal": 2600,
+        "product": {
+          "publicId": "762e53bd-d3bd-43d5-af3c-07d9546d4bb9",
+          "name": "Tomara-que-caia",
+          "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+          "price": 2600
+        }
+      },
+      {
+        "orderId": 2,
+        "quantity": 9,
+        "priceUnit": 4200,
+        "subTotal": 37800,
+        "product": {
+          "publicId": "80b49a62-25f7-4d43-903b-93d9c8498932",
+          "name": "Cueca box",
+          "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+          "price": 4200
+        }
+      },
+      {
+        "orderId": 2,
+        "quantity": 21,
+        "priceUnit": 6900,
+        "subTotal": 144900,
+        "product": {
+          "publicId": "8be95f27-ccb0-4e94-8745-36f3fd792d96",
+          "name": "Cueca box",
+          "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+          "price": 6900
+        }
+      }
+    ]
+  }
+]
+```
 
 ---
 
@@ -514,11 +670,63 @@ Este erro ocorre quando o `productId` fornecido não corresponde a nenhum produt
 
 **Busca um pedido pelo ID**
 
----
+Exemplo: `/orders/e5748fd0-7d90-4a6a-8b6f-c0672e028ab4`
 
-### PATCH `/orders/:orderId`
+#### Resposta (200)
 
-**Atualiza um pedido**
+```json
+{
+  "publicId": "e5748fd0-7d90-4a6a-8b6f-c0672e028ab4",
+  "date": "2025-06-13T08:15:15.625Z",
+  "paymentType": "CARTAO_CREDITO",
+  "status": "IN_PROGRESS",
+  "discount": false,
+  "total": 14700,
+  "client": {
+    "publicId": "a2b490fa-43d6-440f-811a-0d84b58a0ade",
+    "name": "danilo",
+    "email": "sanilo@email.com"
+  },
+  "orderItems": [
+    {
+      "orderId": 1,
+      "quantity": 3,
+      "priceUnit": 1900,
+      "subTotal": 5700,
+      "product": {
+        "publicId": "1858c06f-6e29-4463-98b3-446ac0269f3f",
+        "name": "Meia",
+        "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+        "price": 1900
+      }
+    },
+    {
+      "orderId": 1,
+      "quantity": 1,
+      "priceUnit": 8400,
+      "subTotal": 8400,
+      "product": {
+        "publicId": "9951fccc-a7b0-4064-931e-e75ed71035a8",
+        "name": "Gorro",
+        "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+        "price": 8400
+      }
+    },
+    {
+      "orderId": 1,
+      "quantity": 2,
+      "priceUnit": 300,
+      "subTotal": 600,
+      "product": {
+        "publicId": "0f007cd1-cc97-4196-b705-248d1c5b7de2",
+        "name": "Camisa de manga curta",
+        "description": "Esta peça é confeccionada com tecido de alta qualidade, proporcionando conforto e estilo para diversas ocasiões. ",
+        "price": 300
+      }
+    }
+  ]
+}
+```
 
 ---
 
@@ -526,7 +734,220 @@ Este erro ocorre quando o `productId` fornecido não corresponde a nenhum produt
 
 **Remove um pedido**
 
+#### Resposta (204)
+
 ---
+
+## 👤 Rotas de Funcionários (`/employee`)
+
+### POST `/employee`
+
+**Cria um novo funcionário**
+
+> 🔐 Requer token JWT no header `Authorization`  
+> Acesso permitido apenas para usuários com papel `ADM`.
+
+#### Corpo da requisição
+
+```json
+{
+  "name": "João Silva",
+  "email": "joao@email.com",
+  "password": "SenhaForte123!",
+  "birthDate": "1990-04-05",
+  "CPF": "84988147070",
+  "phone": "11999999999",
+  "accessLevel": "FUNCIONARIO",
+  "address": {
+    "street": "Rua do tamoios",
+    "number": 598,
+    "complement": "2 andar",
+    "zipCode": "80045-000",
+    "neighborhood": "Centro",
+    "city": "Sao Paulo",
+    "state": "SP",
+    "country": "Brasil"
+  }
+}
+```
+
+#### Resposta (201)
+
+```json
+{
+  "publicId": "0e4979d5-b98d-44f6-b9fa-2026cd92bada",
+  "name": "João Silva",
+  "email": "joao@email.com",
+  "birthDate": "1990-04-05T00:00:00.000Z",
+  "CPF": "84988147070",
+  "phone": "11999999999",
+  "accessLevel": "FUNCIONARIO",
+  "address": {
+    "street": "Rua do tamoios",
+    "number": 598,
+    "complement": "2 andar",
+    "zipCode": "80045-000",
+    "neighborhood": "Centro",
+    "state": "SP",
+    "city": "Sao Paulo",
+    "country": "Brasil"
+  },
+  "store": {
+    "publicId": "3294cf96-db26-4dda-ab38-7a54853fc057",
+    "name": "Mega Store",
+    "CNPJ": "41984004000139"
+  }
+}
+```
+
+---
+
+### GET `/employee`
+
+**Lista todos os funcionários**
+
+#### Resposta (200)
+
+```json
+[
+  {
+    "publicId": "7dd3c4b9-9da5-4c25-856d-2dce9d04ca89",
+    "name": "Zé da loja",
+    "email": "zedaloja@email.com",
+    "birthDate": "1985-02-13T23:00:00.000Z",
+    "CPF": "62759608093",
+    "phone": "41987654321",
+    "accessLevel": "ADM"
+  },
+  {
+    "publicId": "0e4979d5-b98d-44f6-b9fa-2026cd92bada",
+    "name": "João Silva",
+    "email": "joao@email.com",
+    "birthDate": "1990-04-05T00:00:00.000Z",
+    "CPF": "84988147070",
+    "phone": "11999999999",
+    "accessLevel": "FUNCIONARIO"
+  }
+]
+```
+
+---
+
+### GET `/employee/:employeeId`
+
+**Busca um funcionário pelo ID**
+
+Exemplo: `/employee/0e4979d5-b98d-44f6-b9fa-2026cd92bada`
+
+#### Resposta (200)
+
+```json
+{
+  "publicId": "0e4979d5-b98d-44f6-b9fa-2026cd92bada",
+  "name": "João Silva",
+  "email": "joao@email.com",
+  "birthDate": "1990-04-05T00:00:00.000Z",
+  "CPF": "84988147070",
+  "phone": "11999999999",
+  "accessLevel": "FUNCIONARIO",
+  "address": {
+    "street": "Rua do tamoios",
+    "number": 598,
+    "complement": "2 andar",
+    "zipCode": "80045-000",
+    "neighborhood": "Centro",
+    "state": "SP",
+    "city": "Sao Paulo",
+    "country": "Brasil"
+  }
+}
+```
+
+#### Erro: Funcionário não encontrado (404)
+
+```json
+{
+  "message": "User not found!"
+}
+```
+
+---
+
+### PATCH `/employee/:employeeId`
+
+**Atualiza um funcionário existente**
+
+> 🔐 Requer token JWT no header `Authorization`
+
+#### Corpo da requisição (exemplo)
+
+```json
+{
+  "phone": "11888888888"
+}
+```
+
+#### Resposta (200)
+
+```json
+{
+  "publicId": "0e4979d5-b98d-44f6-b9fa-2026cd92bada",
+  "name": "João Silva",
+  "email": "joao@email.com",
+  "birthDate": "1990-04-05T00:00:00.000Z",
+  "CPF": "84988147070",
+  "phone": "11888888888",
+  "accessLevel": "FUNCIONARIO",
+  "address": {
+    "street": "Rua do tamoios",
+    "number": 598,
+    "complement": "2 andar",
+    "zipCode": "80045-000",
+    "neighborhood": "Centro",
+    "state": "SP",
+    "city": "Sao Paulo",
+    "country": "Brasil"
+  }
+}
+```
+
+---
+
+### DELETE `/employee/:employeeId`
+
+**Remove um funcionário pelo ID**
+
+> 🔐 Requer token JWT no header `Authorization`  
+> Acesso permitido apenas para usuários com papel `ADM`.
+
+#### Resposta de Sucesso (204)
+
+Sem conteúdo.
+
+#### Erros Possíveis
+
+- **401** Token inválido ou ausente
+
+**Código:** 403
+
+**Descrição:**  
+Este erro ocorre quando o token JWT é válido, mas o usuário autenticado não possui o papel necessário (`ADM` ou `employee`) para executar a ação.
+
+**Resposta:**
+
+```json
+{
+  "message": "You don't have permission to perform this action"
+}
+```
+
+- **404** Funcionário não encontrado
+
+```json
+{
+  "message": "User not found!"
+}
+```
 
 ## 📦 Como rodar localmente
 

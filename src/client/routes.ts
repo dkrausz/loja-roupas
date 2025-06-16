@@ -8,10 +8,7 @@ import { bodyMiddleware } from "../@shared/body.middeware";
 import { clientRegisterSchema, clientUpdateSchema } from "./schemas";
 import { Cpf } from "../@shared/cpf.middleware";
 import { IsIdExisting } from "./middlewares/isIdExisting.middleware";
-import {
-  createAddressBodySchema,
-  updateAddressBodySchema,
-} from "../address/schemas";
+import { createAddressBodySchema, updateAddressBodySchema } from "../address/schemas";
 import { AddressController } from "../address/controller";
 
 import { whoHasAccess } from "../@shared/whoHasAccess.middleware";
@@ -22,57 +19,40 @@ import { StoreIdValid } from "../@shared/storeIdValid.middleware";
 import { customContainer } from "../configs/container";
 container.registerSingleton("ClientServices", ClientServices);
 
-
 const clientControllers = container.resolve(ClientControllers);
 const addressController = container.resolve(AddressController);
 
-
 export const clientRouter = Router();
 
-clientRouter.post(
-  "/",
-  bodyMiddleware.bodyIsValid(clientRegisterSchema),
-  IsUniqueEmail.execute,
-  Cpf.isValid,
-  Cpf.isUnique,
-  StoreIdValid.execute,
-  (req, res) => {
-    clientControllers.register(req, res);
-  }
-);
+clientRouter.post("/", bodyMiddleware.bodyIsValid(clientRegisterSchema), IsUniqueEmail.execute, Cpf.isValid, Cpf.isUnique, StoreIdValid.execute, (req, res) => {
+  clientControllers.register(req, res);
+});
 
 // Somente o administrador?
 clientRouter.get("/", (req, res) => clientControllers.get(req, res));
 
 clientRouter.use("/:id", IsIdExisting.execute);
 
-clientRouter.get(
-  "/:id",
-  // ValidateToken.execute,
-  // ClientAccessPermission.execute,
-  (req, res) => clientControllers.getOne(req, res)
-);
+clientRouter.get("/:id", ValidateToken.execute, whoHasAccess.permission("ADM", "owner"), (req, res) => clientControllers.getOne(req, res));
 
 clientRouter.patch(
   "/:id",
-  // IsUniqueEmail.execute,
-  // bodyMiddleware.bodyIsValid(clientUpdateSchema),
-  // ValidateToken.execute,
+  ValidateToken.execute,
   // ClientAccessPermission.execute,
+  bodyMiddleware.bodyIsValid(clientUpdateSchema),
+
   (req, res) => clientControllers.update(req, res)
 );
 
-// O cliente pode ser excluir mesmo???
-clientRouter.delete(
-  "/:id",
+clientRouter.delete("/:id", ValidateToken.execute, ClientAccessPermission.execute, (req, res) => clientControllers.remove(req, res));
+
+clientRouter.post(
+  "/:id/address",
   ValidateToken.execute,
-  ClientAccessPermission.execute,
-  (req, res) => clientControllers.remove(req, res)
+  whoHasAccess.permission("owner", "ADM"),
+  bodyMiddleware.bodyIsValid(createAddressBodySchema),
+  addressController.createAddress
 );
-
-
-clientRouter.post("/:id/address", ValidateToken.execute, whoHasAccess.permission("owner", "ADM"),
-  bodyMiddleware.bodyIsValid(createAddressBodySchema), addressController.createAddress);
 
 clientRouter.get(
   "/:id/address",
@@ -90,11 +70,4 @@ clientRouter.patch(
   addressController.updateAddress
 );
 
-clientRouter.delete(
-  "/:id/address/:addressid",
-  ValidateToken.execute,
-  whoHasAccess.permission("owner", "ADM"),
-  addressController.deleteAddress
-);
-
-
+clientRouter.delete("/:id/address/:addressid", ValidateToken.execute, whoHasAccess.permission("owner", "ADM"), addressController.deleteAddress);

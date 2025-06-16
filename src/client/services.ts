@@ -4,6 +4,7 @@ import { TClient, TClientRegister, TClientReturn, TClientReturnComplete, TClient
 import bcryptjs from "bcryptjs";
 import { clientReturnSchema, completeReturnSchema } from "./schemas";
 import { loadedStore } from "../app";
+import { AppError } from "../@shared/errors";
 
 @injectable()
 export class ClientServices {
@@ -53,9 +54,12 @@ export class ClientServices {
   };
 
   public update = async (publicId: string, data: TClientUpdate): Promise<TClientReturn> => {
-    const clientFound: TClient = (await prisma.client.findFirst({
+    const clientFound = await prisma.client.findFirst({
       where: { publicId },
-    })) as TClient;
+    });
+    if (!clientFound) {
+      throw new AppError(404, "Client not found");
+    }
     let newDataClient;
     if (data.password) {
       const pwd: string = await bcryptjs.hash(data.password, 10);

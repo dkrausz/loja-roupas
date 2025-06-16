@@ -35,9 +35,9 @@ export class OrderServices {
       orderItems: { create: completedProducts },
     };
 
-    const createdOrder = await prisma.order.create({ data: newOrder, include: { orderItems: true } });
+    const createdOrder = await prisma.order.create({ data: newOrder, include: { client: true, orderItems: { include: { product: true } } } });
 
-    return createdOrder;
+    return returnOrderSchema.parse(createdOrder);
   };
 
   public get = async (): Promise<Array<TReturnOrder>> => {
