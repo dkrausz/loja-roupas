@@ -1324,15 +1324,13 @@ Este erro ocorre quando o `id` fornecido não corresponde a nenhum client existe
 
 **Resposta:**
 
-````json
+```json
 {
   "message": "Client not found"
 }
 ```
 
-
 ---
-
 
 ## 📦 Como rodar localmente
 
@@ -1372,4 +1370,7 @@ npm run test
 ## 📝 Licença
 
 Este projeto é de uso educacional e não possui uma licença específica.
-````
+
+```
+
+```
