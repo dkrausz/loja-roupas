@@ -293,6 +293,8 @@ Este erro ocorre quando o token JWT é válido, mas o usuário autenticado não 
 }
 ```
 
+#### Erro: Cliente não encontrado
+
 **Código:** 404
 
 **Descrição:**  
@@ -311,6 +313,72 @@ Este erro ocorre quando o `id` fornecido não corresponde a nenhum client existe
 Remove um cliente.
 
 🔒 **Acesso:** Cliente dono ou administrador
+
+#### Resposta de Sucesso (204)
+
+Sem conteúdo.
+
+---
+
+#### Erro: Problema com Token
+
+**Código:** 401
+
+**Descrição:**  
+Este erro ocorre quando há qualquer problema com o token JWT.
+
+**Respostas possíveis:**
+
+```json
+{
+  "message": "Token is required."
+}
+```
+
+```json
+{
+  "message": "Token mal formado."
+}
+```
+
+```json
+{
+  "message": "Token expirado."
+}
+```
+
+---
+
+#### Erro: Permissão negada
+
+**Código:** 403
+
+**Descrição:**  
+Este erro ocorre quando o token JWT é válido, mas o usuário autenticado não possui o papel necessário (`ADM` ou `employee`) para executar a ação.
+
+**Resposta:**
+
+```json
+{
+  "message": "You don't have permission to perform this action"
+}
+```
+
+---
+
+**Código:** 404
+
+**Descrição:**  
+Este erro ocorre quando o `id` fornecido não corresponde a nenhum client existente no banco de dados.
+
+**Resposta:**
+
+````json
+{
+  "message": "Client not found"
+}
+
+
 
 ---
 
@@ -366,7 +434,7 @@ Remove um endereço do cliente.
     }
   ]
 }
-```
+````
 
 ### `completeReturnSchema` adiciona o `id`
 
